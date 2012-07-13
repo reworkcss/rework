@@ -2,5 +2,12 @@
   from { opacity: 0; } 
   to { opacity: 1; } 
 }
-@-moz-keyframes fade {fromopacity: 0; toopacity: 1;}
-@-webkit-keyframes fade {fromopacity: 0; toopacity: 1;}
+@-moz-keyframes fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@-webkit-keyframes fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
