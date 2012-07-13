@@ -25,12 +25,11 @@ describe('rework(css)', function(){
       })
 
       it('should prefix only using the parent vendor prefix', function(){
-        var str = rework(fixture('keyframes.props'))
+        rework(fixture('keyframes.props'))
           .prefix('border-radius', ['-webkit-', '-moz-'])
           .prefix('@keyframes', ['-webkit-', '-moz-'])
           .toString()
-        console.log(str);
-          // .should.equal(fixture('keyframes.props.out'));
+          .should.equal(fixture('keyframes.props.out'));
       })
     })
   })

@@ -1,6 +1,6 @@
 @keyframes fade { 
-  from {} 
-  to { } 
+  from { border-radius: 5px; } 
+  to { border-radius: 10px; } 
 }
-@-moz-keyframes fade {}
-@-webkit-keyframes fade {}
+@-moz-keyframes fade {fromborder-radius: 5px; -moz-border-radius: 10px; toborder-radius: 10px;}
+@-webkit-keyframes fade {fromborder-radius: 5px; -webkit-border-radius: 10px; toborder-radius: 10px;}
