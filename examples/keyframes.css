@@ -1,0 +1,8 @@
+@keyframes fade {
+  from {
+    border-radius: 5px;
+  }
+  to {
+    border-radius: 10px;
+  }
+}
