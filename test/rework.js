@@ -15,5 +15,12 @@ describe('rework(css)', function(){
         .toString()
         .should.equal(fixture('prefix.out'));
     })
+
+    it('should prefix @keyframes', function(){
+      var str = rework(fixture('keyframes'))
+        .prefix('@keyframes', ['-webkit-', '-moz-'])
+        .toString();
+      console.log(str);
+    })
   })
 })
