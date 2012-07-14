@@ -32,5 +32,14 @@ describe('rework(css)', function(){
           .should.equal(fixture('keyframes.props.out'));
       })
     })
+
+    describe('when only one arg is given', function(){
+      it('should prefix selectors', function(){
+        rework(fixture('prefix.selectors'))
+          .prefix('#dialog')
+          .toString()
+          .should.equal(fixture('prefix.selectors.out'));
+      })
+    })
   })
 })
