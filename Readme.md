@@ -3,6 +3,67 @@
 
   CSS manipulations built on CSSOM.
 
+  Still a WIP, CSSOM needs a few patches aka this will break ATM.
+
+## Example
+
+style.css:
+
+```css
+@keyframes round {
+  from { border-radius: 5px }
+  to { border-radius: 10px }
+}
+
+.title {
+  font-size: 18px;
+  padding: 5px;
+}
+
+.close {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+```
+
+example.js:
+
+```js
+var rework = require('rework')
+  , fs = require('fs')
+  , read = fs.readFileSync;
+
+var vendors = ['-webkit-', '-moz-'];
+
+var css = rework(read('examples/sink.css', 'utf8'))
+  .prefix('border-radius', vendors)
+  .prefix('@keyframes', vendors)
+  .prefix('#dialog')
+  .toString();
+
+console.log(css);
+```
+
+stdout:
+
+```css
+@keyframes round { 
+  from { border-radius: 5px; } 
+  to { border-radius: 10px; } 
+}
+@-moz-keyframes round { 
+  from { border-radius: 5px; -moz-border-radius: 5px; } 
+  to { border-radius: 10px; -moz-border-radius: 10px; } 
+}
+@-webkit-keyframes round { 
+  from { border-radius: 5px; -webkit-border-radius: 5px; } 
+  to { border-radius: 10px; -webkit-border-radius: 10px; } 
+}
+#dialog .title {font-size: 18px; padding: 5px;}
+#dialog .close {position: absolute; top: 5px; right: 5px;}
+```
+
 ## License 
 
 (The MIT License)

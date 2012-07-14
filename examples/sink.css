@@ -1,0 +1,20 @@
+
+@keyframes round {
+  from {
+    border-radius: 5px;
+  }
+  to {
+    border-radius: 10px;
+  }
+}
+
+.title {
+  font-size: 18px;
+  padding: 5px;
+}
+
+.close {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
