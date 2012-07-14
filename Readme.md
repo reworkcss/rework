@@ -1,7 +1,7 @@
 
 # rework
 
-  CSS manipulations built on CSSOM
+  CSS manipulations built on CSSOM.
 
 ## License 
 
