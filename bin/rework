@@ -1,0 +1,50 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var program = require('commander')
+  , rework = require('..');
+
+// comma list
+
+function list(str) {
+  return str.split(/ *, */);
+}
+
+// options
+
+program
+  .option('-v, --vendors <prefixes>', 'use vendor <prefixes>', list)
+  .option('-p, --prefix <props>', 'prefix occurrances of <props>', list)
+  .parse(process.argv);
+
+// require --vendors
+
+if (!program.vendors) throw new Error('--vendors required');
+
+// vendor prefixes
+
+var vendors = program.vendors.map(function(name){
+  return '-' + name + '-';
+});
+
+// read from stdin
+
+var css = '';
+process.stdin.setEncoding('utf8');
+process.stdin.on('data', function(chunk){ css += chunk; });
+process.stdin.on('end', apply).resume();
+
+// apply transformations
+
+function apply() {
+  var style = rework(css);
+  if (program.prefix) {
+    program.prefix.forEach(function(prop){
+      style.prefix(prop, vendors);
+    });
+  }
+  process.stdout.write(style.toString());
+}
