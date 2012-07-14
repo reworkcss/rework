@@ -10,9 +10,7 @@ var rework = require('..')
 var vendors = ['-webkit-', '-moz-', '-ms-'];
 
 var css = rework(read('examples/prefix-selectors.css', 'utf8'))
-  .mapSelectors(function(sel){
-    return '#dialog ' + sel;
-  })
+  .prefixSelectors('#dialog')
   .toString();
 
 console.log(css);
