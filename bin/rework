@@ -7,14 +7,20 @@
 var program = require('commander')
   , rework = require('..');
 
+// comma list
+
+function list(str) {
+  return str.split(/ *, */);
+}
+
 // options
 
 program
   .option('-v, --vendors <prefixes>', 'use vendor <prefixes>', list)
-  .option('-p, --prefix <prop>', 'prefix occurrances of <prop>')
+  .option('-p, --prefix <props>', 'prefix occurrances of <props>', list)
   .parse(process.argv);
 
-// require prefixes
+// require --vendors
 
 if (!program.vendors) throw new Error('--vendors required');
 
@@ -23,12 +29,6 @@ if (!program.vendors) throw new Error('--vendors required');
 var vendors = program.vendors.map(function(name){
   return '-' + name + '-';
 });
-
-// comma list
-
-function list(str) {
-  return str.split(/ *, */);
-}
 
 // read from stdin
 
@@ -41,6 +41,10 @@ process.stdin.on('end', apply).resume();
 
 function apply() {
   var style = rework(css);
-  if (program.prefix) style.prefix(program.prefix, vendors);
+  if (program.prefix) {
+    program.prefix.forEach(function(prop){
+      style.prefix(prop, vendors);
+    });
+  }
   process.stdout.write(style.toString());
 }
