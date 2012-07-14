@@ -12,5 +12,8 @@
     "mocha": "*",
     "should": "*"
   },
+  "bin": {
+    "rework": "./bin/rework"
+  },
   "main": "index"
 }
