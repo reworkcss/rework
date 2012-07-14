@@ -1,0 +1,22 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var program = require('commander')
+  , rework = require('..');
+
+// read from stdin
+
+var css = '';
+process.stdin.setEncoding('utf8');
+process.stdin.on('data', function(chunk){ css += chunk; });
+process.stdin.on('end', apply).resume();
+
+// apply transformations
+
+function apply() {
+  var style = rework(css);
+  process.stdout.write(style.toString());
+}
