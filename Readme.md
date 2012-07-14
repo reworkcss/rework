@@ -100,6 +100,21 @@ stdout:
 })
 ```
 
+## CLI
+
+```
+
+Usage: rework [options]
+
+Options:
+
+  -h, --help                output usage information
+  -v, --vendors <prefixes>  use vendor <prefixes>
+  -p, --prefix <props>      prefix occurrances of <props>
+  -V, --version
+
+```
+
 ## License 
 
 (The MIT License)
