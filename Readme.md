@@ -64,6 +64,42 @@ stdout:
 #dialog .close {position: absolute; top: 5px; right: 5px;}
 ```
 
+## API
+
+### .prefix(string)
+
+  Prefix selectors with `string`.
+
+```js
+.prefix('#dialog')
+```
+
+### .prefix(property, prefixes)
+
+  Apply vendor `prefixes` array to occurrences of `property`.
+
+```js
+.prefix('border-radius', ['-webkit-', '-moz-'])
+```
+
+### .prefixes("@keyframes", prefixes)
+
+  Apply vendor `prefixes` array to __@keyframes__.
+
+```js
+.prefix('@keyframes', ['-webkit-', '-moz-'])
+```
+
+### .mapSelectors(callback)
+
+  Map selector strings using the given `callback`.
+
+```js
+.mapSelectors(function(sel){
+  return '#dialog ' + sel;
+})
+```
+
 ## License 
 
 (The MIT License)
