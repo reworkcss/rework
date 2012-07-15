@@ -1,7 +1,3 @@
-@keyframes fade { 
-  from {border-radius: 5px;} 
-  to {border-radius: 10px;} 
-}
 @-moz-keyframes fade { 
   from {border-radius: 5px; -moz-border-radius: 5px;} 
   to {border-radius: 10px; -moz-border-radius: 10px;} 
@@ -9,4 +5,8 @@
 @-webkit-keyframes fade { 
   from {border-radius: 5px; -webkit-border-radius: 5px;} 
   to {border-radius: 10px; -webkit-border-radius: 10px;} 
+}
+@keyframes fade { 
+  from {border-radius: 5px;} 
+  to {border-radius: 10px;} 
 }
