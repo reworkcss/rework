@@ -100,6 +100,34 @@ button {
 }
 ```
 
+### .prefixSelectors(string)
+
+  Prefix selectors with the given `string`.
+
+```css
+h1 {
+  font-weight: bold;
+}
+
+a {
+  text-decoration: none;
+  color: #ddd;
+}
+```
+
+yields:
+
+```css
+#dialog h1 {
+  font-weight: bold;
+}
+
+#dialog a {
+  text-decoration: none;
+  color: #ddd;
+}
+```
+
 ### .opacity()
 
   Add IE opacity support.
