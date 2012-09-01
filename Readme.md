@@ -5,6 +5,10 @@
   allowing you to automate vendor prefixing, create your own properties,
   inline images, anything you can imagine!
 
+## Installation
+
+    $ npm install rework
+
 ## API
 
 ### rework(css)
