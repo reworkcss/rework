@@ -47,6 +47,15 @@ describe('rework', function(){
     })
   })
 
+  describe('.prefixSelectors(str)', function(){
+    it('should prefix selectors', function(){
+      rework(fixture('prefix-selectors'))
+        .use(rework.prefixSelectors('#dialog'))
+        .toString()
+        .should.equal(fixture('prefix-selectors.out'));
+    })
+  })
+
   describe('.opacity()', function(){
     it('should add ie crap', function(){
       rework(fixture('opacity'))
