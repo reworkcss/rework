@@ -4,6 +4,7 @@ var rework = require('..')
 
 var css = rework(read('examples/sink.css', 'utf8'))
   .vendors(['-webkit-', '-moz-'])
+  .use(rework.keyframes())
   .use(rework.prefixValue('transform'))
   .use(rework.prefix('backface-visibility'))
   .use(rework.prefix('border-radius'))
