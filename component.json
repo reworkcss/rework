@@ -4,7 +4,8 @@
   "description": "CSS manipulations built on CSSOM",
   "keywords": ["css", "manipulation", "preprocess", "transform"],
   "dependencies": {
-    "visionmedia/node-css": "1.0.3"
+    "visionmedia/node-css": "1.0.3",
+    "component/path": "*"
   },
   "scripts": [
     "index.js",
