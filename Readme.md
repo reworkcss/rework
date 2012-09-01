@@ -7,7 +7,13 @@
 
 ## Installation
 
+with node:
+
     $ npm install rework
+
+or in the browser:
+
+    $ component install visionmedia/rework
 
 ## API
 
