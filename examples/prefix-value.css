@@ -1,0 +1,5 @@
+.card .wrapper {
+  foo: 'bar';
+  transition: transform 500ms ease-in-out;
+  bar: 'baz';
+}

@@ -1,0 +1,12 @@
+
+#logo {
+  absolute: top left;
+}
+
+#logo {
+  relative: top 5px left;
+}
+
+#logo {
+  fixed: top 5px left 10px;
+}
