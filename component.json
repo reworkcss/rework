@@ -1,0 +1,20 @@
+{
+  "name": "rework",
+  "version": "0.1.0",
+  "description": "CSS manipulations built on CSSOM",
+  "keywords": ["css", "manipulation", "preprocess", "transform"],
+  "dependencies": {
+    "visionmedia/css": "1.0.2"
+  },
+  "scripts": [
+    "index.js",
+    "lib/rework.js",
+    "lib/utils.js",
+    "lib/plugins/at2x.js",
+    "lib/plugins/keyframes.js",
+    "lib/plugins/opacity.js",
+    "lib/plugins/prefix-selectors.js",
+    "lib/plugins/prefix-value.js",
+    "lib/plugins/prefix.js"
+  ]
+}
