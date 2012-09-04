@@ -1,0 +1,9 @@
+.logo {
+  background-image: url('/public/images/logo.png')
+}
+
+@media all and (min-width: 600px) {
+  .logo {
+  background: transparent url('/public/images/logo-tablet.png') 0 0 no-repeat
+}
+}
