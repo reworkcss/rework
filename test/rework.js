@@ -34,9 +34,7 @@ describe('rework', function(){
         .toString()
         .should.equal(fixture('at2x.out'));
     })
-  })
 
-  describe('.at2x.complex()', function(){
     it('should add vendor prefixed device-pixel-ratio rules', function(){
       rework(fixture('at2x-complex'))
         .use(rework.at2x(vendors))
