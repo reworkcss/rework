@@ -1,0 +1,122 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var program = require('commander')
+  , rework = require('..')
+  , stdin = process.stdin;
+
+// options
+
+program
+  .option('-v, --vendors <list>', 'specify list of vendors', list)
+  .parse(process.argv);
+
+// --vendors
+
+var vendors = prefix(program.vendors || ['o', 'ms', 'moz', 'webkit']);
+
+// stdin boilerplate...
+
+var str = '';
+stdin.setEncoding('utf8');
+stdin.on('data', function(chunk){ str += chunk });
+stdin.on('end', done);
+stdin.resume();
+
+// parse list
+
+function list(str) {
+  return str.split(/ *, */);
+}
+
+// prefix names
+
+function prefix(names) {
+  return names.map(function(name){
+    return '-' + name + '-';
+  });
+}
+
+// rework
+
+function done() {
+  var style = rework(str)
+    .vendors(vendors)
+    .use(rework.keyframes())
+    .use(rework.prefixValue('transform'))
+    .use(rework.prefix('animation'))
+    .use(rework.prefix('animation-delay'))
+    .use(rework.prefix('animation-direction'))
+    .use(rework.prefix('animation-duration'))
+    .use(rework.prefix('animation-fill-mode'))
+    .use(rework.prefix('animation-iteration-count'))
+    .use(rework.prefix('animation-name'))
+    .use(rework.prefix('animation-play-state'))
+    .use(rework.prefix('animation-timing-function'))
+    .use(rework.prefix('appearance'))
+    .use(rework.prefix('background-visibility'))
+    .use(rework.prefix('background-clip'))
+    .use(rework.prefix('background-composite'))
+    .use(rework.prefix('background-origin'))
+    .use(rework.prefix('background-size'))
+    .use(rework.prefix('blend-mode'))
+    .use(rework.prefix('border-bottom-left-radius'))
+    .use(rework.prefix('border-bottom-right-radius'))
+    .use(rework.prefix('border-fit'))
+    .use(rework.prefix('border-image'))
+    .use(rework.prefix('border-radius'))
+    .use(rework.prefix('border-top-left-radius'))
+    .use(rework.prefix('border-top-right-radius'))
+    .use(rework.prefix('border-vertical-spacing'))
+    .use(rework.prefix('box-align'))
+    .use(rework.prefix('box-direction'))
+    .use(rework.prefix('box-flex'))
+    .use(rework.prefix('box-flex-group'))
+    .use(rework.prefix('box-lines'))
+    .use(rework.prefix('box-ordinal-group'))
+    .use(rework.prefix('box-orient'))
+    .use(rework.prefix('box-pack'))
+    .use(rework.prefix('box-reflect'))
+    .use(rework.prefix('box-shadow'))
+    .use(rework.prefix('box-sizing'))
+    .use(rework.prefix('clip-path'))
+    .use(rework.prefix('flex'))
+    .use(rework.prefix('flex-basis'))
+    .use(rework.prefix('flex-direction'))
+    .use(rework.prefix('flex-flow'))
+    .use(rework.prefix('flex-grow'))
+    .use(rework.prefix('flex-shrink'))
+    .use(rework.prefix('flex-wrap'))
+    .use(rework.prefix('flex-flow-from'))
+    .use(rework.prefix('flex-flow-into'))
+    .use(rework.prefix('font-smoothing'))
+    .use(rework.prefix('transform'))
+    .use(rework.prefix('transform-origin'))
+    .use(rework.prefix('transform-origin-x'))
+    .use(rework.prefix('transform-origin-y'))
+    .use(rework.prefix('transform-origin-z'))
+    .use(rework.prefix('transform-style'))
+    .use(rework.prefix('transition'))
+    .use(rework.prefix('transition-delay'))
+    .use(rework.prefix('transition-duration'))
+    .use(rework.prefix('transition-property'))
+    .use(rework.prefix('transition-timing-function'))
+    .use(rework.prefix('user-drag'))
+    .use(rework.prefix('user-modify'))
+    .use(rework.prefix('user-select'))
+    .use(rework.prefix('wrap'))
+    .use(rework.prefix('wrap-flow'))
+    .use(rework.prefix('wrap-margin'))
+    .use(rework.prefix('wrap-padding'))
+    .use(rework.prefix('wrap-through'))
+    .use(rework.at2x())
+
+  if (~vendors.indexOf('-ms-')) {
+    style.use(rework.opacity());
+  }
+
+  process.stdout.write(style.toString());
+}
