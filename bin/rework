@@ -11,6 +11,7 @@ var program = require('commander')
 // options
 
 program
+  .version(require('../package.json').version)
   .option('-v, --vendors <list>', 'specify list of vendors', list)
   .parse(process.argv);
 

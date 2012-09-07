@@ -14,6 +14,27 @@ or in the browser:
 
     $ component install visionmedia/rework
 
+## rework(1)
+
+```js
+
+Usage: rework [options]
+
+Options:
+
+  -h, --help            output usage information
+  -V, --version         output the version number
+  -v, --vendors <list>  specify list of vendors
+
+
+```
+
+for example:
+
+```
+$ rework -v webkit,moz < my.css > my.reworked.css
+```
+
 ## API
 
 ### rework(css)
