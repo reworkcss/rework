@@ -1,0 +1,7 @@
+body {
+  background: url("http://example.com/images/bg.png") repeat-x
+}
+
+#logo {
+  background: url("http://example.com/images/logo.jpeg")
+}

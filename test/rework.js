@@ -84,4 +84,17 @@ describe('rework', function(){
         .should.equal(fixture('keyframes.out'));
     })
   })
+
+  describe('.url(fn)', function(){
+    it('should map urls', function(){
+      function rewrite(url) {
+        return 'http://example.com' + url;
+      }
+
+      rework(fixture('url'))
+        .use(rework.url(rewrite))
+        .toString()
+        .should.equal(fixture('url.out'));
+    })
+  })
 })

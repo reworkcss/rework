@@ -1,0 +1,7 @@
+body {
+  background: url('/images/bg.png') repeat-x;
+}
+
+#logo {
+  background: url(/images/logo.jpeg);
+}
