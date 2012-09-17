@@ -174,6 +174,21 @@ ul {
 }
 ```
 
+### .url(callback)
+
+  Map `url()` calls, useful for inlining images as data-uris, converting
+  relative paths to absolute etc.
+
+```js
+function rewrite(url) {
+  return 'http://example.com' + url;
+}
+
+rework(str)
+  .use(rework.url(rewrite))
+  .toString()
+```
+
 ### .keyframes([vendors])
 
   Prefix __@keyframes__ with `vendors` defaulting to `.vendors()`.
