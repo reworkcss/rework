@@ -26,7 +26,6 @@ Options:
   -V, --version         output the version number
   -v, --vendors <list>  specify list of vendors
 
-
 ```
 
 for example:
@@ -53,9 +52,10 @@ $ rework -v webkit,moz < my.css > my.reworked.css
   a function accepting the stylesheet object and `Rework` instance,
   view the definitions in `./lib/plugins` for examples.
 
-### Rework#toString()
+### Rework#toString(options)
 
-  Return the string representation of the manipulated css.
+  Return the string representation of the manipulated css. Optionally
+  you may compress the output with `.toString({ compress: true })`
 
 ## Plugins
 

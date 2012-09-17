@@ -97,4 +97,12 @@ describe('rework', function(){
         .should.equal(fixture('url.out'));
     })
   })
+
+  describe('.toString() compress option', function(){
+    it('should compress the output', function(){
+      rework('body { color: red; }')
+        .toString({ compress: true })
+        .should.equal('body{color:red}');
+    })
+  })
 })
