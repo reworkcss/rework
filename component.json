@@ -1,10 +1,10 @@
 {
   "name": "rework",
-  "version": "0.1.1",
+  "version": "0.4.1",
   "description": "CSS manipulations built on CSSOM",
   "keywords": ["css", "manipulation", "preprocess", "transform"],
   "dependencies": {
-    "visionmedia/node-css": "1.0.3",
+    "visionmedia/node-css": "1.0.4",
     "component/path": "*"
   },
   "scripts": [
