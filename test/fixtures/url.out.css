@@ -5,3 +5,17 @@ body {
 #logo {
   background: url("http://example.com/images/logo.jpeg")
 }
+
+@font-face {
+  font-family: 'icons';
+  src: url("http://example.com/icons/font/icons.eot");
+  src: url("http://example.com/icons/font/icons.eot?#iefix")
+    format('embedded-opentype'),
+    url("http://example.com/icons/font/icons.woff")
+    format('woff'),
+    url("http://example.com/icons/font/icons.ttf")
+    format('truetype'),
+    url("http://example.com/icons/font/icons.svg#icons") format('svg');
+  font-weight: normal;
+  font-style: normal
+}
