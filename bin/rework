@@ -85,6 +85,7 @@ var props = [
 program
   .version(require('../package.json').version)
   .option('-v, --vendors <list>', 'specify list of vendors', list)
+  .option('--vars', 'add css variable support')
   .parse(process.argv);
 
 // --vendors
@@ -122,6 +123,10 @@ function done() {
     .use(rework.prefixValue('transform'))
     .use(rework.prefix(props))
     .use(rework.at2x())
+
+  if (program.vars) {
+    style.use(rework.vars());
+  }
 
   if (~vendors.indexOf('-ms-')) {
     style.use(rework.opacity());
