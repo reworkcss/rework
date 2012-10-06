@@ -52,6 +52,14 @@ describe('rework', function(){
         .toString()
         .should.equal(fixture('prefix.out'));
     })
+
+    it('should support an array of properties', function(){
+      rework(fixture('prefix'))
+        .vendors(vendors)
+        .use(rework.prefix(['border-radius', 'box-shadow']))
+        .toString()
+        .should.equal(fixture('prefix.out'));
+    })
   })
 
   describe('.prefixSelectors(str)', function(){
