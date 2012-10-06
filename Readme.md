@@ -174,7 +174,6 @@ ul {
 }
 ```
 
-<<<<<<< HEAD
 ### .url(callback)
 
   Map `url()` calls, useful for inlining images as data-uris, converting
@@ -188,7 +187,7 @@ function rewrite(url) {
 rework(str)
   .use(rework.url(rewrite))
   .toString()
-=======
+
 ### .vars()
 
   Add variable support. Note that this does not cascade like the CSS variable
