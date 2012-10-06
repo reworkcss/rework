@@ -8,6 +8,78 @@ var program = require('commander')
   , rework = require('..')
   , stdin = process.stdin;
 
+/**
+ * Prefixed properties.
+ */
+
+var props = [
+  'animation',
+  'animation-delay',
+  'animation-direction',
+  'animation-duration',
+  'animation-fill-mode',
+  'animation-iteration-count',
+  'animation-name',
+  'animation-play-state',
+  'animation-timing-function',
+  'appearance',
+  'background-visibility',
+  'background-clip',
+  'background-composite',
+  'background-origin',
+  'background-size',
+  'blend-mode',
+  'border-bottom-left-radius',
+  'border-bottom-right-radius',
+  'border-fit',
+  'border-image',
+  'border-radius',
+  'border-top-left-radius',
+  'border-top-right-radius',
+  'border-vertical-spacing',
+  'box-align',
+  'box-direction',
+  'box-flex',
+  'box-flex-group',
+  'box-lines',
+  'box-ordinal-group',
+  'box-orient',
+  'box-pack',
+  'box-reflect',
+  'box-shadow',
+  'box-sizing',
+  'clip-path',
+  'flex',
+  'flex-basis',
+  'flex-direction',
+  'flex-flow',
+  'flex-grow',
+  'flex-shrink',
+  'flex-wrap',
+  'flex-flow-from',
+  'flex-flow-into',
+  'font-smoothing',
+  'transform',
+  'transform-origin',
+  'transform-origin-x',
+  'transform-origin-y',
+  'transform-origin-z',
+  'transform-style',
+  'transition',
+  'transition-delay',
+  'transition-duration',
+  'transition-property',
+  'transition-timing-function',
+  'user-drag',
+  'user-modify',
+  'user-select',
+  'wrap',
+  'wrap-flow',
+  'wrap-margin',
+  'wrap-padding',
+  'wrap-through'
+];
+
 // options
 
 program
@@ -48,71 +120,7 @@ function done() {
     .vendors(vendors)
     .use(rework.keyframes())
     .use(rework.prefixValue('transform'))
-    .use(rework.prefix('animation'))
-    .use(rework.prefix('animation-delay'))
-    .use(rework.prefix('animation-direction'))
-    .use(rework.prefix('animation-duration'))
-    .use(rework.prefix('animation-fill-mode'))
-    .use(rework.prefix('animation-iteration-count'))
-    .use(rework.prefix('animation-name'))
-    .use(rework.prefix('animation-play-state'))
-    .use(rework.prefix('animation-timing-function'))
-    .use(rework.prefix('appearance'))
-    .use(rework.prefix('background-visibility'))
-    .use(rework.prefix('background-clip'))
-    .use(rework.prefix('background-composite'))
-    .use(rework.prefix('background-origin'))
-    .use(rework.prefix('background-size'))
-    .use(rework.prefix('blend-mode'))
-    .use(rework.prefix('border-bottom-left-radius'))
-    .use(rework.prefix('border-bottom-right-radius'))
-    .use(rework.prefix('border-fit'))
-    .use(rework.prefix('border-image'))
-    .use(rework.prefix('border-radius'))
-    .use(rework.prefix('border-top-left-radius'))
-    .use(rework.prefix('border-top-right-radius'))
-    .use(rework.prefix('border-vertical-spacing'))
-    .use(rework.prefix('box-align'))
-    .use(rework.prefix('box-direction'))
-    .use(rework.prefix('box-flex'))
-    .use(rework.prefix('box-flex-group'))
-    .use(rework.prefix('box-lines'))
-    .use(rework.prefix('box-ordinal-group'))
-    .use(rework.prefix('box-orient'))
-    .use(rework.prefix('box-pack'))
-    .use(rework.prefix('box-reflect'))
-    .use(rework.prefix('box-shadow'))
-    .use(rework.prefix('box-sizing'))
-    .use(rework.prefix('clip-path'))
-    .use(rework.prefix('flex'))
-    .use(rework.prefix('flex-basis'))
-    .use(rework.prefix('flex-direction'))
-    .use(rework.prefix('flex-flow'))
-    .use(rework.prefix('flex-grow'))
-    .use(rework.prefix('flex-shrink'))
-    .use(rework.prefix('flex-wrap'))
-    .use(rework.prefix('flex-flow-from'))
-    .use(rework.prefix('flex-flow-into'))
-    .use(rework.prefix('font-smoothing'))
-    .use(rework.prefix('transform'))
-    .use(rework.prefix('transform-origin'))
-    .use(rework.prefix('transform-origin-x'))
-    .use(rework.prefix('transform-origin-y'))
-    .use(rework.prefix('transform-origin-z'))
-    .use(rework.prefix('transform-style'))
-    .use(rework.prefix('transition'))
-    .use(rework.prefix('transition-delay'))
-    .use(rework.prefix('transition-duration'))
-    .use(rework.prefix('transition-property'))
-    .use(rework.prefix('transition-timing-function'))
-    .use(rework.prefix('user-drag'))
-    .use(rework.prefix('user-modify'))
-    .use(rework.prefix('user-select'))
-    .use(rework.prefix('wrap'))
-    .use(rework.prefix('wrap-flow'))
-    .use(rework.prefix('wrap-margin'))
-    .use(rework.prefix('wrap-padding'))
-    .use(rework.prefix('wrap-through'))
+    .use(rework.prefix(props))
     .use(rework.at2x())
 
   if (~vendors.indexOf('-ms-')) {
