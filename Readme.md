@@ -232,7 +232,6 @@ h1 {
 .content {
   background: linear-gradient(to top, #c06, white) !important
 }
->>>>>>> add/vars
 ```
 
 ### .keyframes([vendors])
