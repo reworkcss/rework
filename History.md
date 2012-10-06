@@ -1,4 +1,11 @@
 
+0.6.0 / 2012-10-06 
+==================
+
+  * add `.prefix(props)` array support. Closes #1
+  * add variables plugin. Closes #5
+  * increase perf ~40% faster for `rework(1)` pass
+
 0.5.1 / 2012-09-18 
 ==================
 
