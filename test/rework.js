@@ -85,6 +85,7 @@ describe('rework', function(){
     })
   })
 
+<<<<<<< HEAD
   describe('.url(fn)', function(){
     it('should map urls', function(){
       function rewrite(url) {
@@ -103,6 +104,15 @@ describe('rework', function(){
       rework('body { color: red; }')
         .toString({ compress: true })
         .should.equal('body{color:red}');
+=======
+  describe.only('.vars()', function(){
+    it('should add variable support', function(){
+      rework(fixture('vars'))
+        .vendors(vendors)
+        .use(rework.vars())
+        .toString()
+        .should.equal(fixture('vars.out'));
+>>>>>>> add/vars
     })
   })
 })

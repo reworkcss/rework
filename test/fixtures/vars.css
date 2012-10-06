@@ -1,0 +1,16 @@
+:root {
+  var-header-color: #06c;
+  var-main-color: #c06;
+}
+
+div {
+  var-accent-background: linear-gradient(to top, var(main-color), white);
+}
+
+h1 {
+  background-color: var(header-color);
+}
+
+.content {
+  background: var(accent-background) !important;
+}
