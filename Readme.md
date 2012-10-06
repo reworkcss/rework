@@ -86,9 +86,9 @@ logo {
 }
 ```
 
-### .prefix(property, [vendors])
+### .prefix(property|properties, [vendors])
 
-  Prefix `property` with optional `vendors` defaulting to `.vendors()`.
+  Prefix `property` or array of `properties` with optional `vendors` defaulting to `.vendors()`.
 
 ```css
 .button {
