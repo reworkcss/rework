@@ -449,6 +449,10 @@ var css = rework(read('positions.css', 'utf8'))
 console.log(css);
 ```
 
+## Links
+
+  - Nodejitsu rework [web service](http://rework.jit.su/) 
+
 ## License 
 
 (The MIT License)
