@@ -187,6 +187,7 @@ function rewrite(url) {
 rework(str)
   .use(rework.url(rewrite))
   .toString()
+```
 
 ### .vars()
 
