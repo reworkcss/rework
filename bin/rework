@@ -85,6 +85,7 @@ var props = [
 program
   .version(require('../package.json').version)
   .option('-v, --vendors <list>', 'specify list of vendors', list)
+  .option('-e, --ease', 'add additional easing functions')
   .option('--vars', 'add css variable support')
   .parse(process.argv);
 
@@ -117,12 +118,17 @@ function prefix(names) {
 // rework
 
 function done() {
-  var style = rework(str)
-    .vendors(vendors)
-    .use(rework.keyframes())
-    .use(rework.prefixValue('transform'))
-    .use(rework.prefix(props))
-    .use(rework.at2x())
+  var style = rework(str);
+  style.vendors(vendors);
+  style.use(rework.keyframes());
+
+  if (program.ease) {
+    style.use(rework.ease());
+  }
+
+  style.use(rework.prefixValue('transform'))
+  style.use(rework.prefix(props))
+  style.use(rework.at2x())
 
   if (program.vars) {
     style.use(rework.vars());
