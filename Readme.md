@@ -16,7 +16,7 @@ or in the browser:
 
 ## rework(1)
 
-```js
+```
 
 Usage: rework [options]
 
