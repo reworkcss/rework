@@ -1,4 +1,10 @@
 
+0.7.0 / 2012-10-10 
+==================
+
+  * add `--ease` to rework(1)
+  * add `.ease()` plugin for additional easing functions
+
 0.6.1 / 2012-10-06 
 ==================
 
