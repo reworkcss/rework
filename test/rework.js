@@ -116,6 +116,16 @@ describe('rework', function(){
     })
   })
 
+  describe('.ease()', function(){
+    it('should add additional easing functions', function(){
+      rework(fixture('easing'))
+        .vendors(vendors)
+        .use(rework.ease())
+        .toString()
+        .should.equal(fixture('easing.out'));
+    })
+  })
+
   describe('.toString() compress option', function(){
     it('should compress the output', function(){
       rework('body { color: red; }')
