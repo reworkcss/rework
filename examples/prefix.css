@@ -1,3 +1,11 @@
+body {
+	background: linear-gradient(#ddd,#eee);
+}
+
+div {
+	background: radial-gradient(#cde6f9, #81a8cb);;
+}
+
 .button {
   border-radius: 5px;
   box-shadow: inset 0 0 1px white;
