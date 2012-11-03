@@ -1,3 +1,5 @@
 .logo {
-  background-image: url('/public/images/logo.png');
+  background-image: url('component.png');
+  width: 289px;
+  height: 113px;
 }
