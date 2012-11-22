@@ -22,6 +22,6 @@ body {
 
 @media only screen and (-webkit-min-device-pixel-ratio: 2) {
   #logo {
-  background-image: url("http://example.com/core/logo@2x.png")
-}
+    background-image: url("http://example.com/core/logo@2x.png")
+  }
 }

@@ -4,20 +4,20 @@
 
 @media all and (min-width: 600px) {
   .logo {
-  background: transparent url('/public/images/logo-tablet.png') 0 0 no-repeat
-}
+    background: transparent url('/public/images/logo-tablet.png') 0 0 no-repeat
+  }
 }
 
 @media all and (-webkit-min-device-pixel-ratio: 1.5 or -moz-min-device-pixel-ratio: 1.5) {
   .logo {
-  background-image: url("/public/images/logo@2x.png");
-  background-size: contain
-}
+    background-image: url("/public/images/logo@2x.png");
+    background-size: contain
+  }
 }
 
 @media all and (min-width: 600px) and (-webkit-min-device-pixel-ratio: 1.5 or -moz-min-device-pixel-ratio: 1.5) {
   .logo {
-  background-image: url("/public/images/logo-tablet@2x.png");
-  background-size: contain
-}
+    background-image: url("/public/images/logo-tablet@2x.png");
+    background-size: contain
+  }
 }
