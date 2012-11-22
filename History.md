@@ -1,4 +1,10 @@
 
+0.8.0 / 2012-11-21 
+==================
+
+  * add media macros. Closes #10
+  * add background-size: contain to at2x
+
 0.7.0 / 2012-10-10 
 ==================
 
