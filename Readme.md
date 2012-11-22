@@ -63,6 +63,19 @@ $ rework -v webkit,moz < my.css > my.reworked.css
 
   The following plugins are bundled with `rework`:
 
+### TOC
+
+  - [media macros](#mediaobj) — define your own __@media__ queries
+  - [ease](#ease) — several additional easing functions
+  - [at2x](#at2xvendors) — serve "@2x" images
+  - [prefix](#prefixpropertyproperties-vendors) — add vendor prefixes to properties
+  - [prefixValue](#prefixvaluevalue-vendors) — add vendor prefixes to values
+  - [prefixSelectors](#prefixselectorsstring) — add prefixes to selectors
+  - [opacity](#opacity) — add IE opacity support
+  - [url](#urlcallback) — rewrite `url()`s with a callback function
+  - [vars](#vars) — add css variable support
+  - [keyframes](#keyframesvendors) — add __@keyframe__ vendor prefixing
+
 ### .media(obj)
 
   Define media macros with the given `obj`.
