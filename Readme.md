@@ -63,6 +63,49 @@ $ rework -v webkit,moz < my.css > my.reworked.css
 
   The following plugins are bundled with `rework`:
 
+### .media(obj)
+
+  Define media macros with the given `obj`.
+
+  For example define two contrived custom media types, "phone" and "phone-landscape":
+
+```js
+style.use(rework.media({
+  'phone': 'only screen and (min-device-width : 320px) and (max-device-width : 480px)',
+  'phone-landscape': '@media only screen and (min-width : 321px)'
+}))
+```
+
+```css
+@media phone {
+  body {
+    background: 'green'
+  }
+}
+
+@media phone-landscape {
+  body {
+    background: 'red'
+  }
+}
+```
+
+yields:
+
+```css
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+  body {
+    background: 'green'
+  }
+}
+
+@media @media only screen and (min-width : 321px) {
+  body {
+    background: 'red'
+  }
+}
+```
+
 ### .ease()
 
   Adds the following list of additional easing functions:

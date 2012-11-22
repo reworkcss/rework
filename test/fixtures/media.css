@@ -1,0 +1,12 @@
+
+@media phone {
+  body {
+    background: 'green'
+  }
+}
+
+@media phone-landscape {
+  body {
+    background: 'red'
+  }
+}

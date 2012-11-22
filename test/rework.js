@@ -9,6 +9,11 @@ function fixture(name) {
 
 var vendors = ['-webkit-', '-moz-'];
 
+var media = {
+  'phone': 'only screen and (min-device-width : 320px) and (max-device-width : 480px)',
+  'phone-landscape': '@media only screen and (min-width : 321px)'
+};
+
 describe('rework', function(){
   describe('.prefixValue(value)', function(){
     it('should prefix the value', function(){
@@ -123,6 +128,15 @@ describe('rework', function(){
         .use(rework.ease())
         .toString()
         .should.equal(fixture('easing.out'));
+    })
+  })
+
+  describe('.media(obj)', function(){
+    it('should define media macros', function(){
+      rework(fixture('media'))
+        .use(rework.media(media))
+        .toString()
+        .should.equal(fixture('media.out'));
     })
   })
 
