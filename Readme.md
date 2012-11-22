@@ -65,7 +65,7 @@ $ rework -v webkit,moz < my.css > my.reworked.css
 
   - [media macros](#mediaobj) — define your own __@media__ queries
   - [ease](#ease) — several additional easing functions
-  - [at2x](#at2xvendors) — serve "@2x" images
+  - [at2x](#at2xvendors) — serve high resolution images
   - [prefix](#prefixpropertyproperties-vendors) — add vendor prefixes to properties
   - [prefixValue](#prefixvaluevalue-vendors) — add vendor prefixes to values
   - [prefixSelectors](#prefixselectorsstring) — add prefixes to selectors
