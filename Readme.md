@@ -2,7 +2,8 @@
 
   CSS manipulations built on [node-css](//github.com/visionmedia/node-css),
   allowing you to automate vendor prefixing, create your own properties,
-  inline images, anything you can imagine!
+  inline images, anything you can imagine! Also works in the browser as
+  a [component](https://github.com/component/component).
 
 ## Installation
 
