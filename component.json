@@ -16,6 +16,7 @@
     "lib/plugins/opacity.js",
     "lib/plugins/prefix-selectors.js",
     "lib/plugins/prefix-value.js",
+    "lib/plugins/media.js",
     "lib/plugins/prefix.js"
   ]
 }
