@@ -75,6 +75,7 @@ $ rework -v webkit,moz < my.css > my.reworked.css
   - [vars](#vars) — add css variable support
   - [keyframes](#keyframesvendors) — add __@keyframe__ vendor prefixing
   - [colors](#colors) — add colour helpers like `rgba(#fc0, .5)`
+  - [references](#references) — add property references support `height: @width` etc
 
 ### .media(obj)
 
@@ -322,6 +323,38 @@ rework(str)
   .toString()
 ```
 
+### .references()
+
+  Add property reference support.
+
+```css
+button {
+  width: 120px;
+}
+
+button.round {
+  width: 50px;
+  height: @width;
+  line-height: @height;
+  background-size: @width @height;
+}
+```
+
+yields:
+
+```css
+button {
+  width: 120px
+}
+
+button.round {
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  background-size: 50px 50px
+}
+```
+
 ### .vars()
 
   Add variable support. Note that this does not cascade like the CSS variable
@@ -385,7 +418,6 @@ button {
   background: rgba(204, 204, 204, .5);
 }
 ```
-
 
 ### .keyframes([vendors])
 

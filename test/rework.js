@@ -50,6 +50,15 @@ describe('rework', function(){
     })
   })
 
+  describe('.references()', function(){
+    it('should substitute @<word> with property values', function(){
+      rework(fixture('references'))
+        .use(rework.references())
+        .toString()
+        .should.equal(fixture('references.out'));
+    })
+  })
+
   describe('.at2x()', function(){
     it('should add device-pixel-ratio rules', function(){
       rework(fixture('at2x'))
