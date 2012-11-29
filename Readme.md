@@ -15,6 +15,10 @@ or in the browser:
 
     $ component install visionmedia/rework
 
+## Links
+
+  - [rework mixins](https://github.com/visionmedia/rework-mixins)
+
 ## rework(1)
 
 ```
