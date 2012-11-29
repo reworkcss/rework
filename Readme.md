@@ -219,6 +219,7 @@ button {
 ```js
 .use(rework.prefixValue('linear-gradient'))
 .use(rework.prefixValue('radial-gradient'))
+```
 
 ```css
 
