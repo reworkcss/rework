@@ -1,3 +1,15 @@
+body {
+  background: -webkit-linear-gradient(#ddd,#eee);
+  background: -moz-linear-gradient(#ddd,#eee);
+  background: linear-gradient(#ddd,#eee)
+}
+
+div {
+  background: -webkit-radial-gradient(#cde6f9, #81a8cb);
+  background: -moz-radial-gradient(#cde6f9, #81a8cb);
+  background: radial-gradient(#cde6f9, #81a8cb)
+}
+
 .button {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
