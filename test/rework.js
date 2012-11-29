@@ -50,6 +50,27 @@ describe('rework', function(){
     })
   })
 
+  describe('.mixin(obj)', function(){
+    it('should apply mixins', function(){
+      rework(fixture('mixins'))
+        .use(rework.mixin({ overflow: ellipsis }))
+        .toString()
+        .should.equal(fixture('mixins.out'));
+      
+      function ellipsis(type) {
+        if ('ellipsis' == type) {
+          return {
+            'white-space': 'nowrap',
+            'overflow': 'hidden',
+            'text-overflow': 'ellipsis'
+          }
+        }
+      
+        return type;
+      }
+    })
+  })
+
   describe('.references()', function(){
     it('should substitute @<word> with property values', function(){
       rework(fixture('references'))

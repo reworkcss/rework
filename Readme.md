@@ -76,6 +76,7 @@ $ rework -v webkit,moz < my.css > my.reworked.css
   - [keyframes](#keyframesvendors) — add __@keyframe__ vendor prefixing
   - [colors](#colors) — add colour helpers like `rgba(#fc0, .5)`
   - [references](#references) — add property references support `height: @width` etc
+  - [mixin](#mixinobjects) — add custom property logic with mixing
 
 ### .media(obj)
 
@@ -321,6 +322,52 @@ function rewrite(url) {
 rework(str)
   .use(rework.url(rewrite))
   .toString()
+```
+
+### .mixin(object)
+
+  Add user-defined mixins, functions that are invoked for a given property, and
+  passed the value. Returning an object that represents one or more properties.
+
+  For example the following `overflow` mixin allows the designer
+  to utilize `overflow: ellipsis;` to automatically assign associated
+  properties preventing wrapping etc.
+
+```js
+var css = rework(css)
+  .use(rework.mixin({ overflow: ellipsis }))
+  .toString()
+
+function ellipsis(type) {
+  if ('ellipsis' == type) {
+    return {
+      'white-space': 'nowrap',
+      'overflow': 'hidden',
+      'text-overflow': 'ellipsis'
+    }
+  }
+
+  return type;
+}
+```
+
+  Mixins in use look just like regular CSS properties:
+
+```css
+
+h1 {
+  overflow: ellipsis;
+}
+```
+
+yields:
+
+```css
+h1 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis
+}
 ```
 
 ### .references()

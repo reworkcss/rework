@@ -1,0 +1,7 @@
+
+h1 {
+  color: blue;
+  margin: 15px;
+  overflow: ellipsis;
+  text-align: center;
+}
