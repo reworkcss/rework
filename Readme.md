@@ -214,6 +214,49 @@ button {
 }
 ```
 
+  This works with other values as well, such as gradients. For example:
+
+```js
+.use(rework.prefixValue('linear-gradient'))
+.use(rework.prefixValue('radial-gradient'))
+
+```css
+
+button {
+  background: linear-gradient(#eee, #ddd);
+}
+
+button.round {
+  border-radius: 50%;
+  background-image: radial-gradient(#cde6f9, #81a8cb);
+}
+
+body {
+  background: -webkit-linear-gradient(#fff, #eee);
+}
+```
+
+yields:
+
+```css
+button {
+  background: -webkit-linear-gradient(#eee, #ddd);
+  background: -moz-linear-gradient(#eee, #ddd);
+  background: linear-gradient(#eee, #ddd)
+}
+
+button.round {
+  border-radius: 50%;
+  background-image: -webkit-radial-gradient(#cde6f9, #81a8cb);
+  background-image: -moz-radial-gradient(#cde6f9, #81a8cb);
+  background-image: radial-gradient(#cde6f9, #81a8cb)
+}
+
+body {
+  background: -webkit-linear-gradient(#fff, #eee)
+}
+```
+
 ### .prefixSelectors(string)
 
   Prefix selectors with the given `string`.
