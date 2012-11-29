@@ -30,6 +30,15 @@ describe('rework', function(){
         .toString()
         .should.equal(fixture('prefix-value.out'));
     })
+
+    it('should support gradients', function(){
+      rework(fixture('gradients'))
+        .vendors(vendors)
+        .use(rework.prefixValue('linear-gradient'))
+        .use(rework.prefixValue('radial-gradient'))
+        .toString()
+        .should.equal(fixture('gradients.out'));
+    })
   })
 
   describe('.at2x()', function(){
