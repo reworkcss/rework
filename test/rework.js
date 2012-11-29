@@ -41,6 +41,15 @@ describe('rework', function(){
     })
   })
 
+  describe('.colors()', function(){
+    it('should support rgba(color, a)', function(){
+      rework(fixture('colors'))
+        .use(rework.colors())
+        .toString()
+        .should.equal(fixture('colors.out'));
+    })
+  })
+
   describe('.at2x()', function(){
     it('should add device-pixel-ratio rules', function(){
       rework(fixture('at2x'))
