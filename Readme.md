@@ -18,6 +18,7 @@ or in the browser:
 ## Links
 
   - [rework mixins](https://github.com/visionmedia/rework-mixins)
+  - [significant whitespace](https://github.com/visionmedia/css-whitespace)
 
 ## rework(1)
 
