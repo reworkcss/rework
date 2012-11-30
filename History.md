@@ -1,4 +1,12 @@
 
+0.9.0 / 2012-11-30 
+==================
+
+  * add mixin support
+  * add property reference support
+  * add rgba(color, a) plugin
+  * add gradient support. Closes #12
+
 0.8.0 / 2012-11-21 
 ==================
 
