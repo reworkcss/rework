@@ -119,7 +119,7 @@ yields:
   }
 }
 
-@media @media only screen and (min-width : 321px) {
+@media only screen and (min-width : 321px) {
   body {
     background: 'red'
   }
