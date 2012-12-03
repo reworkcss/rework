@@ -92,7 +92,7 @@ $ rework -v webkit,moz < my.css > my.reworked.css
 ```js
 style.use(rework.media({
   'phone': 'only screen and (min-device-width : 320px) and (max-device-width : 480px)',
-  'phone-landscape': '@media only screen and (min-width : 321px)'
+  'phone-landscape': 'only screen and (min-width : 321px)'
 }))
 ```
 
