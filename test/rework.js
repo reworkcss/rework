@@ -66,7 +66,9 @@ describe('rework', function(){
           }
         }
       
-        return type;
+        return {
+          'overflow': type
+        };
       }
     })
   })

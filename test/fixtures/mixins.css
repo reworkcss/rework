@@ -5,3 +5,7 @@ h1 {
   overflow: ellipsis;
   text-align: center;
 }
+
+h2 {
+  overflow: hidden;
+}
