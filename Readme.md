@@ -163,21 +163,26 @@ yields:
   defaulting to `.vendors()`.
 
 ```css
-logo {
-  background-image: url('/public/images/logo.png')
+.logo {
+  background-image: url('component.png');
+  width: 289px;
+  height: 113px
 }
 ```
 
 yields:
 
 ```css
-logo {
-  background-image: url('/public/images/logo.png')
+.logo {
+  background-image: url('component.png');
+  width: 289px;
+  height: 113px
 }
 
 @media all and (-webkit-min-device-pixel-ratio: 1.5) {
   .logo {
-    background-image: url("/public/images/logo@2x.png")
+    background-image: url("component@2x.png");
+    background-size: contain
   }
 }
 ```
