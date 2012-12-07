@@ -18,6 +18,6 @@ a.join {
 a.button
 input[type='submit'],
 input[type='button'] {
-  extend: button;
+  extends: button;
   margin: 2px;
 }
