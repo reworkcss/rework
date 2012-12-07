@@ -82,6 +82,57 @@ $ rework -v webkit,moz < my.css > my.reworked.css
   - [colors](#colors) — add colour helpers like `rgba(#fc0, .5)`
   - [references](#references) — add property references support `height: @width` etc
   - [mixin](#mixinobjects) — add custom property logic with mixing
+  - [extend](#extend) — add `extend: selector` support
+
+### .extend()
+
+  Add support for extending existing rulesets:
+
+```css
+
+button {
+  padding: 5px 10px;
+  border: 1px solid #eee;
+  border-bottom-color: #ddd;
+}
+
+.green {
+  background: green;
+  padding: 10px 15px
+}
+
+a.join {
+  extend: button;
+  extend: .green;
+}
+
+a.button
+input[type='submit'],
+input[type='button'] {
+  extend: button
+}
+```
+
+yields:
+
+```css
+
+button,
+a.button,
+input[type='submit'],
+input[type='button'],
+a.join {
+  padding: 5px 10px;
+  border: 1px solid #eee;
+  border-bottom-color: #ddd;
+}
+
+.green,
+a.join {
+  background: green;
+  padding: 10px 15px
+}
+```
 
 ### .media(obj)
 

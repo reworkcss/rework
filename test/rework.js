@@ -41,6 +41,15 @@ describe('rework', function(){
     })
   })
 
+  describe('.extend()', function(){
+    it('should allow extending rulesets', function(){
+      rework(fixture('extend'))
+      .use(rework.extend())
+      .toString()
+      .should.equal(fixture('extend.out'));
+    })
+  })
+
   describe('.colors()', function(){
     it('should support rgba(color, a)', function(){
       rework(fixture('colors'))
