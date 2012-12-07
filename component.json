@@ -5,6 +5,7 @@
   "keywords": ["css", "manipulation", "preprocess", "transform"],
   "dependencies": {
     "visionmedia/css": "1.0.7",
+    "visionmedia/debug": "*",
     "component/path": "*"
   },
   "scripts": [
