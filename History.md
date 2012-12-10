@@ -1,4 +1,11 @@
 
+0.10.0 2012-12-10 
+==================
+
+  * add .mixin -> .mixins alias
+  * add debug to component.json
+  * add `extends` support
+
 0.9.2 / 2012-12-05 
 ==================
 
