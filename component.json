@@ -6,6 +6,7 @@
   "dependencies": {
     "visionmedia/css": "1.0.7",
     "visionmedia/debug": "*",
+    "component/color-parser": "0.1.0",
     "component/path": "*"
   },
   "scripts": [
