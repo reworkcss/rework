@@ -1,6 +1,6 @@
 {
   "name": "rework",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "CSS manipulations built on CSSOM",
   "keywords": ["css", "manipulation", "preprocess", "transform"],
   "dependencies": {
@@ -16,6 +16,9 @@
     "lib/plugins/vars.js",
     "lib/plugins/ease.js",
     "lib/plugins/at2x.js",
+    "lib/plugins/colors.js",
+    "lib/plugins/extend.js",
+    "lib/plugins/mixin.js",
     "lib/plugins/keyframes.js",
     "lib/plugins/opacity.js",
     "lib/plugins/prefix-selectors.js",
