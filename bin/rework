@@ -126,6 +126,8 @@ function done() {
     style.use(rework.ease());
   }
 
+  style.use(rework.prefixValue('linear-gradient'))
+  style.use(rework.prefixValue('radial-gradient'))
   style.use(rework.prefixValue('transform'))
   style.use(rework.prefix(props))
   style.use(rework.at2x())
