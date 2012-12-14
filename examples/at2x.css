@@ -3,3 +3,7 @@
   width: 289px;
   height: 113px;
 }
+
+.button {
+  background: url(some/awesome.svg);
+}
