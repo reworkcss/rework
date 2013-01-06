@@ -7,5 +7,5 @@ button.round {
   width: 50px;
   height: @width;
   line-height: @height;
-  background-size: @width @height;
+  background-size: @width @line-height;
 }
