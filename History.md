@@ -1,4 +1,10 @@
 
+0.11.0 / 2013-01-16 
+==================
+
+  * fix extend nesting. Closes #22
+  * fix hyphenated property references. Closes #20
+
 0.10.2 / 2012-12-14 
 ==================
 
