@@ -48,6 +48,13 @@ describe('rework', function(){
       .toString()
       .should.equal(fixture('extend.out'));
     })
+
+    it('should support nested selectors', function(){
+      rework(fixture('extend.nested'))
+      .use(rework.extend())
+      .toString()
+      .should.equal(fixture('extend.nested.out').trim());
+    })
   })
 
   describe('.colors()', function(){
@@ -65,7 +72,7 @@ describe('rework', function(){
         .use(rework.mixin({ overflow: ellipsis }))
         .toString()
         .should.equal(fixture('mixins.out'));
-      
+
       function ellipsis(type) {
         if ('ellipsis' == type) {
           return {
@@ -74,7 +81,7 @@ describe('rework', function(){
             'text-overflow': 'ellipsis'
           }
         }
-      
+
         return {
           'overflow': type
         };
