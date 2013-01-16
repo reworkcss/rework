@@ -1,19 +1,26 @@
+.actions a,
 button,
-.actions a {
+input[type='submit'] {
   background: black
 }
 
+.actions a:hover,
 button:hover,
-.actions a:hover {
+input[type='submit']:hover {
   background: rgba(0,0,0,.5)
 }
 
+.actions a:hover .icon,
 button:hover .icon,
-.actions a:hover .icon {
+input[type='submit']:hover .icon {
   color: rgba(255,255,255,.5)
 }
 
-button,
 .actions a {
   padding: 5px 10px
+}
+
+button,
+input[type='submit'] {
+
 }
