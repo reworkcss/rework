@@ -55,6 +55,13 @@ describe('rework', function(){
       .toString()
       .should.equal(fixture('extend.nested.out').trim());
     })
+
+    it('should support placeholder selectors', function(){
+      rework(fixture('extend.nested.placeholder'))
+      .use(rework.extend())
+      .toString()
+      .should.equal(fixture('extend.nested.placeholder.out').trim());
+    })
   })
 
   describe('.colors()', function(){
