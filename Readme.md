@@ -134,6 +134,53 @@ a.join {
 }
 ```
 
+  Optionally selectors may be prefixed with `%` to create sass-style "placeholder"
+  selectors, which do not become part of the output. For example:
+
+```css
+%dark-button {
+  background: black;
+}
+
+%dark-button:hover {
+  background: rgba(0,0,0,.5);
+}
+
+%dark-button:hover .icon {
+  color: rgba(255,255,255,.5);
+}
+
+button,
+.actions a {
+  extend: %dark-button;
+  padding: 5px 10px;
+}
+```
+
+yields:
+
+```css
+button,
+.actions a {
+  background: black
+}
+
+button:hover,
+.actions a:hover {
+  background: rgba(0,0,0,.5)
+}
+
+button:hover .icon,
+.actions a:hover .icon {
+  color: rgba(255,255,255,.5)
+}
+
+button,
+.actions a {
+  padding: 5px 10px
+}
+```
+
 ### .media(obj)
 
   Define media macros with the given `obj`.
@@ -729,7 +776,7 @@ function positions() {
             value: n
           });
         }
-        
+
       });
     });
   }
@@ -742,6 +789,6 @@ var css = rework(read('positions.css', 'utf8'))
 console.log(css);
 ```
 
-## License 
+## License
 
   MIT
