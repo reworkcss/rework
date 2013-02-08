@@ -9,3 +9,9 @@ h1 {
 h2 {
   overflow: hidden;
 }
+
+@media screen {
+  h3 {
+    overflow: ellipsis;
+  }
+}

@@ -4,7 +4,7 @@ var rework = require('..')
   , read = fs.readFileSync;
 
 function fixture(name) {
-  return read('test/fixtures/' + name + '.css', 'utf8');
+  return read('test/fixtures/' + name + '.css', 'utf8').trim();
 }
 
 var vendors = ['-webkit-', '-moz-'];
@@ -77,7 +77,7 @@ describe('rework', function(){
     it('should apply mixins', function(){
       rework(fixture('mixins'))
         .use(rework.mixin({ overflow: ellipsis }))
-        .toString()
+        .toString().trim()
         .should.equal(fixture('mixins.out'));
 
       function ellipsis(type) {

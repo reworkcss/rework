@@ -10,3 +10,11 @@ h1 {
 h2 {
   overflow: hidden
 }
+
+@media screen {
+  h3 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis
+  }
+}
