@@ -14,3 +14,9 @@ h1 {
 .content {
   background: var(accent-background) !important;
 }
+
+@media only screen and (min-device-width: 600px) {
+  h2 {
+    color: var(main-color);
+  }
+}

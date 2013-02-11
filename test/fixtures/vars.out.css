@@ -14,3 +14,9 @@ h1 {
 .content {
   background: linear-gradient(to top, #c06, white) !important
 }
+
+@media only screen and (min-device-width: 600px) {
+  h2 {
+    color: #c06
+  }
+}
