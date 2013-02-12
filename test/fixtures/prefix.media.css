@@ -1,0 +1,14 @@
+
+@media phone {
+  body {
+    background: 'green';
+    border-radius: 5px;
+  }
+}
+
+@media phone-landscape {
+  body {
+    background: 'red';
+    border-radius: 2px;
+  }
+}

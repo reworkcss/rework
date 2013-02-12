@@ -131,6 +131,14 @@ describe('rework', function(){
         .toString()
         .should.equal(fixture('prefix.out'));
     })
+
+    it('should visit @media', function(){
+      rework(fixture('prefix.media'))
+        .vendors(vendors)
+        .use(rework.prefix('border-radius'))
+        .toString()
+        .should.equal(fixture('prefix.media.out'));
+    })
   })
 
   describe('.prefixSelectors(str)', function(){
