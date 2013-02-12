@@ -1,4 +1,10 @@
 
+0.12.2 / 2013-02-12 
+==================
+
+  * add prefix visiting for @media
+  * add column props (fixes #26)
+
 0.12.1 / 2013-02-08 
 ==================
 
