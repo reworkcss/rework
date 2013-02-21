@@ -195,6 +195,16 @@ describe('rework', function(){
     })
   })
 
+  describe('.eval()', function(){
+    it('should add calculations support', function(){
+      rework(fixture('eval'))
+        .vendors(vendors)
+        .use(rework.eval())
+        .toString()
+        .should.equal(fixture('eval.out'));
+    })
+  })
+
   describe('.ease()', function(){
     it('should add additional easing functions', function(){
       rework(fixture('easing'))
