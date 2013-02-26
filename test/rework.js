@@ -15,6 +15,15 @@ var media = {
 };
 
 describe('rework', function(){
+  describe('visitor', function(){
+    it('should work with charset, import, etc', function(){
+      rework(fixture('charset'))
+        .use(rework.extend())
+        .toString().trim()
+        .should.equal(fixture('charset.out'));
+    })
+  })
+
   describe('.prefixValue(value)', function(){
     it('should prefix the value', function(){
       rework(fixture('prefix-value'))
