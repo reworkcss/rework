@@ -1,3 +1,8 @@
 button {
   transition: height, transform 2s, width 0.3s linear;
+  background: green;
+}
+
+@media screen {
+  transition: transform 1s
 }
