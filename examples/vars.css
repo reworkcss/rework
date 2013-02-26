@@ -20,3 +20,12 @@ h1 {
     color: var(main-color);
   }
 }
+
+@keyframes fade {
+  from {
+    color: var(main-color);
+  }
+  to {
+    color: var(header-color);
+  }
+}
