@@ -4,5 +4,7 @@ button {
 }
 
 @media screen {
-  transition: transform 1s
+  button {
+    transition: transform 1s
+  }
 }

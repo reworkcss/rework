@@ -4,3 +4,11 @@ button {
   transition: height, transform 2s, width 0.3s linear;
   background: green
 }
+
+@media screen {
+  button {
+    -webkit-transition: -webkit-transform 1s;
+    -moz-transition: -moz-transform 1s;
+    transition: transform 1s
+  }
+}
