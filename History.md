@@ -1,4 +1,15 @@
 
+0.13.0 / 2013-02-26 
+==================
+
+  * refactor url() with visitor
+  * refactor references() with visitor
+  * refactor prefixValue() with visitor
+  * refactor mixin with visitor
+  * refactor ease plugin with visitor
+  * refactor colors plugin with visitor
+  * add visit.declarations() helper
+
 0.12.2 / 2013-02-12 
 ==================
 
