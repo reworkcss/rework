@@ -8,3 +8,10 @@ button.round {
   line-height: 50px;
   background-size: 50px 50px
 }
+
+@media screen {
+  button {
+    width: 80px;
+    height: 80px
+  }
+}
