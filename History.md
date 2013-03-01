@@ -1,4 +1,10 @@
 
+0.13.2 / 2013-02-28 
+==================
+
+  * add ./rework.js stand-alone build
+  * refactor positions example with visitor
+
 0.13.1 / 2013-02-26 
 ==================
 
