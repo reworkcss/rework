@@ -2,5 +2,5 @@ components
 support
 test
 examples
-rework.js
+/rework.js
 *.sock
