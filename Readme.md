@@ -85,6 +85,7 @@ $ rework -v webkit,moz < my.css > my.reworked.css
   - [references](#references) — add property references support `height: @width` etc
   - [mixin](#mixinobjects) — add custom property logic with mixing
   - [extend](#extend) — add `extend: selector` support
+  - [import](#importpath) — read and inline imported stylesheets
 
 ### .extend()
 
@@ -626,6 +627,39 @@ yields:
   to {
     opacity: 1;
   }
+}
+```
+
+### .import(path)
+  Read and inline imported stylesheets relative to supplied base path.
+
+main.css:
+
+```css
+@import "imported.css"
+
+a {
+  color: yellow
+}
+```
+
+imported.css:
+
+```css
+span {
+  color: red
+}
+```
+
+yields:
+
+```css
+span {
+  color: red
+}
+
+a {
+  color: yellow
 }
 ```
 

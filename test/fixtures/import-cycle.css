@@ -1,0 +1,5 @@
+@import url('import-cycle-imported.css');
+
+a {
+  color: blue;
+}
