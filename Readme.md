@@ -11,9 +11,11 @@ with node:
 
     $ npm install rework
 
-or in the browser:
+or in the browser with component:
 
     $ component install visionmedia/rework
+
+or in the browser with the stand-alone build ./rework.js referencing the `rework` global.
 
 ## Links
 
