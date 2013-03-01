@@ -1,0 +1,6 @@
+@import url('import-imported.css');
+@import 'import-imported-2.css';
+
+a {
+  color: blue;
+}

@@ -230,6 +230,22 @@ describe('rework', function(){
     })
   })
 
+  describe('.import(path)', function(){
+    it('should read imported scripts', function(){
+      rework(fixture('import'))
+        .use(rework.import(__dirname + "/fixtures"))
+        .toString()
+        .should.equal(fixture('import.out'));
+    })
+
+    it('should detect import cycles', function(){
+      (function() {
+        rework(fixture('import-cycle'))
+          .use(rework.import(__dirname + "/fixtures"));
+      }).should.throw();
+    })
+  })
+
   describe('.toString() compress option', function(){
     it('should compress the output', function(){
       rework('body { color: red; }')
