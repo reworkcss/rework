@@ -1,6 +1,7 @@
 
 var rework = require('..')
   , fs = require('fs')
+  , assert = require('assert')
   , read = fs.readFileSync;
 
 function fixture(name) {
@@ -15,6 +16,12 @@ var media = {
 };
 
 describe('rework', function(){
+  describe('.properties', function(){
+    it('should be vendor-prefixed properties', function(){
+      assert(rework.properties);
+    })
+  })
+
   describe('visitor', function(){
     it('should work with charset, import, etc', function(){
       rework(fixture('charset'))
