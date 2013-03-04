@@ -80,6 +80,7 @@ $ rework -v webkit,moz < my.css > my.reworked.css
   - [opacity](#opacity) — add IE opacity support
   - [url](#urlcallback) — rewrite `url()`s with a callback function
   - [vars](#vars) — add css variable support
+  - [eval](#eval) — add evaluations support
   - [keyframes](#keyframesvendors) — add __@keyframe__ vendor prefixing
   - [colors](#colors) — add colour helpers like `rgba(#fc0, .5)`
   - [references](#references) — add property references support `height: @width` etc
@@ -555,6 +556,41 @@ h1 {
 
 .content {
   background: linear-gradient(to top, #c06, white) !important
+}
+```
+
+### .eval()
+
+  Add evaluations support. A feature to evaluate math expressions, and can be
+  particularly useful together with the .vars() plugin.
+
+```css
+:root {
+  var-main-font-size: 16px;
+}
+
+body {
+  font-size: var(main-font-size);
+}
+
+h1 {
+  font-size: eval(var(main-font-size) * 2);
+}
+```
+
+  yields:
+
+```css
+:root {
+  var-main-font-size: 16px
+}
+
+body {
+  font-size: 16px
+}
+
+h1 {
+  font-size: 32px
 }
 ```
 

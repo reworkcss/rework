@@ -1,0 +1,9 @@
+body {
+  font-size: eval(8px * 2);
+}
+
+@media only screen and (min-device-width: 600px) {
+  h2 {
+    margin: eval(100px * 10%);
+  }
+}
