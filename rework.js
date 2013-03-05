@@ -437,14 +437,14 @@ module.exports = function(css){
 
     if (!open()) return;
     comments();
-  
+
     // declarations
     var decl;
     while (decl = declaration()) {
       decls.push(decl);
       comments();
     }
-  
+
     if (!close()) return;
     return decls;
   }
@@ -452,7 +452,7 @@ module.exports = function(css){
   /**
    * Parse at rule.
    */
-   
+
   function atrule() {
     return keyframes()
       || media()
@@ -463,14 +463,14 @@ module.exports = function(css){
   /**
    * Parse rule.
    */
-  
+
   function rule() {
     var sel = selector();
     if (!sel) return;
     comments();
     return { selectors: sel, declarations: declarations() };
   }
-  
+
   return stylesheet();
 };
 
@@ -1088,7 +1088,7 @@ exports.basename = function(path){
 };
 
 exports.dirname = function(path){
-  return path.split('/').slice(0, -1).join('/') || '.'; 
+  return path.split('/').slice(0, -1).join('/') || '.';
 };
 
 exports.extname = function(path){
@@ -1724,39 +1724,39 @@ require.register("rework/lib/plugins/keyframes.js", function(exports, require, m
 
 /**
  * Prefix keyframes.
- * 
+ *
  *   @keyframes animation {
  *     from {
  *       opacity: 0;
  *     }
- *   
+ *
  *     to {
  *       opacity: 1;
  *     }
  *   }
- * 
+ *
  * yields:
- * 
+ *
  *   @keyframes animation {
  *     from {
  *       opacity: 0;
  *     }
- *   
+ *
  *     to {
  *       opacity: 1;
  *     }
  *   }
- * 
+ *
  *   @-webkit-keyframes animation {
  *     from {
  *       opacity: 0;
  *     }
- *   
+ *
  *     to {
  *       opacity: 1;
  *     }
  *   }
- * 
+ *
  */
 
 module.exports = function(vendors) {
@@ -1873,19 +1873,19 @@ require.register("rework/lib/plugins/opacity.js", function(exports, require, mod
 
 /**
  * Add IE opacity support.
- * 
+ *
  *   ul {
  *     opacity: 1 !important;
  *   }
- * 
+ *
  * yields:
- * 
+ *
  *   ul {
  *     opacity: 1 !important;
  *     -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100) !important;
  *     filter: alpha(opacity=100) !important
  *   }
- * 
+ *
  */
 
 module.exports = function() {
@@ -1923,17 +1923,17 @@ require.register("rework/lib/plugins/prefix-selectors.js", function(exports, req
 
 /**
  * Prefix selectors with `str`.
- * 
+ *
  *    button {
  *      color: red;
  *    }
- * 
+ *
  * yields:
- * 
+ *
  *    #dialog button {
  *      color: red;
  *    }
- * 
+ *
  */
 
 module.exports = function(str) {
