@@ -1,0 +1,5 @@
+.icon {
+  background: inline(component@2x.png) no-repeat;
+  width: 10px;
+  height: 10px
+}
