@@ -112,6 +112,24 @@ describe('rework', function(){
     })
   })
 
+  describe('.func()', function(){
+    it('should add custom function', function(){
+      rework(fixture('func'))
+        .use(rework.func({ fonts: fonts }))
+        .toString()
+        .should.equal(fixture('func.out'));
+
+      function fonts() {
+        var files = Array.prototype.slice.call(arguments);
+        var types = { woff: 'woff', ttf: 'truetype', otf: 'opentype' };
+        return files.map(function(file){
+          var ext = file.replace(/^.*\./, '');
+          return 'url(' + file + ') format("' + types[ext] + '")';
+        }).join(', ');
+      }
+    })
+  })
+
   describe('.references()', function(){
     it('should substitute @<word> with property values', function(){
       rework(fixture('references'))

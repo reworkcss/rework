@@ -480,6 +480,40 @@ h1 {
 }
 ```
 
+### .func(object)
+
+  Add user-defined CSS functions.
+
+  For example create `black(0.5)` shortcut, to replace
+  long `rgba(0, 0, 0, 0.5)`.
+
+```js
+var css = rework(css)
+  .use(rework.func({ black: black }))
+  .toString()
+
+function black(opacity) {
+  return 'rgba(0, 0, 0, ' + opacity + ')';
+}
+```
+
+  User code will receive CSS arguments and replace user-defined function
+  by returned code.
+
+```css
+input {
+  box-shadow: 0 0 5px black(0.7);
+}
+```
+
+yields:
+
+```css
+input {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+}
+```
+
 ### .references()
 
   Add property reference support.
