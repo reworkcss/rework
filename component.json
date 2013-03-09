@@ -15,6 +15,7 @@
     "lib/utils.js",
     "lib/visit.js",
     "lib/properties.js",
+    "lib/plugins/function.js",
     "lib/plugins/url.js",
     "lib/plugins/vars.js",
     "lib/plugins/ease.js",
