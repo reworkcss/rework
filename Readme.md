@@ -1,6 +1,6 @@
 # rework
 
-  CSS manipulations built on [css](//github.com/visionmedia/css),
+  CSS manipulations built on [css](https://github.com/visionmedia/css),
   allowing you to automate vendor prefixing, create your own properties,
   inline images, anything you can imagine! Also works in the browser as
   a [component](https://github.com/component/component).
