@@ -278,4 +278,29 @@ describe('rework', function(){
         .should.equal('body{color:red}');
     })
   })
+
+  describe('.tidy())', function(){
+    it('should tidy output by removing empty selectors', function(){
+      rework(fixture('tidy'))
+      .use(rework.tidy())
+      .toString()
+      .should.equal(fixture('tidy.out'));
+    })
+
+    it('should tidy output after .extend() by removing empty selectors', function(){
+      rework(fixture('tidy.extend'))
+      .use(rework.extend())
+      .use(rework.tidy())
+      .toString()
+      .should.equal(fixture('tidy.extend.out'));
+    })
+
+    it('should tidy output after .extend() nested placeholder by removing empty selectors', function(){
+      rework(fixture('tidy.extend.nested.placeholder'))
+      .use(rework.extend())
+      .use(rework.tidy())
+      .toString()
+      .should.equal(fixture('tidy.extend.nested.placeholder.out'));
+    })
+  })
 })
