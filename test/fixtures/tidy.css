@@ -1,0 +1,21 @@
+
+button {
+  padding: 5px 10px;
+  border: 1px solid #eee;
+  border-bottom-color: #ddd;
+}
+
+.green {
+  background: green;
+  padding: 10px 15px;
+}
+
+a.join {
+
+}
+
+a.button
+input[type='submit'],
+input[type='button'] {
+
+}

@@ -1195,6 +1195,7 @@ exports.mixin = exports.mixins = require('./plugins/mixin');
 exports.prefix = require('./plugins/prefix');
 exports.colors = require('./plugins/colors');
 exports.extend = require('./plugins/extend');
+exports.tidy = require('./plugins/tidy');
 exports.references = require('./plugins/references');
 exports.prefixValue = require('./plugins/prefix-value');
 exports.prefixSelectors = require('./plugins/prefix-selectors');
