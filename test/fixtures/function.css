@@ -1,4 +1,4 @@
 @font-face {
-  scr: fonts(a.woff,a.ttf, a.otf);
+  scr: fonts("a.woff",a.ttf, 'a.otf');
   font-family: A
 }
