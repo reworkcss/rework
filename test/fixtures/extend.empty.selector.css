@@ -1,0 +1,7 @@
+%dark-button {
+  background: black;
+}
+
+.button {
+  extend: %dark-button;
+}

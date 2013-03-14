@@ -78,6 +78,44 @@ describe('rework', function(){
       .toString()
       .should.equal(fixture('extend.nested.placeholder.out').trim());
     })
+
+    it('should support combined selectors', function(){
+      rework(fixture('extend.combined.selectors'))
+      .use(rework.extend())
+      .toString()
+      .should.equal(fixture('extend.combined.selectors.out'));
+    })
+
+    it('should support clearfix placeholder', function(){
+      // #52
+      rework(fixture('extend.clearfix'))
+      .use(rework.extend())
+      .toString()
+      .should.equal(fixture('extend.clearfix.out'));
+    })
+
+    it('should support clearfix placeholder with zoom', function(){
+      rework(fixture('extend.clearfix.zoom'))
+      .use(rework.extend())
+      .toString()
+      .should.equal(fixture('extend.clearfix.zoom.out'));
+    })
+
+    it('should not leave empty selectors', function(){
+      // #46
+      rework(fixture('extend.empty.selector'))
+      .use(rework.extend())
+      .toString()
+      .should.equal(fixture('extend.empty.selector.out'));
+    })
+
+    it('should not leave unused placeholders without selectors', function(){
+      // #53
+      rework(fixture('extend.unused.placeholder'))
+      .use(rework.extend())
+      .toString()
+      .should.equal(fixture('extend.unused.placeholder.out'));
+    })
   })
 
   describe('.colors()', function(){

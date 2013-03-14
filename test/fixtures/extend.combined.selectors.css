@@ -1,0 +1,7 @@
+button + button {
+  color: green;
+}
+
+.button {
+  extend: button;
+}
