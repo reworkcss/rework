@@ -21,6 +21,7 @@ or in the browser with the stand-alone build ./rework.js referencing the `rework
 
   - [rework mixins](https://github.com/visionmedia/rework-mixins)
   - [significant whitespace](https://github.com/visionmedia/css-whitespace)
+  - third-party [plugins](https://github.com/visionmedia/rework/wiki/Plugins)
 
 ## rework(1)
 
