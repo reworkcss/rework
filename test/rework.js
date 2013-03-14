@@ -227,6 +227,16 @@ describe('rework', function(){
         .toString()
         .should.equal(fixture('vars.out'));
     })
+
+    it('should add variables from an object', function(){
+      var args = JSON.parse(fs.readFileSync('test/fixtures/vars.args.json', 'utf8'))
+
+      rework(fixture('vars.args'))
+        .vendors(vendors)
+        .use(rework.vars(args))
+        .toString()
+        .should.equal(fixture('vars.args.out'));
+    })
   })
 
   describe('.ease()', function(){
