@@ -1,0 +1,4 @@
+button + button,
+.button + .button {
+  color: green
+}
