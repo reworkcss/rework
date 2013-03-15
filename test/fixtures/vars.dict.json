@@ -1,0 +1,5 @@
+{
+  "header-color": "#06c",
+  "main-color": "#c06",
+  "accent-background": "linear-gradient(to top, var(main-color), white)"
+}

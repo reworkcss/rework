@@ -546,7 +546,7 @@ button.round {
 }
 ```
 
-### .vars()
+### .vars(object)
 
   Add variable support. Note that this does not cascade like the CSS variable
   spec does, thus this is _not_ some sort of fallback mechanism, just a useful
@@ -574,15 +574,6 @@ h1 {
   yields:
 
 ```css
-:root {
-  var-header-color: #06c;
-  var-main-color: #c06
-}
-
-div {
-  var-accent-background: linear-gradient(to top, #c06, white)
-}
-
 h1 {
   background-color: #06c
 }
@@ -591,6 +582,33 @@ h1 {
   background: linear-gradient(to top, #c06, white) !important
 }
 ```
+
+  Alternatively, you can define the variables in an object.
+  Note that variables declared in CSS will have precedence.
+
+```js
+  var css = rework(css)
+    .use(vars({
+      'header-color': '#06c',
+      'main-color': '#c06',
+      'accept-background': 'linear-gradient(to top, var(main-color), white)'
+    }))
+    .toString()
+```
+
+Where `css`:
+
+```css
+h1 {
+  background-color: var(header-color);
+}
+
+.content {
+  background: var(accent-background) !important;
+}
+```
+
+will yield the same result as above.
 
 ### .colors()
 
