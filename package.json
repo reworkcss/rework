@@ -8,7 +8,7 @@
     "rework": "./bin/rework"
   },
   "dependencies": {
-    "css": "1.0.7",
+    "css": "1.0.8",
     "commander": "1.0.4",
     "color-parser": "0.1.0",
     "mime": "1.2.9",
