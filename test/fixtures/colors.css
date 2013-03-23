@@ -4,7 +4,7 @@ button {
 }
 
 button {
-  border: 1px solid rgba (  #fc0  , .2  );
+  border: 1px solid rgba(  #fc0  , .2);
 }
 
 button {
@@ -17,4 +17,8 @@ button {
 
 button {
   background: rgba(white, .2)
+}
+
+button {
+  background: linear-gradient(rgba(black, .5), rgba(black, .7))
 }
