@@ -227,6 +227,14 @@ describe('rework', function(){
         .toString()
         .should.equal(fixture('vars.out'));
     })
+
+    it('should add variable dictionary support', function(){
+      rework(fixture('vars.dict'))
+        .vendors(vendors)
+        .use(rework.vars(require('./fixtures/vars.dict.json')))
+        .toString()
+        .should.equal(fixture('vars.out'));
+    })
   })
 
   describe('.ease()', function(){
