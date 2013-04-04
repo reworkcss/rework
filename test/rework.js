@@ -223,7 +223,7 @@ describe('rework', function(){
     it('should add variable support', function(){
       rework(fixture('vars'))
         .vendors(vendors)
-        .use(rework.vars())
+        .use(rework.vars({ 'main-color': '#c06' }))
         .toString()
         .should.equal(fixture('vars.out'));
     })

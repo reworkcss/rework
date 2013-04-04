@@ -80,7 +80,7 @@ $ rework -v webkit,moz < my.css > my.reworked.css
   - [prefixSelectors](#prefixselectorsstring) — add prefixes to selectors
   - [opacity](#opacity) — add IE opacity support
   - [url](#urlcallback) — rewrite `url()`s with a callback function
-  - [vars](#vars) — add css variable support
+  - [vars](#varsobject) — add css variable support
   - [keyframes](#keyframesvendors) — add __@keyframe__ vendor prefixing
   - [colors](#colors) — add colour helpers like `rgba(#fc0, .5)`
   - [references](#references) — add property references support `height: @width` etc
@@ -547,11 +547,11 @@ button.round {
 }
 ```
 
-### .vars()
+### .vars([object])
 
   Add variable support. Note that this does not cascade like the CSS variable
   spec does, thus this is _not_ some sort of fallback mechanism, just a useful
-  feature.
+  feature. Optionally you may pass an `object` of variables from js-land.
 
 ```css
 :root {
