@@ -1,5 +1,5 @@
-
 rework.js:
+	component install
 	component build --standalone rework --out . --name rework
 
 test:
@@ -7,4 +7,4 @@ test:
 		--require should \
 		--reporter spec
 
-.PHONY: test
+.PHONY: rework.js test
