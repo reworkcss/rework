@@ -7,4 +7,4 @@ test:
 		--require should \
 		--reporter spec
 
-.PHONY: test
+.PHONY: test rework.js

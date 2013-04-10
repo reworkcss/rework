@@ -1,4 +1,15 @@
 
+0.14.0 / 2013-04-10
+==================
+
+  * add `rework.inline()` to encode images to base64
+  * add `rework.function(obj)`
+  * add var(object) support
+  * add rework.properties array
+  * remove unprefixed CSS3 properties
+  * update css
+  * fix colors() when multiple rgba() calls are in one property value
+
 0.13.2 / 2013-02-28
 ==================
 

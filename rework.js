@@ -1,12 +1,5 @@
 ;(function(){
 
-
-/**
- * hasOwnProperty.
- */
-
-var has = Object.prototype.hasOwnProperty;
-
 /**
  * Require the given path.
  *
@@ -83,10 +76,10 @@ require.resolve = function(path) {
 
   for (var i = 0; i < paths.length; i++) {
     var path = paths[i];
-    if (has.call(require.modules, path)) return path;
+    if (require.modules.hasOwnProperty(path)) return path;
   }
 
-  if (has.call(require.aliases, index)) {
+  if (require.aliases.hasOwnProperty(index)) {
     return require.aliases[index];
   }
 };
@@ -140,7 +133,7 @@ require.register = function(path, definition) {
  */
 
 require.alias = function(from, to) {
-  if (!has.call(require.modules, from)) {
+  if (!require.modules.hasOwnProperty(from)) {
     throw new Error('Failed to alias "' + from + '", it does not exist');
   }
   require.aliases[to] = from;
@@ -202,7 +195,7 @@ require.relative = function(parent) {
    */
 
   localRequire.exists = function(path) {
-    return has.call(require.modules, localRequire.resolve(path));
+    return require.modules.hasOwnProperty(localRequire.resolve(path));
   };
 
   return localRequire;
@@ -437,14 +430,14 @@ module.exports = function(css){
 
     if (!open()) return;
     comments();
-
+  
     // declarations
     var decl;
     while (decl = declaration()) {
       decls.push(decl);
       comments();
     }
-
+  
     if (!close()) return;
     return decls;
   }
@@ -452,7 +445,7 @@ module.exports = function(css){
   /**
    * Parse at rule.
    */
-
+   
   function atrule() {
     return keyframes()
       || media()
@@ -463,14 +456,14 @@ module.exports = function(css){
   /**
    * Parse rule.
    */
-
+  
   function rule() {
     var sel = selector();
     if (!sel) return;
     comments();
     return { selectors: sel, declarations: declarations() };
   }
-
+  
   return stylesheet();
 };
 
@@ -1088,7 +1081,7 @@ exports.basename = function(path){
 };
 
 exports.dirname = function(path){
-  return path.split('/').slice(0, -1).join('/') || '.';
+  return path.split('/').slice(0, -1).join('/') || '.'; 
 };
 
 exports.extname = function(path){
@@ -1108,8 +1101,7 @@ require.register("rework/lib/rework.js", function(exports, require, module){
  * Module dependencies.
  */
 
-var css = require('css')
-  , visit = require('./visit');
+var css = require('css');
 
 /**
  * Expose `rework`.
@@ -1121,7 +1113,13 @@ exports = module.exports = rework;
  * Expose `visit` helpers.
  */
 
-exports.visit = visit;
+exports.visit = require('./visit');
+
+/**
+ * Expose prefix properties.
+ */
+
+exports.properties = require('./properties');
 
 /**
  * Initialize a new stylesheet `Rework` with `str`.
@@ -1192,6 +1190,7 @@ Rework.prototype.toString = function(options){
 
 exports.media = require('./plugins/media');
 exports.mixin = exports.mixins = require('./plugins/mixin');
+exports.function = exports.functions = require('./plugins/function');
 exports.prefix = require('./plugins/prefix');
 exports.colors = require('./plugins/colors');
 exports.extend = require('./plugins/extend');
@@ -1204,6 +1203,7 @@ exports.at2x = require('./plugins/at2x');
 exports.url = require('./plugins/url');
 exports.ease = require('./plugins/ease');
 exports.vars = require('./plugins/vars');
+exports.inline = require('./plugins/inline');
 
 });
 require.register("rework/lib/utils.js", function(exports, require, module){
@@ -1256,6 +1256,139 @@ exports.declarations = function(node, fn){
 };
 
 });
+require.register("rework/lib/properties.js", function(exports, require, module){
+
+/**
+ * Prefixed properties.
+ */
+
+module.exports = [
+  'animation',
+  'animation-delay',
+  'animation-direction',
+  'animation-duration',
+  'animation-fill-mode',
+  'animation-iteration-count',
+  'animation-name',
+  'animation-play-state',
+  'animation-timing-function',
+  'appearance',
+  'background-visibility',
+  'background-composite',
+  'blend-mode',
+  'border-bottom-left-radius',
+  'border-bottom-right-radius',
+  'border-fit',
+  'border-image',
+  'border-vertical-spacing',
+  'box-align',
+  'box-direction',
+  'box-flex',
+  'box-flex-group',
+  'box-lines',
+  'box-ordinal-group',
+  'box-orient',
+  'box-pack',
+  'box-reflect',
+  'box-sizing',
+  'clip-path',
+  'column-count',
+  'column-width',
+  'column-min-width',
+  'column-width-policy',
+  'column-gap',
+  'column-rule',
+  'column-rule-color',
+  'column-rule-style',
+  'column-rule-width',
+  'column-span',
+  'flex',
+  'flex-basis',
+  'flex-direction',
+  'flex-flow',
+  'flex-grow',
+  'flex-shrink',
+  'flex-wrap',
+  'flex-flow-from',
+  'flex-flow-into',
+  'font-smoothing',
+  'transform',
+  'transform-origin',
+  'transform-origin-x',
+  'transform-origin-y',
+  'transform-origin-z',
+  'transform-style',
+  'transition',
+  'transition-delay',
+  'transition-duration',
+  'transition-property',
+  'transition-timing-function',
+  'user-drag',
+  'user-modify',
+  'user-select',
+  'wrap',
+  'wrap-flow',
+  'wrap-margin',
+  'wrap-padding',
+  'wrap-through'
+];
+
+});
+require.register("rework/lib/plugins/function.js", function(exports, require, module){
+
+/**
+ * Module dependencies.
+ */
+
+var visit = require('../visit')
+  , utils = require('../utils');
+
+/**
+ * Define custom function.
+ */
+
+module.exports = function(functions) {
+  if (!functions) throw new Error('functions object required');
+  return function(style, rework){
+    visit.declarations(style, function(declarations){
+      for (var name in functions) {
+        func(declarations, name, functions[name]);
+      }
+    });
+  }
+};
+
+/**
+ * Escape regexp codes in string.
+ *
+ * @param {String} s
+ * @api private
+ */
+
+function escape(s) {
+  return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+}
+
+/**
+ * Visit declarations and apply functions.
+ *
+ * @param {Array} declarations
+ * @param {Object} functions
+ * @api private
+ */
+
+function func(declarations, name, func) {
+  var regexp = new RegExp(escape(name) + '\\(([^\)]+)\\)', 'g');
+  declarations.forEach(function(decl){
+    if (!~decl.value.indexOf(name + '(')) return;
+    decl.value = decl.value.replace(regexp, function(_, args){
+      args = args.split(/,\s*/).map(utils.stripQuotes);
+      return func.apply(decl, args);
+    });
+  });
+}
+
+});
 require.register("rework/lib/plugins/url.js", function(exports, require, module){
 
 /**
@@ -1263,7 +1396,7 @@ require.register("rework/lib/plugins/url.js", function(exports, require, module)
  */
 
 var utils = require('../utils')
-  , visit = require('../visit');
+  , func = require('./function');
 
 /**
  * Map `url()` calls.
@@ -1281,17 +1414,11 @@ var utils = require('../utils')
  */
 
 module.exports = function(fn) {
-  return function(style, rework){
-    visit.declarations(style, function(declarations){
-      declarations.forEach(function(decl, i){
-        if (!~decl.value.indexOf('url(')) return;
-        decl.value = decl.value.replace(/url\(([^)]+)\)/g, function(_, url){
-          url = utils.stripQuotes(url);
-          return 'url("' + fn(url) + '")';
-        });
-      });
-    });
-  }
+  return func({ url: url });
+
+  function url(path){
+    return 'url("' + fn(path) + '")';
+  };
 };
 
 });
@@ -1322,12 +1449,13 @@ var visit = require('../visit');
  *
  */
 
-module.exports = function() {
-  var map = {};
+module.exports = function(map) {
+  map = map || {};
 
   function replace(str) {
     return str.replace(/\bvar\((.*?)\)/g, function(_, name){
       var val = map[name];
+      if (!val) throw new Error('variable "' + name + '" is undefined');
       if (val.match(/\bvar\(/)) val = replace(val);
       return val;
     });
@@ -1537,7 +1665,7 @@ require.register("rework/lib/plugins/colors.js", function(exports, require, modu
  */
 
 var parse = require('color-parser')
-  , visit = require('../visit');
+  , functions = require('./function');
 
 /**
  * Provide color manipulation helpers:
@@ -1555,57 +1683,22 @@ var parse = require('color-parser')
  */
 
 module.exports = function() {
-  return function(style, rework){
-    visit.declarations(style, substitute);
-  }
+  return functions({
+    rgba: function(color, alpha){
+      if (2 == arguments.length) {
+        var c = parse(color.trim());
+        var args = [c.r, c.g, c.b, alpha];
+      } else {
+        var args = [].slice.call(arguments);
+      }
+      
+      return 'rgba(' + args.join(', ') + ')';
+    }
+  });
 };
-
-/**
- * Substitute easing functions.
- *
- * @api private
- */
-
-function substitute(declarations) {
-  for (var i = 0; i < declarations.length; ++i) {
-    var decl = declarations[i];
-    var val = decl.value;
-    var index = val.indexOf('rgba');
-    if (-1 == index) continue;
-
-    // grab rgba(...) value
-    var rgba = val.slice(index, val.indexOf(')', index));
-
-    // arity > 2
-    if (rgba.split(',').length > 2) continue;
-
-    // color
-    var c = rgba.slice(rgba.indexOf('(') + 1, rgba.indexOf(',')).trim();
-    c = parse(c);
-
-    // alpha
-    var a = rgba.slice(rgba.indexOf(',') + 1, rgba.length);
-    a = parseFloat(a);
-
-    // format
-    c = 'rgba('
-      + c.r
-      + ','
-      + c.g
-      + ','
-      + c.b
-      + ','
-      + a
-      + ')';
-
-    // replace
-    decl.value = val.replace(rgba + ')', c);
-  }
-}
 
 });
 require.register("rework/lib/plugins/extend.js", function(exports, require, module){
-
 /**
  * Module dependencies.
  */
@@ -1618,16 +1711,28 @@ var debug = require('debug')('rework:extend');
 
 module.exports = function() {
   debug('use extend');
-  return function(style, rework){
+  return function(style, rework) {
     var map = {};
-    style.rules.forEach(function(rule){
-      if (!rule.declarations) return;
-      rule.selectors.forEach(function(sel, i){
+    var rules = style.rules.length;
+
+    for (var j = 0; j < rules; j++) {
+      var rule = style.rules[j];
+      if (!rule || !rule.selectors) return;
+
+      // map selectors
+      rule.selectors.forEach(function(sel, i) {
         map[sel] = rule;
         if ('%' == sel[0]) rule.selectors.splice(i, 1);
       });
+
+      // visit extend: properties
       visit(rule, map);
-    });
+
+      // clean up empty rules
+      if (!rule.declarations.length) {
+        style.rules.splice(j--, 1);
+      }
+    };
   }
 };
 
@@ -1650,12 +1755,12 @@ function visit(rule, map) {
     if (!extend) throw new Error('failed to extend "' + val + '"');
 
     var keys = Object.keys(map);
-    keys.forEach(function(key){
+    keys.forEach(function(key) {
       if (0 != key.indexOf(val)) return;
       var extend = map[key];
       var suffix = key.replace(val, '');
       debug('extend %j with %j', rule.selectors, extend.selectors);
-      extend.selectors = extend.selectors.concat(rule.selectors.map(function(sel){
+      extend.selectors = extend.selectors.concat(rule.selectors.map(function(sel) {
         return sel + suffix;
       }));
     });
@@ -2118,5 +2223,5 @@ if (typeof exports == "object") {
 } else if (typeof define == "function" && define.amd) {
   define(function(){ return require("rework"); });
 } else {
-  window["rework"] = require("rework");
+  this["rework"] = require("rework");
 }})();
