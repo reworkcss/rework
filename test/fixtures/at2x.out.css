@@ -2,9 +2,21 @@
   background-image: url('/public/images/logo.png')
 }
 
+.banner {
+  background-image: url('/public/images/banner.png');
+  background-size: cover
+}
+
 @media all and (-webkit-min-device-pixel-ratio: 1.5) {
   .logo {
     background-image: url("/public/images/logo@2x.png");
     background-size: contain
+  }
+}
+
+@media all and (-webkit-min-device-pixel-ratio: 1.5) {
+  .banner {
+    background-image: url("/public/images/banner@2x.png");
+    background-size: cover
   }
 }
