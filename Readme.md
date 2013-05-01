@@ -669,7 +669,7 @@ yields:
   Inline files from `dir` directly to CSS. Replace `inline(path)` to Data URI
   with base64 encoding of file. It is useful for small images and fonts.
 
-  Of cource, you can use inline only with node. It is not available
+  Of course, you can use inline only with node. It is not available
   in the browser with component.
 
 ```js
