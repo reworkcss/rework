@@ -4,7 +4,6 @@ rework.js:
 
 test:
 	@./node_modules/.bin/mocha \
-		--require should \
-		--reporter spec
+		--require should
 
 .PHONY: test rework.js
