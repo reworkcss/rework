@@ -1,6 +1,7 @@
 
 rework.js:
-	component build --standalone rework --out . --name rework
+	@component install
+	@component build --standalone rework --out . --name rework
 
 test:
 	@./node_modules/.bin/mocha \
