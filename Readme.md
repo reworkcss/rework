@@ -23,6 +23,11 @@ or in the browser with the stand-alone build ./rework.js referencing the `rework
   - [significant whitespace](https://github.com/visionmedia/css-whitespace)
   - third-party [plugins](https://github.com/visionmedia/rework/wiki/Plugins)
 
+## Built with rework
+
+  - [styl](https://github.com/visionmedia/styl) - CSS preprocessor built on Rework
+  - [autoprefixer](https://github.com/ai/autoprefixer) - prefixer based on the Can I Use database
+
 ## rework(1)
 
 ```
