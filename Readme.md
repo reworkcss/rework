@@ -28,28 +28,6 @@ or in the browser with the stand-alone build ./rework.js referencing the `rework
   - [styl](https://github.com/visionmedia/styl) - CSS preprocessor built on Rework
   - [autoprefixer](https://github.com/ai/autoprefixer) - prefixer based on the Can I Use database
 
-## rework(1)
-
-```
-
-Usage: rework [options]
-
-Options:
-
-  -h, --help            output usage information
-  -V, --version         output the version number
-  -v, --vendors <list>  specify list of vendors
-  -e, --ease            add additional easing functions
-  --vars                add css variable support
-
-```
-
-for example:
-
-```
-$ rework -v webkit,moz < my.css > my.reworked.css
-```
-
 ## API
 
 ### rework(css)
