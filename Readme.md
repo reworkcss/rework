@@ -54,7 +54,8 @@ or in the browser with the stand-alone build ./rework.js referencing the `rework
 ## Plugins
 
   The following plugins are bundled with `rework`:
-
+  
+  - [extend](#extend) — add `extend: selector` support
   - [media macros](#mediaobj) — define your own __@media__ queries
   - [ease](#ease) — several additional easing functions
   - [at2x](#at2xvendors) — serve high resolution images
@@ -63,12 +64,13 @@ or in the browser with the stand-alone build ./rework.js referencing the `rework
   - [prefixSelectors](#prefixselectorsstring) — add prefixes to selectors
   - [opacity](#opacity) — add IE opacity support
   - [url](#urlcallback) — rewrite `url()`s with a callback function
-  - [vars](#varsobject) — add css variable support
   - [keyframes](#keyframesvendors) — add __@keyframe__ vendor prefixing
   - [colors](#colors) — add colour helpers like `rgba(#fc0, .5)`
+  - [mixin](#mixinobject) — add custom property logic with mixing
+  - [function](#functionobject) — Add user-defined CSS functions
   - [references](#references) — add property references support `height: @width` etc
-  - [mixin](#mixinobjects) — add custom property logic with mixing
-  - [extend](#extend) — add `extend: selector` support
+  - [vars](#varsobject) — add css variable support
+
 
 ### .extend()
 
