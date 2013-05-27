@@ -35,6 +35,7 @@ describe('rework', function(){
     it('should prefix the value', function(){
       rework(fixture('prefix-value'))
         .use(rework.prefixValue('transform', vendors))
+        .use(rework.prefixValue(/(green|blue)/, vendors))
         .toString()
         .should.equal(fixture('prefix-value.out'));
     })
@@ -154,6 +155,7 @@ describe('rework', function(){
         .vendors(vendors)
         .use(rework.prefix('border-radius'))
         .use(rework.prefix('box-shadow'))
+        .use(rework.prefix(/flex-.+/))
         .toString()
         .should.equal(fixture('prefix.out'));
     })
