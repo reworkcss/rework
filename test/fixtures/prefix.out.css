@@ -5,4 +5,7 @@
   -webkit-box-shadow: inset 0 0 1px white;
   -moz-box-shadow: inset 0 0 1px white;
   box-shadow: inset 0 0 1px white
+  -webkit-flex-align: center;
+  -moz-flex-align: center;
+  flex-align: center;
 }
