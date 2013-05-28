@@ -5,7 +5,7 @@
   "keywords": ["css", "manipulation", "preprocess", "transform"],
   "author": "TJ Holowaychuk <tj@vision-media.ca>",
   "dependencies": {
-    "css": "1.1.0",
+    "css": "1.2.0",
     "commander": "1.0.4",
     "color-parser": "0.1.0",
     "mime": "1.2.9",
