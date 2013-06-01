@@ -61,7 +61,6 @@ or in the browser with the stand-alone build ./rework.js referencing the `rework
   - [prefix](#prefixpropertyproperties-vendors) — add vendor prefixes to properties
   - [prefixValue](#prefixvaluevalue-vendors) — add vendor prefixes to values
   - [prefixSelectors](#prefixselectorsstring) — add prefixes to selectors
-  - [opacity](#opacity) — add IE opacity support
   - [url](#urlcallback) — rewrite `url()`s with a callback function
   - [keyframes](#keyframesvendors) — add __@keyframe__ vendor prefixing
   - [colors](#colors) — add colour helpers like `rgba(#fc0, .5)`
@@ -339,41 +338,6 @@ yields:
   text-decoration: none;
   color: #ddd;
 }
-```
-
-### .opacity()
-
-  Add IE opacity support.
-
-```css
-ul {
-  opacity: 1 !important;
-}
-```
-
-yields:
-
-```css
-ul {
-  opacity: 1 !important;
-  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100) !important;
-  filter: alpha(opacity=100) !important
-}
-```
-
-### .url(callback)
-
-  Map `url()` calls, useful for inlining images as data-uris, converting
-  relative paths to absolute etc.
-
-```js
-function rewrite(url) {
-  return 'http://example.com' + url;
-}
-
-rework(str)
-  .use(rework.url(rewrite))
-  .toString()
 ```
 
 ### .mixin(object)

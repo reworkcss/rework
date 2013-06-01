@@ -179,22 +179,11 @@ describe('rework', function(){
     })
   })
 
-  describe('.opacity()', function(){
-    it('should add ie crap', function(){
-      rework(fixture('opacity'))
-        .vendors(vendors)
-        .use(rework.opacity())
-        .toString()
-        .should.equal(fixture('opacity.out'));
-    })
-  })
-
   describe('.keyframes()', function(){
     it('should prefix keyframes', function(){
       rework(fixture('keyframes'))
         .vendors(vendors)
         .use(rework.keyframes())
-        .use(rework.opacity())
         .use(rework.prefix('border-radius'))
         .toString()
         .should.equal(fixture('keyframes.out'));
