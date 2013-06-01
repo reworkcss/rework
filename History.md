@@ -1,4 +1,15 @@
 
+0.15.0 / 2013-06-01 
+==================
+
+ * remove opacity plugin. Closes #29
+ * remove media macros. Closes #36
+ * update css
+ * update css
+ * fix data uris in .url(), .function() too greed with argument splitting. Closes #81
+ * fix easing functions with animation and timing properties. Closes #83
+ * remove rework(1) executable, use https://github.com/visionmedia/styl
+
 0.14.0 / 2013-04-10
 ==================
 

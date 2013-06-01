@@ -1,10 +1,10 @@
 {
   "name": "rework",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "description": "CSS manipulations built on CSSOM",
   "keywords": ["css", "manipulation", "preprocess", "transform"],
   "dependencies": {
-    "visionmedia/css": "1.2.0",
+    "visionmedia/css": "1.3.0",
     "visionmedia/debug": "*",
     "component/color-parser": "0.1.0",
     "component/path": "*"
@@ -25,10 +25,8 @@
     "lib/plugins/mixin.js",
     "lib/plugins/keyframes.js",
     "lib/plugins/references.js",
-    "lib/plugins/opacity.js",
     "lib/plugins/prefix-selectors.js",
     "lib/plugins/prefix-value.js",
-    "lib/plugins/media.js",
     "lib/plugins/prefix.js"
   ]
 }
