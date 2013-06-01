@@ -54,9 +54,8 @@ or in the browser with the stand-alone build ./rework.js referencing the `rework
 ## Plugins
 
   The following plugins are bundled with `rework`:
-  
+
   - [extend](#extend) — add `extend: selector` support
-  - [media macros](#mediaobj) — define your own __@media__ queries
   - [ease](#ease) — several additional easing functions
   - [at2x](#at2xvendors) — serve high resolution images
   - [prefix](#prefixpropertyproperties-vendors) — add vendor prefixes to properties
@@ -166,49 +165,6 @@ button:hover .icon,
 button,
 .actions a {
   padding: 5px 10px
-}
-```
-
-### .media(obj)
-
-  Define media macros with the given `obj`.
-
-  For example define two contrived custom media types, "phone" and "phone-landscape":
-
-```js
-style.use(rework.media({
-  'phone': 'only screen and (min-device-width : 320px) and (max-device-width : 480px)',
-  'phone-landscape': 'only screen and (min-width : 321px)'
-}))
-```
-
-```css
-@media phone {
-  body {
-    background: 'green'
-  }
-}
-
-@media phone-landscape {
-  body {
-    background: 'red'
-  }
-}
-```
-
-yields:
-
-```css
-@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
-  body {
-    background: 'green'
-  }
-}
-
-@media only screen and (min-width : 321px) {
-  body {
-    background: 'red'
-  }
 }
 ```
 
