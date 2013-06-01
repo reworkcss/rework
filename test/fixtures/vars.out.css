@@ -1,21 +1,21 @@
 :root {
-  var-header-color: #06c
+  var-header-color: #06c;
 }
 
 div {
-  var-accent-background: linear-gradient(to top, #c06, white)
+  var-accent-background: linear-gradient(to top, #c06, white);
 }
 
 h1 {
-  background-color: #06c
+  background-color: #06c;
 }
 
 .content {
-  background: linear-gradient(to top, #c06, white) !important
+  background: linear-gradient(to top, #c06, white) !important;
 }
 
 @media only screen and (min-device-width: 600px) {
   h2 {
-    color: #c06
+    color: #c06;
   }
 }

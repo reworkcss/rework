@@ -275,7 +275,7 @@ describe('rework', function(){
     it('should compress the output', function(){
       rework('body { color: red; }')
         .toString({ compress: true })
-        .should.equal('body{color:red}');
+        .should.equal('body{color:red;}');
     })
   })
 })

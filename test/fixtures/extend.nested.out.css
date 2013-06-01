@@ -1,22 +1,22 @@
 .dark-button,
 button,
 .actions a {
-  background: black
+  background: black;
 }
 
 .dark-button:hover,
 button:hover,
 .actions a:hover {
-  background: rgba(0,0,0,.5)
+  background: rgba(0,0,0,.5);
 }
 
 .dark-button:hover .icon,
 button:hover .icon,
 .actions a:hover .icon {
-  color: rgba(255,255,255,.5)
+  color: rgba(255,255,255,.5);
 }
 
 button,
 .actions a {
-  padding: 5px 10px
+  padding: 5px 10px;
 }

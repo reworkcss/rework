@@ -1,9 +1,9 @@
 body {
-  background: url("http://example.com/images/bg.png") repeat-x
+  background: url("http://example.com/images/bg.png") repeat-x;
 }
 
 #logo {
-  background: url("http://example.com/images/logo.jpeg")
+  background: url("http://example.com/images/logo.jpeg");
 }
 
 @font-face {
@@ -17,11 +17,11 @@ body {
     format('truetype'),
     url("http://example.com/icons/font/icons.svg#icons") format('svg');
   font-weight: normal;
-  font-style: normal
+  font-style: normal;
 }
 
 @media only screen and (-webkit-min-device-pixel-ratio: 2) {
   #logo {
-    background-image: url("http://example.com/core/logo@2x.png")
+    background-image: url("http://example.com/core/logo@2x.png");
   }
 }

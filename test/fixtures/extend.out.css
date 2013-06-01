@@ -5,17 +5,17 @@ input[type='submit'],
 input[type='button'] {
   padding: 5px 10px;
   border: 1px solid #eee;
-  border-bottom-color: #ddd
+  border-bottom-color: #ddd;
 }
 
 .green,
 a.join {
   background: green;
-  padding: 10px 15px
+  padding: 10px 15px;
 }
 
 a.button
 input[type='submit'],
 input[type='button'] {
-  margin: 2px
+  margin: 2px;
 }

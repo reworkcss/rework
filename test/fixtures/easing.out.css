@@ -3,5 +3,5 @@
   transition: all 500ms cubic-bezier(0.680, -0.550, 0.265, 1.550);
   animation: fade 2s cubic-bezier(0.680, -0.550, 0.265, 1.550);
   animation-timing-function: cubic-bezier(0.680, -0.550, 0.265, 1.550);
-  transition-timing-function: cubic-bezier(0.680, -0.550, 0.265, 1.550)
+  transition-timing-function: cubic-bezier(0.680, -0.550, 0.265, 1.550);
 }

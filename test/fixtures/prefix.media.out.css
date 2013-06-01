@@ -4,7 +4,7 @@
     background: 'green';
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
-    border-radius: 5px
+    border-radius: 5px;
   }
 }
 
@@ -13,6 +13,6 @@
     background: 'red';
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
-    border-radius: 2px
+    border-radius: 2px;
   }
 }
