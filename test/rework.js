@@ -85,7 +85,7 @@ describe('rework', function(){
   })
 
   describe('.mixin(obj)', function(){
-    it('should apply mixins', function(){
+    it('should apply properties', function(){
       rework(fixture('mixins'))
         .use(rework.mixin({ overflow: ellipsis }))
         .toString().trim()
@@ -103,6 +103,30 @@ describe('rework', function(){
         return {
           'overflow': type
         };
+      }
+    })
+
+    it('should apply array properties', function(){
+      rework(fixture('mixins.array'))
+        .use(rework.mixin({ display: display }))
+        .toString().trim()
+        .should.equal(fixture('mixins.array.out'));
+
+      function display(type) {
+        if ('flex' == type) {
+          return {
+            display: [
+              '-webkit-flex',
+              '-moz-flex',
+              '-webkit-flexbox',
+              'flex'
+            ]
+          }
+        }
+
+        return {
+          display: type
+        }
       }
     })
   })

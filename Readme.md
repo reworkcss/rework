@@ -420,6 +420,38 @@ input {
 }
 ```
 
+  You may also return array values to expand to several definitions of the property:
+
+```
+function display(type) {
+  if ('flex' == type) {
+    return {
+      display: [
+        '-webkit-flex',
+        '-moz-flex',
+        '-webkit-flexbox',
+        'flex'
+      ]
+    }
+  }
+
+  return {
+    display: type
+  }
+}
+```
+
+  Would yield:
+
+```css
+.myclass {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -webkit-flexbox;
+  display: flex;
+}
+```
+
 ### .references()
 
   Add property reference support.
