@@ -15,6 +15,12 @@ a.join {
   extend: .green;
 }
 
+@media screen and (min-width) {
+  body {
+    background: #fff;
+  }
+}
+
 a.button
 input[type='submit'],
 input[type='button'] {
