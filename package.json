@@ -13,7 +13,8 @@
     "commander": "1.0.4",
     "color-parser": "0.1.0",
     "mime": "1.2.9",
-    "debug": "*"
+    "debug": "*",
+    "rework-inherit": "0.1.5"
   },
   "devDependencies": {
     "mocha": "*",
