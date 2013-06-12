@@ -1,5 +1,14 @@
 
-0.15.0 / 2013-06-01 
+0.16.0 / 2013-06-12
+==================
+
+ * add mixin property array support. Closes #80
+ * change rework.extend to use rework-inherit
+ * pin path version
+ * fix: ignore comments in all plugins
+ * fix: references in strings (`"foo@2x"` etc)
+
+0.15.0 / 2013-06-01
 ==================
 
  * remove opacity plugin. Closes #29

@@ -7,4 +7,8 @@ test:
 	@./node_modules/.bin/mocha \
 		--require should
 
-.PHONY: test rework.js
+clean:
+	rm -f rework.js
+	rm -fr components
+
+.PHONY: test rework.js clean
