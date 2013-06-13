@@ -87,11 +87,14 @@ describe('rework', function(){
   describe('.mixin(obj)', function(){
     it('should apply properties', function(){
       rework(fixture('mixins'))
+        .vendors(['-moz-'])
         .use(rework.mixin({ overflow: ellipsis }))
         .toString().trim()
         .should.equal(fixture('mixins.out'));
 
       function ellipsis(type) {
+        this.prefixes.should.eql(['-moz-']);
+
         if ('ellipsis' == type) {
           return {
             'white-space': 'nowrap',

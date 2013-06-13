@@ -349,6 +349,9 @@ yields:
   to utilize `overflow: ellipsis;` to automatically assign associated
   properties preventing wrapping etc.
 
+  The receiver (`this`) is the `Rework` instance, allowing the mixin to reference
+  properties such as the vendor `.prefixes` array.
+
 ```js
 var css = rework(css)
   .use(rework.mixin({ overflow: ellipsis }))
