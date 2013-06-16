@@ -92,7 +92,7 @@ a.join {
   extend: .green;
 }
 
-a.button
+a.button,
 input[type='submit'],
 input[type='button'] {
   extend: button
