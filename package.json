@@ -14,7 +14,8 @@
     "color-parser": "0.1.0",
     "mime": "1.2.9",
     "debug": "*",
-    "rework-inherit": "0.1.5"
+    "rework-inherit": "0.1.5",
+    "rework-visit": "1.0.0"
   },
   "devDependencies": {
     "mocha": "*",

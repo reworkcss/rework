@@ -1179,6 +1179,41 @@ function coerce(val) {
 if (window.localStorage) debug.enable(localStorage.debug);
 
 });
+require.register("visionmedia-rework-visit/index.js", function(exports, require, module){
+
+/**
+ * Visit `node`'s declarations recursively and
+ * invoke `fn(declarations, node)`.
+ *
+ * @param {Object} node
+ * @param {Function} fn
+ * @api private
+ */
+
+module.exports = function(node, fn){
+  node.rules.forEach(function(rule){
+    // @media etc
+    if (rule.rules) {
+      exports.declarations(rule, fn);
+      return;
+    }
+
+    // keyframes
+    if (rule.keyframes) {
+      rule.keyframes.forEach(function(keyframe){
+        fn(keyframe.declarations, rule);
+      });
+      return;
+    }
+
+    // @charset, @import etc
+    if (!rule.declarations) return;
+
+    fn(rule.declarations, node);
+  });
+};
+
+});
 require.register("component-color-parser/index.js", function(exports, require, module){
 
 /**
@@ -2744,6 +2779,9 @@ require.alias("visionmedia-css-stringify/lib/identity.js", "visionmedia-css/deps
 require.alias("visionmedia-debug/index.js", "rework/deps/debug/index.js");
 require.alias("visionmedia-debug/debug.js", "rework/deps/debug/debug.js");
 require.alias("visionmedia-debug/index.js", "debug/index.js");
+
+require.alias("visionmedia-rework-visit/index.js", "rework/deps/rework-visit/index.js");
+require.alias("visionmedia-rework-visit/index.js", "rework-visit/index.js");
 
 require.alias("component-color-parser/index.js", "rework/deps/color-parser/index.js");
 require.alias("component-color-parser/colors.js", "rework/deps/color-parser/colors.js");
