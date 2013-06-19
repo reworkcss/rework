@@ -167,6 +167,9 @@ button,
 }
 ```
 
+This plugin is stored in its own repo at [jonathanong/rework-inherit](https://github.com/jonathanong/rework-inherit).
+Please delegate any issues with `.extend()` to that repository instead of rework.
+
 ### .ease()
 
   Adds the following list of additional easing functions:
