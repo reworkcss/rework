@@ -67,7 +67,6 @@ or in the browser with the stand-alone build ./rework.js referencing the `rework
   - [mixin](#mixinobject) — add custom property logic with mixing
   - [function](#functionobject) — Add user-defined CSS functions
   - [references](#references) — add property references support `height: @width` etc
-  - [vars](#varsobject) — add css variable support
 
 
 ### .extend()
@@ -487,52 +486,6 @@ button.round {
   height: 50px;
   line-height: 50px;
   background-size: 50px 50px
-}
-```
-
-### .vars([object])
-
-  Add variable support. Note that this does not cascade like the CSS variable
-  spec does, thus this is _not_ some sort of fallback mechanism, just a useful
-  feature. Optionally you may pass an `object` of variables from js-land.
-
-```css
-:root {
-  var-header-color: #06c;
-  var-main-color: #c06;
-}
-
-div {
-  var-accent-background: linear-gradient(to top, var(main-color), white);
-}
-
-h1 {
-  background-color: var(header-color);
-}
-
-.content {
-  background: var(accent-background) !important;
-}
-```
-
-  yields:
-
-```css
-:root {
-  var-header-color: #06c;
-  var-main-color: #c06
-}
-
-div {
-  var-accent-background: linear-gradient(to top, #c06, white)
-}
-
-h1 {
-  background-color: #06c
-}
-
-.content {
-  background: linear-gradient(to top, #c06, white) !important
 }
 ```
 
