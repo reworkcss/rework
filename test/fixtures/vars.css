@@ -4,6 +4,7 @@
 
 div {
   var-accent-background: linear-gradient(to top, var(main-color), white);
+  width: var(width);
 }
 
 h1 {
@@ -18,4 +19,8 @@ h1 {
   h2 {
     color: var(main-color);
   }
+}
+
+:root {
+  var-width: 100px;
 }

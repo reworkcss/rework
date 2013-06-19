@@ -2088,15 +2088,17 @@ module.exports = function(map) {
   }
 
   return function vars(style){
+    // map vars
     visit.declarations(style, function(declarations, node){
-      // map vars
       declarations.forEach(function(decl){
         if (0 != decl.property.indexOf('var-')) return;
         var name = decl.property.replace('var-', '');
         map[name] = decl.value;
       });
+    });
 
       // substitute values
+    visit.declarations(style, function(declarations, node){
       declarations.forEach(function(decl){
         if (!decl.value.match(/\bvar\(/)) return;
         decl.value = replace(decl.value);
@@ -2366,7 +2368,7 @@ module.exports = function(mixins) {
   if (!mixins) throw new Error('mixins object required');
   return function(style, rework){
     visit.declarations(style, function(declarations){
-      mixin(declarations, mixins);
+      mixin(rework, declarations, mixins);
     });
   }
 };
@@ -2374,12 +2376,13 @@ module.exports = function(mixins) {
 /**
  * Visit declarations and apply mixins.
  *
+ * @param {Rework} rework
  * @param {Array} declarations
  * @param {Object} mixins
  * @api private
  */
 
-function mixin(declarations, mixins) {
+function mixin(rework, declarations, mixins) {
   for (var i = 0; i < declarations.length; ++i) {
     var decl = declarations[i];
     if ('comment' == decl.type) continue;
@@ -2390,7 +2393,7 @@ function mixin(declarations, mixins) {
     if (!fn) continue;
 
     // invoke mixin
-    var ret = fn(val);
+    var ret = fn.call(rework, val);
 
     // apply properties
     for (var key in ret) {
