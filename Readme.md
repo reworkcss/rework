@@ -67,7 +67,7 @@ or in the browser with the stand-alone build ./rework.js referencing the `rework
   - [mixin](#mixinobject) — add custom property logic with mixing
   - [function](#functionobject) — Add user-defined CSS functions
   - [references](#references) — add property references support `height: @width` etc
-
+  - third-party [plugins](https://github.com/visionmedia/rework/wiki/Plugins)
 
 ### .extend()
 
