@@ -1,4 +1,12 @@
 
+0.17.0 / 2013-06-18 
+==================
+
+ * add this == Rework to mixin functions. Closes #101
+ * update css
+ * remove .vars() plugin. Closes #77
+ * move visitor into rework-visit
+
 0.16.0 / 2013-06-12
 ==================
 
