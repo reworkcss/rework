@@ -1878,37 +1878,8 @@ exports.stripQuotes = function(str) {
 });
 require.register("rework/lib/visit.js", function(exports, require, module){
 
-/**
- * Visit `node`'s declarations recursively and
- * invoke `fn(declarations, node)`.
- *
- * @param {Object} node
- * @param {Function} fn
- * @api private
- */
-
-exports.declarations = function(node, fn){
-  node.rules.forEach(function(rule){
-    // @media etc
-    if (rule.rules) {
-      exports.declarations(rule, fn);
-      return;
-    }
-
-    // keyframes
-    if (rule.keyframes) {
-      rule.keyframes.forEach(function(keyframe){
-        fn(keyframe.declarations, rule);
-      });
-      return;
-    }
-
-    // @charset, @import etc
-    if (!rule.declarations) return;
-
-    fn(rule.declarations, node);
-  });
-};
+// TODO: require() directly in plugins...
+exports.declarations = require('rework-visit');
 
 });
 require.register("rework/lib/properties.js", function(exports, require, module){
@@ -2085,61 +2056,9 @@ module.exports = function(fn) {
 });
 require.register("rework/lib/plugins/vars.js", function(exports, require, module){
 
-/**
- * Module dependencies.
- */
-
-var visit = require('../visit');
-
-/**
- * Add variable support.
- *
- *   :root {
- *     var-header-color: #06c;
- *   }
- *
- *   h1 {
- *     background-color: var(header-color);
- *   }
- *
- * yields:
- *
- *   h1 {
- *     background-color: #06c;
- *   }
- *
- */
-
-module.exports = function(map) {
-  map = map || {};
-
-  function replace(str) {
-    return str.replace(/\bvar\((.*?)\)/g, function(_, name){
-      var val = map[name];
-      if (!val) throw new Error('variable "' + name + '" is undefined');
-      if (val.match(/\bvar\(/)) val = replace(val);
-      return val;
-    });
-  }
-
-  return function vars(style){
-    // map vars
-    visit.declarations(style, function(declarations, node){
-      declarations.forEach(function(decl){
-        if (0 != decl.property.indexOf('var-')) return;
-        var name = decl.property.replace('var-', '');
-        map[name] = decl.value;
-      });
-    });
-
-      // substitute values
-    visit.declarations(style, function(declarations, node){
-      declarations.forEach(function(decl){
-        if (!decl.value.match(/\bvar\(/)) return;
-        decl.value = replace(decl.value);
-      });
-    });
-  }
+module.exports = function(){
+  console.warn('Warning: vars() has been removed, please use: https://github.com/visionmedia/rework-vars');
+  return function(){}
 };
 
 });
@@ -2451,7 +2370,7 @@ function mixin(rework, declarations, mixins) {
     }
 
     // remove original
-    declarations.splice(i, 1);
+    declarations.splice(i--, 1);
   }
 }
 
