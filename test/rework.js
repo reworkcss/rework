@@ -132,6 +132,50 @@ describe('rework', function(){
         }
       }
     })
+
+    it('should allow multiple mixins to be used sequentially', function() {
+      rework(fixture('mixins.multiple'))
+        .vendors(['-moz-'])
+        .use(rework.mixin({
+          display: display,
+          overflow: ellipsis
+        }))
+        .toString().trim()
+        .should.equal(fixture('mixins.multiple.out'));
+
+      function display(type) {
+        if ('flex' == type) {
+          return {
+            display: [
+              '-webkit-flex',
+              '-moz-flex',
+              '-webkit-flexbox',
+              'flex'
+            ]
+          }
+        }
+
+        return {
+          display: type
+        }
+      }
+
+      function ellipsis(type) {
+        this.prefixes.should.eql(['-moz-']);
+
+        if ('ellipsis' == type) {
+          return {
+            'white-space': 'nowrap',
+            'overflow': 'hidden',
+            'text-overflow': 'ellipsis'
+          }
+        }
+
+        return {
+          'overflow': type
+        };
+      }
+    });
   })
 
   describe('.function()', function(){
