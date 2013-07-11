@@ -7,6 +7,8 @@ button.round {
   height: 50px;
   line-height: 50px;
   background-size: 50px 50px;
+  color: #eee;
+  background: linear-gradient(#eee, #eee);
 }
 
 @media screen {
