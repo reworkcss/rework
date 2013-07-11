@@ -2496,8 +2496,8 @@ var visit = require('../visit');
  *
  *    button {
  *      width: 50px;
-*      height: 50px;
-*      line-height: 50px;
+*       height: 50px;
+*       line-height: 50px;
  *    }
  *
  */
@@ -2524,9 +2524,11 @@ function substitute(declarations) {
 
     if ('comment' == decl.type) continue;
 
-    decl.value = val.replace(/(^| )@([-\w]+)/g, function(_, p, name){
+    decl.value = val.replace(/@([-\w]+)/g, function(_, name){
+      // TODO: fix this problem for real with visionmedia/css-value
+      if ('2x' == name) return '@' + name;
       if (null == map[name]) throw new Error('@' + name + ' is not defined in this scope');
-      return p + map[name];
+      return map[name];
     });
 
     map[key] = decl.value;

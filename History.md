@@ -1,4 +1,9 @@
 
+0.17.2 / 2013-07-10 
+==================
+
+ * fix references preceeded by punctuation. Closes #106
+
 0.17.1 / 2013-07-03 
 ==================
 
