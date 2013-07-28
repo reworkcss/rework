@@ -9,7 +9,7 @@
     "url": "git://github.com/visionmedia/rework.git"
   },
   "dependencies": {
-    "css": "1.4.0",
+    "css": "1.4.1",
     "commander": "1.0.4",
     "color-parser": "0.1.0",
     "mime": "1.2.9",
