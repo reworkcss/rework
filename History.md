@@ -1,4 +1,10 @@
 
+0.17.4 / 2013-08-22 
+==================
+
+ * add more to the at2x media query
+ * comment out inline() tests
+
 0.17.3 / 2013-07-28 
 ==================
 
