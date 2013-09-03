@@ -216,17 +216,23 @@ module.exports = function(css, options){
     var lines = str.match(/\n/g);
     if (lines) lineno += lines.length;
     var i = str.lastIndexOf('\n');
-    column = ~i ? str.length-i : column + str.length;
+    column = ~i ? str.length - i : column + str.length;
   }
+
+  /**
+   * Mark position and patch `node.position`.
+   */
 
   function position() {
     var start = { line: lineno, column: column };
     if (!options.position) return positionNoop;
+
     return function(node){
       node.position = {
         start: start,
         end: { line: lineno, column: column }
       };
+
       whitespace();
       return node;
     }
@@ -235,9 +241,22 @@ module.exports = function(css, options){
   /**
    * Return `node`.
    */
+
   function positionNoop(node) {
     whitespace();
     return node;
+  }
+
+  /**
+   * Error `msg`.
+   */
+
+  function error(msg) {
+    var err = new Error(msg + ' near line ' + lineno + ':' + column);
+    err.line = lineno;
+    err.column = column;
+    err.source = css;
+    throw err;
   }
 
   /**
@@ -334,6 +353,7 @@ module.exports = function(css, options){
     updatePosition(str);
     css = css.slice(i);
     column += 2;
+
     return pos({
       type: 'comment',
       comment: str
@@ -358,16 +378,16 @@ module.exports = function(css, options){
     var pos = position();
 
     // prop
-    var prop = match(/^(\*?[-\w]+)\s*/);
+    var prop = match(/^(\*?[-\/\*\w]+)\s*/);
     if (!prop) return;
     prop = prop[0];
 
     // :
-    if (!match(/^:\s*/)) return;
+    if (!match(/^:\s*/)) return error("property missing ':'");
 
     // val
     var val = match(/^((?:'(?:\\'|.)*?'|"(?:\\"|.)*?"|\([^\)]*?\)|[^};])+)/);
-    if (!val) return;
+    if (!val) return error('property missing value');
 
     var ret = pos({
       type: 'declaration',
@@ -377,6 +397,7 @@ module.exports = function(css, options){
 
     // ;
     match(/^[;\s]*/);
+
     return ret;
   }
 
@@ -387,7 +408,7 @@ module.exports = function(css, options){
   function declarations() {
     var decls = [];
 
-    if (!open()) return;
+    if (!open()) return error("missing '{'");
     comments(decls);
 
     // declarations
@@ -397,7 +418,7 @@ module.exports = function(css, options){
       comments(decls);
     }
 
-    if (!close()) return;
+    if (!close()) return error("missing '}'");
     return decls;
   }
 
@@ -437,20 +458,19 @@ module.exports = function(css, options){
 
     // identifier
     var m = match(/^([-\w]+)\s*/);
-    if (!m) return;
+    if (!m) return error("@keyframes missing name");
     var name = m[1];
 
-    if (!open()) return;
-    comments();
+    if (!open()) return error("@keyframes missing '{'");
 
     var frame;
-    var frames = [];
+    var frames = comments();
     while (frame = keyframe()) {
       frames.push(frame);
-      comments();
+      frames = frames.concat(comments());
     }
 
-    if (!close()) return;
+    if (!close()) return error("@keyframes missing '}'");
 
     return pos({
       type: 'keyframes',
@@ -471,12 +491,11 @@ module.exports = function(css, options){
     if (!m) return;
     var supports = m[1].trim();
 
-    if (!open()) return;
-    comments();
+    if (!open()) return error("@supports missing '{'");
 
-    var style = rules();
+    var style = comments().concat(rules());
 
-    if (!close()) return;
+    if (!close()) return error("@supports missing '}'");
 
     return pos({
       type: 'supports',
@@ -496,12 +515,11 @@ module.exports = function(css, options){
     if (!m) return;
     var media = m[1].trim();
 
-    if (!open()) return;
-    comments();
+    if (!open()) return error("@media missing '{'");
 
-    var style = rules();
+    var style = comments().concat(rules());
 
-    if (!close()) return;
+    if (!close()) return error("@media missing '}'");
 
     return pos({
       type: 'media',
@@ -520,19 +538,18 @@ module.exports = function(css, options){
     if (!m) return;
 
     var sel = selector() || [];
-    var decls = [];
 
-    if (!open()) return;
-    comments();
+    if (!open()) return error("@page missing '{'");
+    var decls = comments();
 
     // declarations
     var decl;
     while (decl = declaration()) {
       decls.push(decl);
-      comments();
+      decls = decls.concat(comments());
     }
 
-    if (!close()) return;
+    if (!close()) return error("@page missing '}'");
 
     return pos({
       type: 'page',
@@ -550,15 +567,14 @@ module.exports = function(css, options){
     var m = match(/^@([-\w]+)?document *([^{]+)/);
     if (!m) return;
 
-    var vendor = m[1].trim();
+    var vendor = (m[1] || '').trim();
     var doc = m[2].trim();
 
-    if (!open()) return;
-    comments();
+    if (!open()) return error("@document missing '{'");
 
-    var style = rules();
+    var style = comments().concat(rules());
 
-    if (!close()) return;
+    if (!close()) return error("@document missing '}'");
 
     return pos({
       type: 'document',
@@ -656,17 +672,19 @@ var Identity = require('./lib/identity');
  * Stringfy the given AST `node`.
  *
  * @param {Object} node
- * @param {Object} options
+ * @param {Object} [options]
  * @return {String}
  * @api public
  */
 
 module.exports = function(node, options){
-  if (options.compress) {
-    return new Compressed(options).compile(node);
-  }
+  options = options || {};
 
-  return new Identity(options).compile(node);
+  var compiler = options.compress
+    ? new Compressed(options)
+    : new Identity(options);
+
+  return compiler.compile(node);
 };
 
 
@@ -994,6 +1012,7 @@ Compiler.prototype.page = function(node){
 Compiler.prototype.rule = function(node){
   var indent = this.indent();
   var decls = node.declarations;
+  if (!decls.length) return '';
 
   return node.selectors.map(function(s){ return indent + s }).join(',\n')
     + ' {\n'
@@ -1176,10 +1195,18 @@ function coerce(val) {
 
 // persist
 
-if (window.localStorage) debug.enable(localStorage.debug);
+try {
+  if (window.localStorage) debug.enable(localStorage.debug);
+} catch(e){}
 
 });
 require.register("visionmedia-rework-visit/index.js", function(exports, require, module){
+
+/**
+ * Expose `visit()`.
+ */
+
+module.exports = visit;
 
 /**
  * Visit `node`'s declarations recursively and
@@ -1190,11 +1217,11 @@ require.register("visionmedia-rework-visit/index.js", function(exports, require,
  * @api private
  */
 
-module.exports = function(node, fn){
+function visit(node, fn){
   node.rules.forEach(function(rule){
     // @media etc
     if (rule.rules) {
-      exports.declarations(rule, fn);
+      visit(rule, fn);
       return;
     }
 
@@ -1740,6 +1767,57 @@ function getRule(x) {
 }
 
 });
+require.register("jankuca-hsb2rgb/src/hsb2rgb.js", function(exports, require, module){
+
+function hsb2rgb(hue, saturation, value) {
+  hue = (parseInt(hue, 10) || 0) % 360;
+
+  saturation = /%/.test(saturation)
+    ? parseInt(saturation, 10) / 100
+    : parseFloat(saturation, 10);
+
+  value = /%/.test(value)
+    ? parseInt(value, 10) / 100
+    : parseFloat(value, 10);
+
+  saturation = Math.max(0, Math.min(saturation, 1));
+  value = Math.max(0, Math.min(value, 1));
+
+  var rgb;
+  if (saturation === 0) {
+    return [
+      Math.round(255 * value),
+      Math.round(255 * value),
+      Math.round(255 * value)
+    ];
+  }
+
+  var side = hue / 60;
+  var chroma = value * saturation;
+  var x = chroma * (1 - Math.abs(side % 2 - 1));
+  var match = value - chroma;
+
+  switch (Math.floor(side)) {
+  case 0: rgb = [ chroma, x, 0 ]; break;
+  case 1: rgb = [ x, chroma, 0 ]; break;
+  case 2: rgb = [ 0, chroma, x ]; break;
+  case 3: rgb = [ 0, x, chroma ]; break;
+  case 4: rgb = [ x, 0, chroma ]; break;
+  case 5: rgb = [ chroma, 0, x ]; break;
+  default: rgb = [ 0, 0, 0 ];
+  }
+
+  rgb[0] = Math.round(255 * (rgb[0] + match));
+  rgb[1] = Math.round(255 * (rgb[1] + match));
+  rgb[2] = Math.round(255 * (rgb[2] + match));
+
+  return rgb;
+}
+
+
+module.exports = hsb2rgb;
+
+});
 require.register("rework/index.js", function(exports, require, module){
 
 module.exports = require('./lib/rework');
@@ -2161,6 +2239,19 @@ var path = require('path');
 var stripQuotes = utils.stripQuotes;
 
 /**
+ * Vendor crap.
+ */
+
+var query = [
+  '(min--moz-device-pixel-ratio: 1.5)',
+  '(-o-min-device-pixel-ratio: 3/2)',
+  '(-webkit-min-device-pixel-ratio: 1.5)',
+  '(min-device-pixel-ratio: 1.5)',
+  '(min-resolution: 144dpi)',
+  '(min-resolution: 1.5dppx)'
+].join(', ');
+
+/**
  * Translate
  *
  *   .logo {
@@ -2208,7 +2299,7 @@ module.exports = function(vendors) {
         // wrap in @media
         style.rules.push({
           type: 'media',
-          media: 'all and (-webkit-min-device-pixel-ratio: 1.5)',
+          media: query,
           rules: [
             {
               type: 'rule',
@@ -2272,25 +2363,24 @@ require.register("rework/lib/plugins/colors.js", function(exports, require, modu
  */
 
 var parse = require('color-parser');
+var hsb2rgb = require('hsb2rgb');
 var functions = require('./function');
 
 /**
- * Provide color manipulation helpers:
- *
- *    button {
- *      background: rgba(#eee, .5)
- *    }
- *
- * yields:
- *
- *    button {
- *      background: rgba(238, 238, 238, .5)
- *    }
- *
+ * Provide color manipulation helpers.
  */
 
 module.exports = function() {
   return functions({
+
+    /**
+     * Converts RGBA(color, alpha) to the corrosponding RGBA(r, g, b, a) equivalent. 
+     *
+     *    background: rgba(#eee, .5)
+     *    background: rgba(white, .2)
+     *
+     */
+
     rgba: function(color, alpha){
       if (2 == arguments.length) {
         var c = parse(color.trim());
@@ -2300,6 +2390,42 @@ module.exports = function() {
       }
 
       return 'rgba(' + args.join(', ') + ')';
+    },
+
+    /**
+     * Converts HSV (HSB) color values to RGB.
+     * Saturation and brightness can be expressed as floats or percentages.
+     *
+     *     color: hsb(220, 45%, .3);
+     *     color: hsb(220deg, 0.45, 30%);
+     *
+     */
+
+    hsb: function (hue, saturation, value) {
+      var rgb = hsb2rgb(hue, saturation, value);
+      return 'rgb(' + rgb.join(', ') + ')';
+    },
+
+
+    /**
+     * Converts HSV (HSB) color values with alpha specified to RGBa.
+     * Saturation, brightness and alpha can be expressed as floats or
+     * percentages.
+     *
+     *     color: hsba(220, 45%, .3, .4);
+     *     color: hsba(220deg, 0.45, 30%, 40%);
+     *
+     */
+
+    hsba: function (hue, saturation, value, alpha) {
+      alpha = /%/.test(alpha)
+        ? parseInt(alpha, 10) / 100
+        : parseFloat(alpha, 10);
+      
+      alpha = String(alpha).replace(/^0+\./, '.');
+
+      var rgb = hsb2rgb(hue, saturation, value);
+      return 'rgba(' + rgb.join(', ') + ', ' + alpha + ')';
     }
   });
 };
@@ -2689,6 +2815,14 @@ module.exports = function(prop, vendors) {
 };
 
 });
+
+
+
+
+
+
+
+
 require.alias("visionmedia-css/index.js", "rework/deps/css/index.js");
 require.alias("visionmedia-css/index.js", "css/index.js");
 require.alias("visionmedia-css-parse/index.js", "visionmedia-css/deps/css-parse/index.js");
@@ -2718,8 +2852,10 @@ require.alias("visionmedia-debug/index.js", "jonathanong-rework-inherit/deps/deb
 require.alias("visionmedia-debug/debug.js", "jonathanong-rework-inherit/deps/debug/debug.js");
 
 require.alias("jonathanong-rework-inherit/index.js", "jonathanong-rework-inherit/index.js");
-
-if (typeof exports == "object") {
+require.alias("jankuca-hsb2rgb/src/hsb2rgb.js", "rework/deps/hsb2rgb/src/hsb2rgb.js");
+require.alias("jankuca-hsb2rgb/src/hsb2rgb.js", "rework/deps/hsb2rgb/index.js");
+require.alias("jankuca-hsb2rgb/src/hsb2rgb.js", "hsb2rgb/index.js");
+require.alias("jankuca-hsb2rgb/src/hsb2rgb.js", "jankuca-hsb2rgb/index.js");if (typeof exports == "object") {
   module.exports = require("rework");
 } else if (typeof define == "function" && define.amd) {
   define(function(){ return require("rework"); });
