@@ -82,6 +82,13 @@ describe('rework', function(){
         .toString()
         .should.equal(fixture('colors.out'));
     })
+
+    it('should support hsb(hue, saturation, value)', function(){
+      rework(fixture('colors.hsb'))
+        .use(rework.colors())
+        .toString()
+        .should.equal(fixture('colors.hsb.out'));
+    })
   })
 
   describe('.mixin(obj)', function(){

@@ -1,0 +1,23 @@
+button {
+  background: rgb(44, 55, 77);
+}
+
+button {
+  border: 1px solid rgb(44, 55, 77);
+}
+
+button {
+  background: rgba(44, 55, 77, .4);
+}
+
+button {
+  background: rgba(44, 55, 77, .4);
+}
+
+button {
+  border: 1px solid rgba(44, 55, 77, .4);
+}
+
+button {
+  background: linear-gradient(rgb(44, 55, 77), rgb(44, 55, 77));
+}
