@@ -1,0 +1,24 @@
+
+button {
+  background: hsb(220, .43, .30);
+}
+
+button {
+  border: 1px solid hsb(  220deg  , 0.43, 0.3);
+}
+
+button {
+  background: hsba(220, .43, .30, .4);
+}
+
+button {
+  background: hsba(220, .43, .30, 40%);
+}
+
+button {
+  border: 1px solid hsba(  220deg  , 0.43, 0.3, 0.40);
+}
+
+button {
+  background: linear-gradient(hsb(220, .43, .30), hsb(220, .43, .30));
+}
