@@ -1,6 +1,6 @@
 {
   "name": "rework",
-  "version": "0.17.4",
+  "version": "0.18.0",
   "description": "CSS manipulations built on CSSOM",
   "keywords": ["css", "manipulation", "preprocess", "transform"],
   "dependencies": {
