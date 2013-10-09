@@ -9,7 +9,7 @@
     "visionmedia/rework-visit": "1.0.0",
     "component/color-parser": "0.1.0",
     "component/path": "1.0.0",
-    "jonathanong/rework-inherit": "0.1.5",
+    "jonathanong/rework-inherit": "0.2.0",
     "jankuca/hsb2rgb": "1.0.2"
   },
   "scripts": [
