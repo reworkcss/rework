@@ -20,7 +20,7 @@ or in the browser with the stand-alone build ./rework.js referencing the `rework
 ## Links
 
   - [rework mixins](https://github.com/visionmedia/rework-mixins)
-  - [significant whitespace](https://github.com/visionmedia/css-whitespace)
+  - [significant whitespace](https://github.com/visionmedia/css-whitespace) - nested and indented syntax like Stylus and SASS
   - third-party [plugins](https://github.com/visionmedia/rework/wiki/Plugins)
 
 ## Built with rework
