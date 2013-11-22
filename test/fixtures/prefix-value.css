@@ -1,10 +1,12 @@
 button {
   transition: height, transform 2s, width 0.3s linear;
   background: green;
+  transition-property: transform;
 }
 
 @media screen {
   button {
-    transition: transform 1s
+    transition: transform 1s;
+    transition-property: transform;
   }
 }
