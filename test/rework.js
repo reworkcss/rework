@@ -201,6 +201,31 @@ describe('rework', function(){
         }).join(', ');
       }
     })
+
+    it('should support nested function', function() {
+      var functions = {
+        subtract: function(a, b) { return a - b },
+        multiply: function(a, b) { return a * b },
+        divide: function(a, b) { return a / b },
+        floor: Math.floor
+      }
+
+      rework(fixture('function.nested'))
+        .use(rework.function(functions))
+        .toString()
+        .should.equal(fixture('function.nested.out'));
+    })
+
+    it('should prevent infinite loop', function() {
+      rework(fixture('function.infinite-loop'))
+        .use(rework.function({url: prefixurl}))
+        .toString()
+        .should.equal(fixture('function.infinite-loop.out'));
+
+      function prefixurl(path) {
+        return 'url(' + '/some/prefix' + path + ')';
+      }
+    })
   })
 
   describe('.references()', function(){
