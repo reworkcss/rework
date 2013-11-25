@@ -1,8 +1,12 @@
 .logo {
-  background-image: url('/public/images/logo.png');
+  background-image: url('/public/images/logo.png') hi-res;
 }
 
 .banner {
-  background-image: url('/public/images/banner.png');
+  background-image: url('/public/images/banner.png') hi-res;
   background-size: cover;
+}
+
+.background {
+  background-image: url('/public/images/background.png');
 }
