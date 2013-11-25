@@ -1,9 +1,9 @@
 .logo {
-  background-image: url('/public/images/logo.png') hi-res;
+  background-image: url('/public/images/logo.png') at-2x;
 }
 
 .banner {
-  background-image: url('/public/images/banner.png') hi-res;
+  background-image: url('/public/images/banner.png') at-2x;
   background-size: cover;
 }
 
