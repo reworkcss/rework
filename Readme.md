@@ -202,12 +202,13 @@ Please delegate any issues with `.extend()` to that repository instead of rework
 
 ### .at2x([vendors])
 
-  Add retina support for images, with optional `vendor` prefixes,
-  defaulting to `.vendors()`.
+  Adds `at-2x` keyword to `background` and `background-image` 
+  declarations to add retina support for images, with optional 
+  `vendor` prefixes, defaulting to `.vendors()`.
 
 ```css
 .logo {
-  background-image: url('component.png');
+  background-image: url('component.png') at-2x;
   width: 289px;
   height: 113px
 }
