@@ -4,7 +4,7 @@
   "description": "CSS manipulations built on CSSOM",
   "keywords": ["css", "manipulation", "preprocess", "transform"],
   "dependencies": {
-    "visionmedia/css": "1.4.4",
+    "visionmedia/css": "1.6.0",
     "visionmedia/debug": "*",
     "visionmedia/rework-visit": "1.0.0",
     "component/color-parser": "0.1.0",
