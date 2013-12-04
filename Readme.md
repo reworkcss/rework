@@ -392,6 +392,38 @@ h1 {
 }
 ```
 
+  You may also return array values to expand to several definitions of the property:
+
+```
+function display(type) {
+  if ('flex' == type) {
+    return {
+      display: [
+        '-webkit-flex',
+        '-moz-flex',
+        '-webkit-flexbox',
+        'flex'
+      ]
+    }
+  }
+
+  return {
+    display: type
+  }
+}
+```
+
+  Would yield:
+
+```css
+.myclass {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -webkit-flexbox;
+  display: flex;
+}
+```
+
 ### .function(object)
 
   Add user-defined CSS functions.
@@ -423,38 +455,6 @@ yields:
 ```css
 input {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
-}
-```
-
-  You may also return array values to expand to several definitions of the property:
-
-```
-function display(type) {
-  if ('flex' == type) {
-    return {
-      display: [
-        '-webkit-flex',
-        '-moz-flex',
-        '-webkit-flexbox',
-        'flex'
-      ]
-    }
-  }
-
-  return {
-    display: type
-  }
-}
-```
-
-  Would yield:
-
-```css
-.myclass {
-  display: -webkit-flex;
-  display: -moz-flex;
-  display: -webkit-flexbox;
-  display: flex;
 }
 ```
 
