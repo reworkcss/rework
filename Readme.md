@@ -392,35 +392,6 @@ h1 {
 }
 ```
 
-  Nested functions works well too:
-
-```css
-input {
-  top: divide(subtract(30, floor(multiply(20, 10))), 2);
-}
-```
-
-```javascript
-var functions = {
-}
-
-rework(css)
-  .use(rework.function(
-    subtract: function(a, b) { return a - b },
-    multiply: function(a, b) { return a * b },
-    divide: function(a, b) { return a / b },
-    floor: Math.floor
-  )).toString()
-```
-
-  Would yield:
-
-```css
-input {
-  top: -85;
-}
-```
-
   You may also return array values to expand to several definitions of the property:
 
 ```
@@ -484,6 +455,35 @@ yields:
 ```css
 input {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+}
+```
+
+  Nested functions works well too:
+
+```css
+input {
+  top: divide(subtract(30, floor(multiply(20, 10))), 2);
+}
+```
+
+```javascript
+var functions = {
+}
+
+rework(css)
+  .use(rework.function(
+    subtract: function(a, b) { return a - b },
+    multiply: function(a, b) { return a * b },
+    divide: function(a, b) { return a / b },
+    floor: Math.floor
+  )).toString()
+```
+
+  Would yield:
+
+```css
+input {
+  top: -85;
 }
 ```
 
