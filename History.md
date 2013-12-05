@@ -1,47 +1,53 @@
 
-0.18.3 / 2013-10-18 
+0.19.0 / 2013-12-00
+==================
+
+ * function: support nested functions #119 @bolasblack
+ * at-2x: now requires a `at-2x` tag. breaks backwards compatibility. #121 @rschmukler
+
+0.18.3 / 2013-10-18
 ==================
 
  * update css for css-stringify compress fixes
 
-0.18.2 / 2013-10-16 
+0.18.2 / 2013-10-16
 ==================
 
  * update css dep
  * bump rework-inherit
 
-0.18.1 / 2013-09-03 
+0.18.1 / 2013-09-03
 ==================
 
  * extract hsb2rgb() as a separate npm module
 
-0.18.0 / 2013-09-02 
+0.18.0 / 2013-09-02
 ==================
 
  * add HSV/HSB to RGB function "hsb()"
 
-0.17.4 / 2013-08-22 
+0.17.4 / 2013-08-22
 ==================
 
  * add more to the at2x media query
  * comment out inline() tests
 
-0.17.3 / 2013-07-28 
+0.17.3 / 2013-07-28
 ==================
 
  * update css
 
-0.17.2 / 2013-07-10 
+0.17.2 / 2013-07-10
 ==================
 
  * fix references preceeded by punctuation. Closes #106
 
-0.17.1 / 2013-07-03 
+0.17.1 / 2013-07-03
 ==================
 
  * fix mixins skipping the next declaration
 
-0.17.0 / 2013-06-18 
+0.17.0 / 2013-06-18
 ==================
 
  * add this == Rework to mixin functions. Closes #101
