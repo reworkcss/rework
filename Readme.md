@@ -202,8 +202,8 @@ Please delegate any issues with `.extend()` to that repository instead of rework
 
 ### .at2x([vendors])
 
-  Adds `at-2x` keyword to `background` and `background-image` 
-  declarations to add retina support for images, with optional 
+  Adds `at-2x` keyword to `background` and `background-image`
+  declarations to add retina support for images, with optional
   `vendor` prefixes, defaulting to `.vendors()`.
 
 ```css
@@ -460,23 +460,21 @@ input {
 
   Nested functions works well too:
 
-```css
-input {
-  top: divide(subtract(30, floor(multiply(20, 10))), 2);
-}
-```
-
 ```javascript
-var functions = {
-}
-
-rework(css)
+var css = rework(css)
   .use(rework.function(
     subtract: function(a, b) { return a - b },
     multiply: function(a, b) { return a * b },
     divide: function(a, b) { return a / b },
     floor: Math.floor
-  )).toString()
+  ))
+  .toString()
+```
+
+```css
+input {
+  top: divide(subtract(30, floor(multiply(20, 10))), 2);
+}
 ```
 
   Would yield:
@@ -621,7 +619,7 @@ yields:
 ### .url(fn)
 
   Map `url()` calls. Replace all `url()`s using a given function.
-  
+
 ```js
 var css = rework(read(css))
   .use(rework.url(function(url){
