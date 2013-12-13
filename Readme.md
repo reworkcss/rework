@@ -34,12 +34,6 @@ or in the browser with the stand-alone build ./rework.js referencing the `rework
 
   Return a new `Rework` instance for the given string of `css`.
 
-### Rework#vendors(prefixes)
-
-  Define vendor `prefixes` that plugins may utilize,
-  however most plugins do and should accept direct passing
-  of vendor prefixes as well.
-
 ### Rework#use(fn)
 
   Use the given plugin `fn`. A rework "plugin" is simply
@@ -57,11 +51,8 @@ or in the browser with the stand-alone build ./rework.js referencing the `rework
 
   - [extend](#extend) — add `extend: selector` support
   - [ease](#ease) — several additional easing functions
-  - [at2x](#at2xvendors) — serve high resolution images
-  - [prefix](#prefixpropertyproperties-vendors) — add vendor prefixes to properties
-  - [prefixValue](#prefixvaluevalue-vendors) — add vendor prefixes to values
+  - [at2x](#at2x) — serve high resolution images
   - [prefixSelectors](#prefixselectorsstring) — add prefixes to selectors
-  - [keyframes](#keyframesvendors) — add __@keyframe__ vendor prefixing
   - [colors](#colors) — add colour helpers like `rgba(#fc0, .5)`
   - [mixin](#mixinobject) — add custom property logic with mixing
   - [function](#functionobject) — Add user-defined CSS functions
@@ -200,11 +191,10 @@ Please delegate any issues with `.extend()` to that repository instead of rework
 
   To view them online visit [easings.net](http://easings.net/).
 
-### .at2x([vendors])
+### .at2x()
 
   Adds `at-2x` keyword to `background` and `background-image`
-  declarations to add retina support for images, with optional
-  `vendor` prefixes, defaulting to `.vendors()`.
+  declarations to add retina support for images.
 
 ```css
 .logo {
@@ -228,90 +218,6 @@ yields:
     background-image: url("component@2x.png");
     background-size: contain
   }
-}
-```
-
-### .prefix(property|properties, [vendors])
-
-  Prefix `property` or array of `properties` with optional `vendors` defaulting to `.vendors()`.
-
-```css
-.button {
-  border-radius: 5px;
-}
-```
-
-yields:
-
-```css
-.button {
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-}
-```
-
-### .prefixValue(value, [vendors])
-
-  Prefix `value` with optional `vendors` defaulting to `.vendors()`.
-
-```css
-button {
-  transition: height, transform 2s, width 0.3s linear;
-}
-```
-
-yields:
-
-```css
-button {
-  -webkit-transition: height, -webkit-transform 2s, width 0.3s linear;
-  -moz-transition: height, -moz-transform 2s, width 0.3s linear;
-  transition: height, transform 2s, width 0.3s linear
-}
-```
-
-  This works with other values as well, such as gradients. For example:
-
-```js
-.use(rework.prefixValue('linear-gradient'))
-.use(rework.prefixValue('radial-gradient'))
-```
-
-```css
-
-button {
-  background: linear-gradient(#eee, #ddd);
-}
-
-button.round {
-  border-radius: 50%;
-  background-image: radial-gradient(#cde6f9, #81a8cb);
-}
-
-body {
-  background: -webkit-linear-gradient(#fff, #eee);
-}
-```
-
-yields:
-
-```css
-button {
-  background: -webkit-linear-gradient(#eee, #ddd);
-  background: -moz-linear-gradient(#eee, #ddd);
-  background: linear-gradient(#eee, #ddd)
-}
-
-button.round {
-  border-radius: 50%;
-  background-image: -webkit-radial-gradient(#cde6f9, #81a8cb);
-  background-image: -moz-radial-gradient(#cde6f9, #81a8cb);
-  background-image: radial-gradient(#cde6f9, #81a8cb)
-}
-
-body {
-  background: -webkit-linear-gradient(#fff, #eee)
 }
 ```
 
@@ -535,59 +441,6 @@ button {
 }
 ```
 
-### .keyframes([vendors])
-
-  Prefix __@keyframes__ with `vendors` defaulting to `.vendors()`.
-  Ordering with `.keyframes()` is important, as other plugins
-  may traverse into the newly generated rules, for example the
-  following will allow `.prefix()` to prefix keyframe `border-radius`
-  property, `.prefix()` is also smart about which keyframes definition
-  it is within, and will not add extraneous vendor definitions.
-
-```js
-var css = rework(read('examples/keyframes.css', 'utf8'))
-  .vendors(['-webkit-', '-moz-'])
-  .use(rework.keyframes())
-  .use(rework.prefix('border-radius'))
-  .toString()
-```
-
-```css
-@keyframes animation {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-```
-
-yields:
-
-```css
-@keyframes animation {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-@-webkit-keyframes animation {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-```
-
 ### .inline(dir)
 
   Inline files from `dir` directly to CSS. Replace `inline(path)` to Data URI
@@ -639,77 +492,6 @@ yields:
 ```css
 body {
   background: url(http://example.com/images/bg.png);
-}
-```
-
-## Example
-
-example.js:
-
-```js
-var rework = require('rework')
-  , read = require('fs').readFileSync
-  , str = read('example.css', 'utf8');
-
-var css = rework(str)
-  .vendors(['-webkit-', '-moz-'])
-  .use(rework.keyframes())
-  .use(rework.prefix('border-radius'))
-  .toString()
-
-console.log(css);
-```
-
-example.css:
-
-```css
-@keyframes animation {
-  from { opacity: 0; border-radius: 5px }
-  to { opacity: 1; border-radius: 5px }
-}
-```
-
-stdout:
-
-```css
-@keyframes animation {
-  from {
-    opacity: 0;
-    border-radius: 5px
-  }
-
-  to {
-    opacity: 1;
-    border-radius: 5px
-  }
-}
-
-@-webkit-keyframes animation {
-  from {
-    opacity: 0;
-    -webkit-border-radius: 5px;
-    border-radius: 5px
-  }
-
-  to {
-    opacity: 1;
-    -webkit-border-radius: 5px;
-    border-radius: 5px
-  }
-}
-
-@-moz-keyframes animation {
-  from {
-    opacity: 0;
-    -moz-border-radius: 5px;
-    border-radius: 5px
-  }
-
-  to {
-    opacity: 1;
-    -moz-border-radius: 5px;
-    border-radius: 5px
-  }
 }
 ```
 

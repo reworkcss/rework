@@ -26,32 +26,6 @@ describe('rework', function(){
     })
   })
 
-  describe('.prefixValue(value)', function(){
-    it('should prefix the value', function(){
-      rework(fixture('prefix-value'))
-        .use(rework.prefixValue('transform', vendors))
-        .toString()
-        .should.equal(fixture('prefix-value.out'));
-    })
-
-    it('should utilize .vendors()', function(){
-      rework(fixture('prefix-value'))
-        .vendors(vendors)
-        .use(rework.prefixValue('transform'))
-        .toString()
-        .should.equal(fixture('prefix-value.out'));
-    })
-
-    it('should support gradients', function(){
-      rework(fixture('gradients'))
-        .vendors(vendors)
-        .use(rework.prefixValue('linear-gradient'))
-        .use(rework.prefixValue('radial-gradient'))
-        .toString()
-        .should.equal(fixture('gradients.out'));
-    })
-  })
-
   describe('.extend()', function(){
     it('should allow extending rulesets', function(){
       rework(fixture('extend'))
@@ -246,50 +220,12 @@ describe('rework', function(){
     })
   })
 
-  describe('.prefix(prop)', function(){
-    it('should prefix prop', function(){
-      rework(fixture('prefix'))
-        .vendors(vendors)
-        .use(rework.prefix('border-radius'))
-        .use(rework.prefix('box-shadow'))
-        .toString()
-        .should.equal(fixture('prefix.out'));
-    })
-
-    it('should support an array of properties', function(){
-      rework(fixture('prefix'))
-        .vendors(vendors)
-        .use(rework.prefix(['border-radius', 'box-shadow']))
-        .toString()
-        .should.equal(fixture('prefix.out'));
-    })
-
-    it('should visit @media', function(){
-      rework(fixture('prefix.media'))
-        .vendors(vendors)
-        .use(rework.prefix('border-radius'))
-        .toString()
-        .should.equal(fixture('prefix.media.out'));
-    })
-  })
-
   describe('.prefixSelectors(str)', function(){
     it('should prefix selectors', function(){
       rework(fixture('prefix-selectors'))
         .use(rework.prefixSelectors('#dialog'))
         .toString()
         .should.equal(fixture('prefix-selectors.out'));
-    })
-  })
-
-  describe('.keyframes()', function(){
-    it('should prefix keyframes', function(){
-      rework(fixture('keyframes'))
-        .vendors(vendors)
-        .use(rework.keyframes())
-        .use(rework.prefix('border-radius'))
-        .toString()
-        .should.equal(fixture('keyframes.out'));
     })
   })
 
@@ -323,7 +259,7 @@ describe('rework', function(){
   //      .toString()
   //      .should.equal(fixture('inline.out'));
   //  })
-  //  
+  //
   //  it('should accept dirs in array', function(){
   //    rework(fixture('inline'))
   //      .use(rework.inline(['lib/', 'test/fixtures']))

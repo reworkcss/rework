@@ -25,10 +25,7 @@
     "lib/plugins/at2x.js",
     "lib/plugins/colors.js",
     "lib/plugins/mixin.js",
-    "lib/plugins/keyframes.js",
     "lib/plugins/references.js",
-    "lib/plugins/prefix-selectors.js",
-    "lib/plugins/prefix-value.js",
-    "lib/plugins/prefix.js"
+    "lib/plugins/prefix-selectors.js"
   ]
 }
