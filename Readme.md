@@ -29,7 +29,7 @@ or in the browser with the stand-alone build ./rework.js referencing the `rework
   - [autoprefixer](https://github.com/ai/autoprefixer) - prefixer based on the Can I Use database
   - [rework-pure-css](https://github.com/ianstormtaylor/rework-pure-css) - bleeding-edge, spec-compliant CSS
   - [rework-suit](https://github.com/suitcss/rework-suit) - CSS preprocessor for SUIT
-  - [resin](https://github.com/topcoat/resin) - Opinionated CSS preprocessor for Topcoat 
+  - [resin](https://github.com/topcoat/resin) - Opinionated CSS preprocessor for Topcoat
 
 ## API
 
@@ -496,97 +496,6 @@ yields:
 body {
   background: url(http://example.com/images/bg.png);
 }
-```
-
-## Example Plugin
-
-  Suppose for example you wanted to create your own
-  properties for positions, allowing you to write
-  them as follows:
-
-```css
-
-#logo {
-  absolute: top left;
-}
-
-#logo {
-  relative: top 5px left;
-}
-
-#logo {
-  fixed: top 5px left 10px;
-}
-```
-
-yielding:
-
-```css
-#logo {
-  position: absolute;
-  top: 0;
-  left: 0
-}
-
-#logo {
-  position: relative;
-  top: 5px;
-  left: 0
-}
-
-#logo {
-  position: fixed;
-  top: 5px;
-  left: 10px
-}
-```
-
- This is how you could define the plugin:
-
-```js
-
-var rework = require('rework')
-  , read = require('fs').readFileSync;
-
-function positions() {
-  var positions = ['absolute', 'relative', 'fixed'];
-
-  return function(style){
-    style.rules.forEach(function(rule){
-      rule.declarations.forEach(function(decl, i){
-        if (!~positions.indexOf(decl.property)) return;
-        var args = decl.value.split(/\s+/);
-        var arg, n;
-
-        // remove original
-        rule.declarations.splice(i, 1);
-
-        // position prop
-        rule.declarations.push({
-          property: 'position',
-          value: decl.property
-        });
-
-        // position
-        while (args.length) {
-          arg = args.shift();
-          n = parseFloat(args[0]) ? args.shift() : 0;
-          rule.declarations.push({
-            property: arg,
-            value: n
-          });
-        }
-
-      });
-    });
-  }
-}
-
-var css = rework(read('positions.css', 'utf8'))
-  .use(positions())
-  .toString()
-
-console.log(css);
 ```
 
 ## License
