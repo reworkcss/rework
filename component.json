@@ -17,18 +17,13 @@
     "lib/rework.js",
     "lib/utils.js",
     "lib/visit.js",
-    "lib/properties.js",
     "lib/plugins/function.js",
     "lib/plugins/url.js",
-    "lib/plugins/vars.js",
     "lib/plugins/ease.js",
     "lib/plugins/at2x.js",
     "lib/plugins/colors.js",
     "lib/plugins/mixin.js",
-    "lib/plugins/keyframes.js",
     "lib/plugins/references.js",
-    "lib/plugins/prefix-selectors.js",
-    "lib/plugins/prefix-value.js",
-    "lib/plugins/prefix.js"
+    "lib/plugins/prefix-selectors.js"
   ]
 }

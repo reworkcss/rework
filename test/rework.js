@@ -8,8 +8,6 @@ function fixture(name) {
   return read('test/fixtures/' + name + '.css', 'utf8').trim();
 }
 
-var vendors = ['-webkit-', '-moz-'];
-
 describe('rework', function(){
   describe('.properties', function(){
     it('should be vendor-prefixed properties', function(){
@@ -23,32 +21,6 @@ describe('rework', function(){
         .use(rework.extend())
         .toString().trim()
         .should.equal(fixture('charset.out'));
-    })
-  })
-
-  describe('.prefixValue(value)', function(){
-    it('should prefix the value', function(){
-      rework(fixture('prefix-value'))
-        .use(rework.prefixValue('transform', vendors))
-        .toString()
-        .should.equal(fixture('prefix-value.out'));
-    })
-
-    it('should utilize .vendors()', function(){
-      rework(fixture('prefix-value'))
-        .vendors(vendors)
-        .use(rework.prefixValue('transform'))
-        .toString()
-        .should.equal(fixture('prefix-value.out'));
-    })
-
-    it('should support gradients', function(){
-      rework(fixture('gradients'))
-        .vendors(vendors)
-        .use(rework.prefixValue('linear-gradient'))
-        .use(rework.prefixValue('radial-gradient'))
-        .toString()
-        .should.equal(fixture('gradients.out'));
     })
   })
 
@@ -94,14 +66,11 @@ describe('rework', function(){
   describe('.mixin(obj)', function(){
     it('should apply properties', function(){
       rework(fixture('mixins'))
-        .vendors(['-moz-'])
         .use(rework.mixin({ overflow: ellipsis }))
         .toString().trim()
         .should.equal(fixture('mixins.out'));
 
       function ellipsis(type) {
-        this.prefixes.should.eql(['-moz-']);
-
         if ('ellipsis' == type) {
           return {
             'white-space': 'nowrap',
@@ -142,7 +111,6 @@ describe('rework', function(){
 
     it('should allow multiple mixins to be used sequentially', function() {
       rework(fixture('mixins.multiple'))
-        .vendors(['-moz-'])
         .use(rework.mixin({
           display: display,
           overflow: ellipsis
@@ -168,8 +136,6 @@ describe('rework', function(){
       }
 
       function ellipsis(type) {
-        this.prefixes.should.eql(['-moz-']);
-
         if ('ellipsis' == type) {
           return {
             'white-space': 'nowrap',
@@ -240,36 +206,9 @@ describe('rework', function(){
   describe('.at2x()', function(){
     it('should add device-pixel-ratio rules', function(){
       rework(fixture('at2x'))
-        .use(rework.at2x(vendors))
+        .use(rework.at2x())
         .toString()
         .should.equal(fixture('at2x.out'));
-    })
-  })
-
-  describe('.prefix(prop)', function(){
-    it('should prefix prop', function(){
-      rework(fixture('prefix'))
-        .vendors(vendors)
-        .use(rework.prefix('border-radius'))
-        .use(rework.prefix('box-shadow'))
-        .toString()
-        .should.equal(fixture('prefix.out'));
-    })
-
-    it('should support an array of properties', function(){
-      rework(fixture('prefix'))
-        .vendors(vendors)
-        .use(rework.prefix(['border-radius', 'box-shadow']))
-        .toString()
-        .should.equal(fixture('prefix.out'));
-    })
-
-    it('should visit @media', function(){
-      rework(fixture('prefix.media'))
-        .vendors(vendors)
-        .use(rework.prefix('border-radius'))
-        .toString()
-        .should.equal(fixture('prefix.media.out'));
     })
   })
 
@@ -279,17 +218,6 @@ describe('rework', function(){
         .use(rework.prefixSelectors('#dialog'))
         .toString()
         .should.equal(fixture('prefix-selectors.out'));
-    })
-  })
-
-  describe('.keyframes()', function(){
-    it('should prefix keyframes', function(){
-      rework(fixture('keyframes'))
-        .vendors(vendors)
-        .use(rework.keyframes())
-        .use(rework.prefix('border-radius'))
-        .toString()
-        .should.equal(fixture('keyframes.out'));
     })
   })
 
@@ -309,7 +237,6 @@ describe('rework', function(){
   describe('.ease()', function(){
     it('should add additional easing functions', function(){
       rework(fixture('easing'))
-        .vendors(vendors)
         .use(rework.ease())
         .toString()
         .should.equal(fixture('easing.out'));
@@ -323,7 +250,7 @@ describe('rework', function(){
   //      .toString()
   //      .should.equal(fixture('inline.out'));
   //  })
-  //  
+  //
   //  it('should accept dirs in array', function(){
   //    rework(fixture('inline'))
   //      .use(rework.inline(['lib/', 'test/fixtures']))

@@ -17,6 +17,7 @@ function positions() {
 
         // position prop
         declarations.push({
+          type: 'declaration',
           property: 'position',
           value: decl.property
         });
@@ -26,6 +27,7 @@ function positions() {
           arg = args.shift();
           n = parseFloat(args[0]) ? args.shift() : 0;
           declarations.push({
+            type: 'declaration',
             property: arg,
             value: n
           });

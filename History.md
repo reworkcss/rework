@@ -1,9 +1,17 @@
 
-0.19.0 / 2013-12-00
+HEAD
 ==================
 
+ * remove all vendor support. See: [#126](https://github.com/visionmedia/rework/issues/126).
+
+     * deprecated .vendors()
+     * remove .prefix()
+     * remove .prefixValue()
+     * remove .keyframes()
+     * remove .properties
+
  * function: support nested functions #119 @bolasblack
- * at-2x: now requires a `at-2x` tag. breaks backwards compatibility. #121 @rschmukler
+ * at-2x: now requires a `at-2x` tag. #121 @rschmukler
 
 0.18.3 / 2013-10-18
 ==================
