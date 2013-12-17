@@ -27,7 +27,7 @@ or in the browser with the stand-alone build ./rework.js referencing the `rework
 
   - [styl](https://github.com/visionmedia/styl)
   - [myth](https://github.com/segmentio/myth)
-  - [resin](https://github.com/topcoat/resinh)
+  - [resin](https://github.com/topcoat/resin)
   - [autoprefixer](https://github.com/ai/autoprefixer)
 
 ## API
