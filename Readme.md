@@ -30,6 +30,7 @@ or in the browser with the stand-alone build ./rework.js referencing the `rework
   - [rework-pure-css](https://github.com/ianstormtaylor/rework-pure-css) - bleeding-edge, spec-compliant CSS
   - [rework-suit](https://github.com/suitcss/rework-suit) - CSS preprocessor for SUIT
   - [resin](https://github.com/topcoat/resin) - Opinionated CSS preprocessor for Topcoat
+  - [Myth] (https://github.com/segmentio/myth) -  CSS preprocessor built using Rework
 
 ## API
 
