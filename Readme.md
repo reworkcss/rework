@@ -62,7 +62,7 @@ or in the browser with the stand-alone build ./rework.js referencing the `rework
   - [function](#functionobject) — Add user-defined CSS functions
   - [references](#references) — add property references support `height: @width` etc
   - [url](#urlfn) - rewrite `url()`s with a given function
-  - third-party [plugins](https://github.com/visionmedia/rework/wiki/Plugins)
+  - third-party [plugins](https://github.com/visionmedia/rework/wiki/Plugins-and-Utilities)
 
 ### .extend()
 
