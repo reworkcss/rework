@@ -15,6 +15,18 @@ describe('rework', function(){
     })
   })
 
+  describe('.use(fn)', function(){
+    it('should catch errors', function(done){
+      try {
+        rework('body { color: red; }')
+          .use(function(){ throw new Error; });
+      } catch (err) {
+        // TODO: add testing for context
+        done();
+      }
+    })
+  })
+
   describe('visitor', function(){
     it('should work with charset, import, etc', function(){
       rework(fixture('charset'))
