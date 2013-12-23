@@ -1,6 +1,6 @@
 
-HEAD
-==================
+0.19.0 / 2013-12-22
+===================
 
  * remove all vendor support. See: [#126](https://github.com/visionmedia/rework/issues/126).
 

@@ -1,6 +1,6 @@
 {
   "name": "rework",
-  "version": "0.18.3",
+  "version": "0.19.0",
   "description": "CSS manipulations built on CSSOM",
   "keywords": ["css", "manipulation", "preprocess", "transform"],
   "author": "TJ Holowaychuk <tj@vision-media.ca>",
@@ -13,7 +13,7 @@
     "commander": "1.0.4",
     "color-parser": "0.1.0",
     "hsb2rgb": "1.0.2",
-    "mime": "1.2.9",
+    "mime": "1.2.11",
     "debug": "*",
     "rework-inherit": "0.2.1",
     "rework-visit": "1.0.0"
