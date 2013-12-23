@@ -1,3 +1,8 @@
+0.20.1 / 2013-12-23
+===================
+
+ * fix last tag. please ignore 0.20.0. thank you for your cooperation.
+
 0.20.0 / 2013-12-23
 ===================
 
