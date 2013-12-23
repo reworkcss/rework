@@ -1,6 +1,6 @@
 {
   "name": "rework",
-  "version": "0.19.0",
+  "version": "0.20.0",
   "description": "CSS manipulations built on CSSOM",
   "keywords": [
     "css",

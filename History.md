@@ -1,3 +1,8 @@
+0.20.0 / 2013-12-23
+===================
+
+ * update css
+ * add sourcemap option to .toString() - see [#123](https://github.com/visionmedia/rework/pull/123)
 
 0.19.0 / 2013-12-22
 ===================
