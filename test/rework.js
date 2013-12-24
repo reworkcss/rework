@@ -297,4 +297,32 @@ describe('rework', function(){
       result.map.mappings.should.equal('AAAA,KAAO,SAAU');
     })
   })
+
+  describe('error handling', function() {
+    it('should provide context for error', function() {
+      var src = [
+        'body {',
+        '  color: red;',
+        '}'
+      ].join('\n');
+
+      try {
+        rework(src).use(function(stylesheet) {
+          var position = stylesheet.rules[0].declarations[0].position;
+          var err = new Error('weird error')
+          err.position = position;
+          throw err;
+        });
+      } catch (err) {
+        var msg = err.toString();
+        err.should.have.property('originalMessage');
+        err.should.have.property('position');
+        msg.should.equal([
+          'Error: at line 2 column 3: weird error',
+          '  color: red;',
+          '  ^',
+        ].join('\n'));
+      }
+    });
+  });
 })
