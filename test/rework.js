@@ -297,4 +297,44 @@ describe('rework', function(){
       result.map.mappings.should.equal('AAAA,KAAO,SAAU');
     })
   })
+
+  describe('.error()', function() {
+    function plugin(stylesheet, rework) {
+      stylesheet.rules.forEach(function(rule) {
+        rule.declarations.forEach(function(dec) {
+          if ('color' == dec.property) throw rework.error(dec, 'dont use color');
+        });
+      });
+    }
+
+    it('should return an error with context', function(done) {
+      try {
+        rework(fixture('error')).use(plugin);
+      } catch (err) {
+        err.should.exist;
+        err.should.have.property('start');
+        err.should.have.property('end');
+        err.should.have.property('context');
+        err.start.line.should.equal(6);
+        err.start.column.should.equal(3);
+        err.end.line.should.equal(6);
+        err.end.column.should.equal(14);
+        err.source.should.equal('  color: #eee;');
+        err.context.before.should.equal('  line-height: 50px;\n  background-size: 50px 50px;');
+        err.context.after.should.equal('  background: linear-gradient(#eee, #eee);\n}');
+        done();
+      }
+    })
+
+    it('should not fail without enough context', function(done) {
+      try {
+        rework(fixture('error.context')).use(plugin);
+      } catch (err) {
+        err.should.exist;
+        err.should.have.property('context');
+        err.context.before.should.equal('button {');
+        done();
+      }
+    })
+  })
 })
