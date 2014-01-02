@@ -1,6 +1,6 @@
 {
   "name": "rework",
-  "version": "0.20.1",
+  "version": "0.20.2",
   "description": "CSS manipulations built on CSSOM",
   "keywords": [
     "css",
@@ -30,6 +30,7 @@
   },
   "main": "index",
   "scripts": {
+    "prepublish": "make rework.js",
     "test": "mocha --require should --reporter spec"
   }
 }

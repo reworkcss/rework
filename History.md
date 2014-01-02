@@ -1,3 +1,9 @@
+0.20.2 / 2014-01-02
+===================
+
+ * fix prefix-selector support for :root pseudo-class
+ * fix rework.js
+
 0.20.1 / 2013-12-23
 ===================
 

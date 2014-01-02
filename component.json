@@ -1,15 +1,15 @@
 {
   "name": "rework",
-  "version": "0.20.1",
+  "version": "0.20.2",
   "description": "CSS manipulations built on CSSOM",
   "keywords": ["css", "manipulation", "preprocess", "transform"],
   "dependencies": {
-    "visionmedia/css": "1.6.0",
+    "reworkcss/css": "1.6.1",
+    "reworkcss/rework-visit": "1.0.0",
+    "reworkcss/rework-inherit": "0.2.1",
     "visionmedia/debug": "*",
-    "visionmedia/rework-visit": "1.0.0",
     "component/color-parser": "0.1.0",
     "component/path": "1.0.0",
-    "reworkcss/rework-inherit": "0.2.1",
     "jankuca/hsb2rgb": "1.0.2"
   },
   "scripts": [

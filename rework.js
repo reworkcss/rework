@@ -27,10 +27,14 @@ function require(path, parent, orig) {
   // perform real require()
   // by invoking the module's
   // registered function
-  if (!module.exports) {
-    module.exports = {};
-    module.client = module.component = true;
-    module.call(this, module.exports, require.relative(resolved), module);
+  if (!module._resolving && !module.exports) {
+    var mod = {};
+    mod.exports = {};
+    mod.client = mod.component = true;
+    module._resolving = true;
+    module.call(this, mod.exports, require.relative(resolved), mod);
+    delete module._resolving;
+    module.exports = mod.exports;
   }
 
   return module.exports;
@@ -43,10 +47,18 @@ function require(path, parent, orig) {
 require.modules = {};
 
 /**
- * Registered aliases.
+ * Main definitions.
  */
 
-require.aliases = {};
+require.mains = {};
+
+/**
+ * Define a main.
+ */
+
+require.main = function(name, path){
+  require.mains[name] = path;
+};
 
 /**
  * Resolve `path`.
@@ -63,7 +75,7 @@ require.aliases = {};
  */
 
 require.resolve = function(path) {
-  if (path.charAt(0) === '/') path = path.slice(1);
+  if ('/' == path.charAt(0)) path = path.slice(1);
 
   var paths = [
     path,
@@ -73,10 +85,15 @@ require.resolve = function(path) {
     path + '/index.json'
   ];
 
-  for (var i = 0; i < paths.length; i++) {
+  if (require.mains[path]) {
+    paths = [path + '/' + require.mains[path]];
+  }
+
+  for (var i = 0, len = paths.length; i < len; i++) {
     var path = paths[i];
-    if (require.modules.hasOwnProperty(path)) return path;
-    if (require.aliases.hasOwnProperty(path)) return require.aliases[path];
+    if (require.modules.hasOwnProperty(path)) {
+      return path;
+    }
   }
 };
 
@@ -97,7 +114,7 @@ require.normalize = function(curr, path) {
   curr = curr.split('/');
   path = path.split('/');
 
-  for (var i = 0; i < path.length; ++i) {
+  for (var i = 0, len = path.length; i < len; ++i) {
     if ('..' == path[i]) {
       curr.pop();
     } else if ('.' != path[i] && '' != path[i]) {
@@ -121,21 +138,6 @@ require.register = function(path, definition) {
 };
 
 /**
- * Alias a module definition.
- *
- * @param {String} from
- * @param {String} to
- * @api private
- */
-
-require.alias = function(from, to) {
-  if (!require.modules.hasOwnProperty(from)) {
-    throw new Error('Failed to alias "' + from + '", it does not exist');
-  }
-  require.aliases[to] = from;
-};
-
-/**
  * Return a require function relative to the `parent` path.
  *
  * @param {String} parent
@@ -144,7 +146,7 @@ require.alias = function(from, to) {
  */
 
 require.relative = function(parent) {
-  var p = require.normalize(parent, '..');
+  var root = require.normalize(parent, '..');
 
   /**
    * lastIndexOf helper.
@@ -174,15 +176,7 @@ require.relative = function(parent) {
   localRequire.resolve = function(path) {
     var c = path.charAt(0);
     if ('/' == c) return path.slice(1);
-    if ('.' == c) return require.normalize(p, path);
-
-    // resolve deps by returning
-    // the dep in the nearest "deps"
-    // directory
-    var segs = parent.split('/');
-    var i = lastIndexOf(segs, 'deps') + 1;
-    if (!i) i = 0;
-    path = segs.slice(0, i + 1).join('/') + '/deps/' + path;
+    if ('.' == c) return require.normalize(root, path);
     return path;
   };
 
@@ -196,7 +190,7 @@ require.relative = function(parent) {
 
   return localRequire;
 };
-require.register("visionmedia-css-parse/index.js", function(exports, require, module){
+require.register("reworkcss-css-parse/index.js", function(exports, require, module){
 
 module.exports = function(css, options){
   options = options || {};
@@ -230,7 +224,8 @@ module.exports = function(css, options){
     return function(node){
       node.position = {
         start: start,
-        end: { line: lineno, column: column }
+        end: { line: lineno, column: column },
+        source: options.source
       };
 
       whitespace();
@@ -253,6 +248,7 @@ module.exports = function(css, options){
 
   function error(msg) {
     var err = new Error(msg + ' near line ' + lineno + ':' + column);
+    err.filename = options.source;
     err.line = lineno;
     err.column = column;
     err.source = css;
@@ -297,7 +293,7 @@ module.exports = function(css, options){
     var rules = [];
     whitespace();
     comments(rules);
-    while (css[0] != '}' && (node = atrule() || rule())) {
+    while (css.charAt(0) != '}' && (node = atrule() || rule())) {
       rules.push(node);
       comments(rules);
     }
@@ -342,10 +338,10 @@ module.exports = function(css, options){
 
   function comment() {
     var pos = position();
-    if ('/' != css[0] || '*' != css[1]) return;
+    if ('/' != css.charAt(0) || '*' != css.charAt(1)) return;
 
     var i = 2;
-    while (null != css[i] && ('*' != css[i] || '/' != css[i + 1])) ++i;
+    while (null != css.charAt(i) && ('*' != css.charAt(i) || '/' != css.charAt(i + 1))) ++i;
     i += 2;
 
     var str = css.slice(2, i - 2);
@@ -367,7 +363,7 @@ module.exports = function(css, options){
   function selector() {
     var m = match(/^([^{]+)/);
     if (!m) return;
-    return m[0].trim().split(/\s*,\s*/);
+    return trim(m[0]).split(/\s*,\s*/);
   }
 
   /**
@@ -378,9 +374,9 @@ module.exports = function(css, options){
     var pos = position();
 
     // prop
-    var prop = match(/^(\*?[-\/\*\w]+)\s*/);
+    var prop = match(/^(\*?[-#\/\*\w]+(\[[0-9a-z_-]+\])?)\s*/);
     if (!prop) return;
-    prop = prop[0];
+    prop = trim(prop[0]);
 
     // :
     if (!match(/^:\s*/)) return error("property missing ':'");
@@ -392,7 +388,7 @@ module.exports = function(css, options){
     var ret = pos({
       type: 'declaration',
       property: prop,
-      value: val[0].trim()
+      value: trim(val[0])
     });
 
     // ;
@@ -431,7 +427,7 @@ module.exports = function(css, options){
     var vals = [];
     var pos = position();
 
-    while (m = match(/^(from|to|\d+%|\.\d+%|\d+\.\d+%)\s*/)) {
+    while (m = match(/^((\d+\.\d+|\.\d+|\d+)%?|[a-z]+)\s*/)) {
       vals.push(m[1]);
       match(/^,\s*/);
     }
@@ -489,7 +485,7 @@ module.exports = function(css, options){
     var m = match(/^@supports *([^{]+)/);
 
     if (!m) return;
-    var supports = m[1].trim();
+    var supports = trim(m[1]);
 
     if (!open()) return error("@supports missing '{'");
 
@@ -505,6 +501,28 @@ module.exports = function(css, options){
   }
 
   /**
+   * Parse host.
+   */
+
+  function athost() {
+    var pos = position();
+    var m = match(/^@host */);
+
+    if (!m) return;
+
+    if (!open()) return error("@host missing '{'");
+
+    var style = comments().concat(rules());
+
+    if (!close()) return error("@host missing '}'");
+
+    return pos({
+      type: 'host',
+      rules: style
+    });
+  }
+
+  /**
    * Parse media.
    */
 
@@ -513,7 +531,7 @@ module.exports = function(css, options){
     var m = match(/^@media *([^{]+)/);
 
     if (!m) return;
-    var media = m[1].trim();
+    var media = trim(m[1]);
 
     if (!open()) return error("@media missing '{'");
 
@@ -567,8 +585,8 @@ module.exports = function(css, options){
     var m = match(/^@([-\w]+)?document *([^{]+)/);
     if (!m) return;
 
-    var vendor = (m[1] || '').trim();
-    var doc = m[2].trim();
+    var vendor = trim(m[1]);
+    var doc = trim(m[2]);
 
     if (!open()) return error("@document missing '{'");
 
@@ -617,7 +635,7 @@ module.exports = function(css, options){
     var m = match(new RegExp('^@' + name + ' *([^;\\n]+);'));
     if (!m) return;
     var ret = { type: name };
-    ret[name] = m[1].trim();
+    ret[name] = trim(m[1]);
     return pos(ret);
   }
 
@@ -626,6 +644,8 @@ module.exports = function(css, options){
    */
 
   function atrule() {
+    if (css[0] != '@') return;
+
     return atkeyframes()
       || atmedia()
       || atsupports()
@@ -633,7 +653,8 @@ module.exports = function(css, options){
       || atcharset()
       || atnamespace()
       || atdocument()
-      || atpage();
+      || atpage()
+      || athost();
   }
 
   /**
@@ -657,19 +678,31 @@ module.exports = function(css, options){
   return stylesheet();
 };
 
+/**
+ * Trim `str`.
+ */
+
+function trim(str) {
+  return str ? str.replace(/^\s+|\s+$/g, '') : '';
+}
 
 });
-require.register("visionmedia-css-stringify/index.js", function(exports, require, module){
+require.register("reworkcss-css-stringify/index.js", function(exports, require, module){
 
 /**
  * Module dependencies.
  */
 
-var Compressed = require('./lib/compress');
-var Identity = require('./lib/identity');
+var Compressed = require("./lib/compress");
+var Identity = require("./lib/identity");
 
 /**
  * Stringfy the given AST `node`.
+ *
+ * Options:
+ *
+ *  - `compress` space-optimized output
+ *  - `sourcemap` return an object with `.code` and `.map`
  *
  * @param {Object} node
  * @param {Object} [options]
@@ -684,12 +717,28 @@ module.exports = function(node, options){
     ? new Compressed(options)
     : new Identity(options);
 
-  return compiler.compile(node);
+  // source maps
+  if (options.sourcemap) {
+    var sourcemaps = require("./lib/source-map-support");
+    sourcemaps(compiler);
+
+    var code = compiler.compile(node);
+    return { code: code, map: compiler.map.toJSON() };
+  }
+
+  var code = compiler.compile(node);
+  return code;
 };
 
 
 });
-require.register("visionmedia-css-stringify/lib/compress.js", function(exports, require, module){
+require.register("reworkcss-css-stringify/lib/compress.js", function(exports, require, module){
+
+/**
+ * Module dependencies.
+ */
+
+var Base = require("./compiler");
 
 /**
  * Expose compiler.
@@ -702,8 +751,14 @@ module.exports = Compiler;
  */
 
 function Compiler(options) {
-  options = options || {};
+  Base.call(this, options);
 }
+
+/**
+ * Inherit from `Base.prototype`.
+ */
+
+Compiler.prototype.__proto__ = Base.prototype;
 
 /**
  * Compile `node`.
@@ -716,19 +771,11 @@ Compiler.prototype.compile = function(node){
 };
 
 /**
- * Visit `node`.
- */
-
-Compiler.prototype.visit = function(node){
-  return this[node.type](node);
-};
-
-/**
  * Visit comment node.
  */
 
 Compiler.prototype.comment = function(node){
-  if (this.compress) return '';
+  return this.emit('', node.position);
 };
 
 /**
@@ -736,7 +783,7 @@ Compiler.prototype.comment = function(node){
  */
 
 Compiler.prototype.import = function(node){
-  return '@import ' + node.import + ';';
+  return this.emit('@import ' + node.import + ';', node.position);
 };
 
 /**
@@ -744,11 +791,10 @@ Compiler.prototype.import = function(node){
  */
 
 Compiler.prototype.media = function(node){
-  return '@media '
-    + node.media
-    + '{'
-    + node.rules.map(this.visit, this).join('')
-    + '}';
+  return this.emit('@media ' + node.media, node.position, true)
+    + this.emit('{')
+    + this.mapVisit(node.rules)
+    + this.emit('}');
 };
 
 /**
@@ -758,10 +804,10 @@ Compiler.prototype.media = function(node){
 Compiler.prototype.document = function(node){
   var doc = '@' + (node.vendor || '') + 'document ' + node.document;
 
-  return doc
-    + '{'
-    + node.rules.map(this.visit, this).join('')
-    + '}';
+  return this.emit(doc, node.position, true)
+    + this.emit('{')
+    + this.mapVisit(node.rules)
+    + this.emit('}');
 };
 
 /**
@@ -769,7 +815,15 @@ Compiler.prototype.document = function(node){
  */
 
 Compiler.prototype.charset = function(node){
-  return '@charset ' + node.charset + ';';
+  return this.emit('@charset ' + node.charset + ';', node.position);
+};
+
+/**
+ * Visit namespace node.
+ */
+
+Compiler.prototype.namespace = function(node){
+  return this.emit('@namespace ' + node.namespace + ';', node.position);
 };
 
 /**
@@ -777,13 +831,10 @@ Compiler.prototype.charset = function(node){
  */
 
 Compiler.prototype.supports = function(node){
-  return '@supports '
-    + node.supports
-    + ' {\n'
-    + this.indent(1)
-    + node.rules.map(this.visit, this).join('\n\n')
-    + this.indent(-1)
-    + '\n}';
+  return this.emit('@supports ' + node.supports, node.position, true)
+    + this.emit('{')
+    + this.mapVisit(node.rules)
+    + this.emit('}');
 };
 
 /**
@@ -791,13 +842,13 @@ Compiler.prototype.supports = function(node){
  */
 
 Compiler.prototype.keyframes = function(node){
-  return '@'
+  return this.emit('@'
     + (node.vendor || '')
     + 'keyframes '
-    + node.name
-    + '{'
-    + node.keyframes.map(this.visit, this).join('')
-    + '}';
+    + node.name, node.position, true)
+    + this.emit('{')
+    + this.mapVisit(node.keyframes)
+    + this.emit('}');
 };
 
 /**
@@ -807,10 +858,10 @@ Compiler.prototype.keyframes = function(node){
 Compiler.prototype.keyframe = function(node){
   var decls = node.declarations;
 
-  return node.values.join(',')
-    + '{'
-    + decls.map(this.visit, this).join('')
-    + '}';
+  return this.emit(node.values.join(','), node.position, true)
+    + this.emit('{')
+    + this.mapVisit(decls)
+    + this.emit('}');
 };
 
 /**
@@ -819,15 +870,13 @@ Compiler.prototype.keyframe = function(node){
 
 Compiler.prototype.page = function(node){
   var sel = node.selectors.length
-    ? node.selectors.join(', ') + ' '
+    ? node.selectors.join(', ')
     : '';
 
-  return '@page ' + sel
-    + '{\n'
-    + this.indent(1)
-    + node.declarations.map(this.visit, this).join('\n')
-    + this.indent(-1)
-    + '\n}';
+  return this.emit('@page ' + sel, node.position, true)
+    + this.emit('{')
+    + this.mapVisit(node.declarations)
+    + this.emit('}');
 };
 
 /**
@@ -838,10 +887,10 @@ Compiler.prototype.rule = function(node){
   var decls = node.declarations;
   if (!decls.length) return '';
 
-  return node.selectors.join(',')
-    + '{'
-    + decls.map(this.visit, this).join('')
-    + '}';
+  return this.emit(node.selectors.join(','), node.position, true)
+    + this.emit('{')
+    + this.mapVisit(decls)
+    + this.emit('}');
 };
 
 /**
@@ -849,12 +898,18 @@ Compiler.prototype.rule = function(node){
  */
 
 Compiler.prototype.declaration = function(node){
-  return node.property + ':' + node.value + ';';
+  return this.emit(node.property + ':' + node.value, node.position) + this.emit(';');
 };
 
 
 });
-require.register("visionmedia-css-stringify/lib/identity.js", function(exports, require, module){
+require.register("reworkcss-css-stringify/lib/identity.js", function(exports, require, module){
+
+/**
+ * Module dependencies.
+ */
+
+var Base = require("./compiler");
 
 /**
  * Expose compiler.
@@ -868,25 +923,30 @@ module.exports = Compiler;
 
 function Compiler(options) {
   options = options || {};
+  Base.call(this, options);
   this.indentation = options.indent;
 }
+
+/**
+ * Inherit from `Base.prototype`.
+ */
+
+Compiler.prototype.__proto__ = Base.prototype;
 
 /**
  * Compile `node`.
  */
 
 Compiler.prototype.compile = function(node){
-  return node.stylesheet
-    .rules.map(this.visit, this)
-    .join('\n\n');
+  return this.stylesheet(node);
 };
 
 /**
- * Visit `node`.
+ * Visit stylesheet node.
  */
 
-Compiler.prototype.visit = function(node){
-  return this[node.type](node);
+Compiler.prototype.stylesheet = function(node){
+  return this.mapVisit(node.stylesheet.rules, '\n\n');
 };
 
 /**
@@ -894,7 +954,7 @@ Compiler.prototype.visit = function(node){
  */
 
 Compiler.prototype.comment = function(node){
-  return this.indent() + '/*' + node.comment + '*/';
+  return this.emit(this.indent() + '/*' + node.comment + '*/', node.position);
 };
 
 /**
@@ -902,7 +962,7 @@ Compiler.prototype.comment = function(node){
  */
 
 Compiler.prototype.import = function(node){
-  return '@import ' + node.import + ';';
+  return this.emit('@import ' + node.import + ';', node.position);
 };
 
 /**
@@ -910,13 +970,14 @@ Compiler.prototype.import = function(node){
  */
 
 Compiler.prototype.media = function(node){
-  return '@media '
-    + node.media
-    + ' {\n'
-    + this.indent(1)
-    + node.rules.map(this.visit, this).join('\n\n')
-    + this.indent(-1)
-    + '\n}';
+  return this.emit('@media ' + node.media, node.position, true)
+    + this.emit(
+        ' {\n'
+        + this.indent(1))
+    + this.mapVisit(node.rules, '\n\n')
+    + this.emit(
+        this.indent(-1)
+        + '\n}');
 };
 
 /**
@@ -926,12 +987,15 @@ Compiler.prototype.media = function(node){
 Compiler.prototype.document = function(node){
   var doc = '@' + (node.vendor || '') + 'document ' + node.document;
 
-  return doc + ' '
-    + ' {\n'
-    + this.indent(1)
-    + node.rules.map(this.visit, this).join('\n\n')
-    + this.indent(-1)
-    + '\n}';
+  return this.emit(doc, node.position, true)
+    + this.emit(
+        ' '
+      + ' {\n'
+      + this.indent(1))
+    + this.mapVisit(node.rules, '\n\n')
+    + this.emit(
+        this.indent(-1)
+        + '\n}');
 };
 
 /**
@@ -939,7 +1003,15 @@ Compiler.prototype.document = function(node){
  */
 
 Compiler.prototype.charset = function(node){
-  return '@charset ' + node.charset + ';\n';
+  return this.emit('@charset ' + node.charset + ';', node.position);
+};
+
+/**
+ * Visit namespace node.
+ */
+
+Compiler.prototype.namespace = function(node){
+  return this.emit('@namespace ' + node.namespace + ';', node.position);
 };
 
 /**
@@ -947,13 +1019,14 @@ Compiler.prototype.charset = function(node){
  */
 
 Compiler.prototype.supports = function(node){
-  return '@supports '
-    + node.supports
-    + ' {\n'
-    + this.indent(1)
-    + node.rules.map(this.visit, this).join('\n\n')
-    + this.indent(-1)
-    + '\n}';
+  return this.emit('@supports ' + node.supports, node.position, true)
+    + this.emit(
+      ' {\n'
+      + this.indent(1))
+    + this.mapVisit(node.rules, '\n\n')
+    + this.emit(
+        this.indent(-1)
+        + '\n}');
 };
 
 /**
@@ -961,15 +1034,14 @@ Compiler.prototype.supports = function(node){
  */
 
 Compiler.prototype.keyframes = function(node){
-  return '@'
-    + (node.vendor || '')
-    + 'keyframes '
-    + node.name
-    + ' {\n'
-    + this.indent(1)
-    + node.keyframes.map(this.visit, this).join('\n')
-    + this.indent(-1)
-    + '}';
+  return this.emit('@' + (node.vendor || '') + 'keyframes ' + node.name, node.position, true)
+    + this.emit(
+      ' {\n'
+      + this.indent(1))
+    + this.mapVisit(node.keyframes, '\n')
+    + this.emit(
+        this.indent(-1)
+        + '}');
 };
 
 /**
@@ -979,13 +1051,16 @@ Compiler.prototype.keyframes = function(node){
 Compiler.prototype.keyframe = function(node){
   var decls = node.declarations;
 
-  return this.indent()
-    + node.values.join(', ')
-    + ' {\n'
-    + this.indent(1)
-    + decls.map(this.visit, this).join('\n')
-    + this.indent(-1)
-    + '\n' + this.indent() + '}\n';
+  return this.emit(this.indent())
+    + this.emit(node.values.join(', '), node.position, true)
+    + this.emit(
+      ' {\n'
+      + this.indent(1))
+    + this.mapVisit(decls, '\n')
+    + this.emit(
+      this.indent(-1)
+      + '\n'
+      + this.indent() + '}\n');
 };
 
 /**
@@ -997,12 +1072,12 @@ Compiler.prototype.page = function(node){
     ? node.selectors.join(', ') + ' '
     : '';
 
-  return '@page ' + sel
-    + '{\n'
-    + this.indent(1)
-    + node.declarations.map(this.visit, this).join('\n')
-    + this.indent(-1)
-    + '\n}';
+  return this.emit('@page ' + sel, node.position, true)
+    + this.emit('{\n')
+    + this.emit(this.indent(1))
+    + this.mapVisit(node.declarations, '\n')
+    + this.emit(this.indent(-1))
+    + this.emit('\n}');
 };
 
 /**
@@ -1014,12 +1089,12 @@ Compiler.prototype.rule = function(node){
   var decls = node.declarations;
   if (!decls.length) return '';
 
-  return node.selectors.map(function(s){ return indent + s }).join(',\n')
-    + ' {\n'
-    + this.indent(1)
-    + decls.map(this.visit, this).join('\n')
-    + this.indent(-1)
-    + '\n' + this.indent() + '}';
+  return this.emit(node.selectors.map(function(s){ return indent + s }).join(',\n'), node.position, true)
+    + this.emit(' {\n')
+    + this.emit(this.indent(1))
+    + this.mapVisit(decls, '\n')
+    + this.emit(this.indent(-1))
+    + this.emit('\n' + this.indent() + '}');
 };
 
 /**
@@ -1027,7 +1102,9 @@ Compiler.prototype.rule = function(node){
  */
 
 Compiler.prototype.declaration = function(node){
-  return this.indent() + node.property + ': ' + node.value + ';';
+  return this.emit(this.indent())
+    + this.emit(node.property + ': ' + node.value, node.position)
+    + this.emit(';');
 };
 
 /**
@@ -1046,17 +1123,425 @@ Compiler.prototype.indent = function(level) {
 };
 
 });
-require.register("visionmedia-css/index.js", function(exports, require, module){
+require.register("reworkcss-css-stringify/lib/compiler.js", function(exports, require, module){
 
-exports.parse = require('css-parse');
-exports.stringify = require('css-stringify');
+/**
+ * Expose `Compiler`.
+ */
+
+module.exports = Compiler;
+
+/**
+ * Initialize a compiler.
+ *
+ * @param {Type} name
+ * @return {Type}
+ * @api public
+ */
+
+function Compiler(opts) {
+  this.options = opts || {};
+}
+
+/**
+ * Emit `str`
+ */
+
+Compiler.prototype.emit = function(str) {
+  return str;
+};
+
+/**
+ * Visit `node`.
+ */
+
+Compiler.prototype.visit = function(node){
+  return this[node.type](node);
+};
+
+/**
+ * Map visit over array of `nodes`, optionally using a `delim`
+ */
+
+Compiler.prototype.mapVisit = function(nodes, delim){
+  var buf = '';
+  delim = delim || '';
+
+  for (var i = 0, length = nodes.length; i < length; i++) {
+    buf += this.visit(nodes[i]);
+    if (delim && i < length - 1) buf += this.emit(delim);
+  }
+
+  return buf;
+};
+
+});
+require.register("reworkcss-css-stringify/lib/source-map-support.js", function(exports, require, module){
+
+/**
+ * Module dependencies.
+ */
+
+var SourceMap = require("source-map").SourceMapGenerator;
+
+/**
+ * Expose `mixin()`.
+ */
+
+module.exports = mixin;
+
+/**
+ * Mixin source map support into `compiler`.
+ *
+ * @param {Compiler} compiler
+ * @api public
+ */
+
+function mixin(compiler) {
+  var file = compiler.options.filename || 'generated.css';
+  compiler.map = new SourceMap({ file: file });
+  compiler.position = { line: 1, column: 1 };
+  for (var k in exports) compiler[k] = exports[k];
+}
+
+/**
+ * Update position.
+ *
+ * @param {String} str
+ * @api private
+ */
+
+exports.updatePosition = function(str) {
+  var lines = str.match(/\n/g);
+  if (lines) this.position.line += lines.length;
+  var i = str.lastIndexOf('\n');
+  this.position.column = ~i ? str.length - i : this.position.column + str.length;
+};
+
+/**
+ * Emit `str`.
+ *
+ * @param {String} str
+ * @param {Number} [pos]
+ * @param {Boolean} [startOnly]
+ * @return {String}
+ * @api private
+ */
+
+exports.emit = function(str, pos, startOnly) {
+  if (pos && pos.start) {
+    this.map.addMapping({
+      source: pos.source || 'source.css',
+      generated: {
+        line: this.position.line,
+        column: Math.max(this.position.column - 1, 0)
+      },
+      original: {
+        line: pos.start.line,
+        column: pos.start.column - 1
+      }
+    });
+  }
+
+  this.updatePosition(str);
+
+  if (!startOnly && pos && pos.end) {
+    this.map.addMapping({
+      source: pos.source || 'source.css',
+      generated: {
+        line: this.position.line,
+        column: Math.max(this.position.column - 1, 0)
+      },
+      original: {
+        line: pos.end.line,
+        column: pos.end.column - 1
+      }
+    });
+  }
+
+  return str;
+};
+
+});
+require.register("reworkcss-css/index.js", function(exports, require, module){
+
+exports.parse = require("reworkcss-css-parse");
+exports.stringify = require("reworkcss-css-stringify");
+
+});
+require.register("reworkcss-rework-visit/index.js", function(exports, require, module){
+
+/**
+ * Expose `visit()`.
+ */
+
+module.exports = visit;
+
+/**
+ * Visit `node`'s declarations recursively and
+ * invoke `fn(declarations, node)`.
+ *
+ * @param {Object} node
+ * @param {Function} fn
+ * @api private
+ */
+
+function visit(node, fn){
+  node.rules.forEach(function(rule){
+    // @media etc
+    if (rule.rules) {
+      visit(rule, fn);
+      return;
+    }
+
+    // keyframes
+    if (rule.keyframes) {
+      rule.keyframes.forEach(function(keyframe){
+        fn(keyframe.declarations, rule);
+      });
+      return;
+    }
+
+    // @charset, @import etc
+    if (!rule.declarations) return;
+
+    fn(rule.declarations, node);
+  });
+};
+
+});
+require.register("reworkcss-rework-inherit/index.js", function(exports, require, module){
+var debug = require("visionmedia-debug")('rework-inherit')
+
+exports = module.exports = function (options) {
+  return function inherit(style) {
+    return new Inherit(style, options || {})
+  }
+}
+
+exports.Inherit = Inherit
+
+function Inherit(style, options) {
+  if (!(this instanceof Inherit))
+    return new Inherit(style, options);
+
+  options = options || {}
+
+  this.propertyRegExp = options.propertyRegExp
+    || /^(inherit|extend)s?$/i
+
+  var rules = this.rules = style.rules
+  this.matches = {}
+
+  for (var i = 0; i < rules.length; i++) {
+    var rule = rules[i]
+    if (rule.rules) {
+      // Media queries
+      this.inheritMedia(rule)
+      if (!rule.rules.length) rules.splice(i--, 1);
+    } else if (rule.selectors) {
+      // Regular rules
+      this.inheritRules(rule)
+      if (!rule.declarations.length) rules.splice(i--, 1);
+    }
+  }
+
+  this.removePlaceholders()
+}
+
+Inherit.prototype.inheritMedia = function (mediaRule) {
+  var rules = mediaRule.rules
+  var query = mediaRule.media
+
+  for (var i = 0; i < rules.length; i++) {
+    var rule = rules[i]
+    if (!rule.selectors) continue;
+
+    var additionalRules = this.inheritMediaRules(rule, query)
+
+    if (!rule.declarations.length) rules.splice(i--, 1);
+
+    // I don't remember why I'm using apply here.
+    ;[].splice.apply(rules, [i, 0].concat(additionalRules))
+    i += additionalRules.length
+  }
+}
+
+Inherit.prototype.inheritMediaRules = function (rule, query) {
+  var declarations = rule.declarations
+  var selectors = rule.selectors
+  var appendRules = []
+
+  for (var i = 0; i < declarations.length; i++) {
+    var decl = declarations[i]
+    // Could be comments
+    if (decl.type !== 'declaration') continue;
+    if (!this.propertyRegExp.test(decl.property)) continue;
+
+    decl.value.split(',').map(trim).forEach(function (val) {
+      // Should probably just use concat here
+      ;[].push.apply(appendRules, this.inheritMediaRule(val, selectors, query));
+    }, this)
+
+    declarations.splice(i--, 1)
+  }
+
+  return appendRules
+}
+
+Inherit.prototype.inheritMediaRule = function (val, selectors, query) {
+  var matchedRules = this.matches[val] || this.matchRules(val)
+  var alreadyMatched = matchedRules.media[query]
+  var matchedQueryRules = alreadyMatched || this.matchQueryRule(val, query)
+
+  if (!matchedQueryRules.rules.length)
+    throw new Error('Failed to extend as media query from ' + val + '.');
+
+  debug('extend %j in @media %j with %j', selectors, query, val);
+
+  this.appendSelectors(matchedQueryRules, val, selectors)
+
+  return alreadyMatched
+    ? []
+    : matchedQueryRules.rules.map(getRule)
+}
+
+Inherit.prototype.inheritRules = function (rule) {
+  var declarations = rule.declarations
+  var selectors = rule.selectors
+
+  for (var i = 0; i < declarations.length; i++) {
+    var decl = declarations[i]
+    // Could be comments
+    if (decl.type !== 'declaration') continue;
+    if (!this.propertyRegExp.test(decl.property)) continue;
+
+    decl.value.split(',').map(trim).forEach(function (val) {
+      this.inheritRule(val, selectors)
+    }, this)
+
+    declarations.splice(i--, 1)
+  }
+}
+
+Inherit.prototype.inheritRule = function (val, selectors) {
+  var matchedRules = this.matches[val] || this.matchRules(val)
+
+  if (!matchedRules.rules.length)
+    throw new Error('Failed to extend from ' + val + '.');
+
+  debug('extend %j with %j', selectors, val);
+
+  this.appendSelectors(matchedRules, val, selectors)
+}
+
+Inherit.prototype.matchQueryRule = function (val, query) {
+  var matchedRules = this.matches[val] || this.matchRules(val)
+
+  return matchedRules.media[query] = {
+    media: query,
+    rules: matchedRules.rules.map(function (rule) {
+      return {
+        selectors: rule.selectors,
+        declarations: rule.declarations,
+        rule: {
+          type: 'rule',
+          selectors: [],
+          declarations: rule.declarations
+        }
+      }
+    })
+  }
+}
+
+Inherit.prototype.matchRules = function (val) {
+  var matchedRules = this.matches[val] = {
+    rules: [],
+    media: {}
+  }
+
+  this.rules.forEach(function (rule) {
+    if (!rule.selectors) return;
+
+    var matchedSelectors = rule.selectors.filter(function (selector) {
+      return selector.match(replaceRegExp(val))
+    })
+
+    if (!matchedSelectors.length) return;
+
+    matchedRules.rules.push({
+      selectors: matchedSelectors,
+      declarations: rule.declarations,
+      rule: rule
+    })
+  })
+
+  return matchedRules
+}
+
+Inherit.prototype.appendSelectors = function (matchedRules, val, selectors) {
+  matchedRules.rules.forEach(function (matchedRule) {
+    // Selector to actually inherit
+    var selectorReference = matchedRule.rule.selectors
+
+    matchedRule.selectors.forEach(function (matchedSelector) {
+      ;[].push.apply(selectorReference, selectors.map(function (selector) {
+        return replaceSelector(matchedSelector, val, selector)
+      }))
+    })
+  })
+}
+
+// Placeholders are not allowed in media queries
+Inherit.prototype.removePlaceholders = function () {
+  var rules = this.rules
+
+  for (var i = 0; i < rules.length; i++) {
+    var selectors = rules[i].selectors
+    if (!selectors) continue;
+
+    for (var j = 0; j < selectors.length; j++) {
+      var selector = selectors[j]
+      if (~selector.indexOf('%')) selectors.splice(j--, 1);
+    }
+
+    if (!selectors.length) rules.splice(i--, 1);
+  }
+}
+
+function replaceSelector(matchedSelector, val, selector) {
+  return matchedSelector.replace(replaceRegExp(val), function (_, first, last) {
+    return first + selector + last
+  })
+}
+
+function replaceRegExp(val) {
+  return new RegExp(
+    '(^|\\s|\\>|\\+|~)' +
+    escapeRegExp(val) +
+    '($|\\s|\\>|\\+|~|\\:)'
+    , 'g'
+  )
+}
+
+function escapeRegExp(str) {
+  return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
+}
+
+function trim(x) {
+  return x.trim()
+}
+
+function getRule(x) {
+  return x.rule
+}
 
 });
 require.register("visionmedia-debug/index.js", function(exports, require, module){
 if ('undefined' == typeof window) {
-  module.exports = require('./lib/debug');
+  module.exports = require("./lib/debug");
 } else {
-  module.exports = require('./debug');
+  module.exports = require("./debug");
 }
 
 });
@@ -1200,54 +1685,13 @@ try {
 } catch(e){}
 
 });
-require.register("visionmedia-rework-visit/index.js", function(exports, require, module){
-
-/**
- * Expose `visit()`.
- */
-
-module.exports = visit;
-
-/**
- * Visit `node`'s declarations recursively and
- * invoke `fn(declarations, node)`.
- *
- * @param {Object} node
- * @param {Function} fn
- * @api private
- */
-
-function visit(node, fn){
-  node.rules.forEach(function(rule){
-    // @media etc
-    if (rule.rules) {
-      visit(rule, fn);
-      return;
-    }
-
-    // keyframes
-    if (rule.keyframes) {
-      rule.keyframes.forEach(function(keyframe){
-        fn(keyframe.declarations, rule);
-      });
-      return;
-    }
-
-    // @charset, @import etc
-    if (!rule.declarations) return;
-
-    fn(rule.declarations, node);
-  });
-};
-
-});
 require.register("component-color-parser/index.js", function(exports, require, module){
 
 /**
  * Module dependencies.
  */
 
-var colors = require('./colors');
+var colors = require("./colors");
 
 /**
  * Expose `parse`.
@@ -1540,233 +1984,6 @@ exports.extname = function(path){
   return '.' + ext;
 };
 });
-require.register("jonathanong-rework-inherit/index.js", function(exports, require, module){
-exports = module.exports = function (options) {
-  return function inherit(style) {
-    return new Inherit(style, options || {})
-  }
-}
-
-exports.Inherit = Inherit
-
-exports.debug = require('debug')('rework-inherit')
-
-function Inherit(style, options) {
-  if (!(this instanceof Inherit))
-    return new Inherit(style, options);
-
-  options = options || {}
-
-  this.propertyRegExp = options.propertyRegExp
-    || /^(inherit|extend)s?$/i
-
-  var rules = this.rules = style.rules
-  this.matches = {}
-
-  for (var i = 0; i < rules.length; i++) {
-    var rule = rules[i]
-    if (rule.rules) {
-      // Media queries
-      this.inheritMedia(rule)
-      if (!rule.rules.length) rules.splice(i--, 1);
-    } else if (rule.selectors) {
-      // Regular rules
-      this.inheritRules(rule)
-      if (!rule.declarations.length) rules.splice(i--, 1);
-    }
-  }
-
-  this.removePlaceholders()
-}
-
-Inherit.prototype.inheritMedia = function (mediaRule) {
-  var rules = mediaRule.rules
-  var query = mediaRule.media
-
-  for (var i = 0; i < rules.length; i++) {
-    var rule = rules[i]
-    if (!rule.selectors) continue;
-
-    var additionalRules = this.inheritMediaRules(rule, query)
-
-    if (!rule.declarations.length) rules.splice(i--, 1);
-
-    // I don't remember why I'm using apply here.
-    ;[].splice.apply(rules, [i, 0].concat(additionalRules))
-    i += additionalRules.length
-  }
-}
-
-Inherit.prototype.inheritMediaRules = function (rule, query) {
-  var declarations = rule.declarations
-  var selectors = rule.selectors
-  var appendRules = []
-
-  for (var i = 0; i < declarations.length; i++) {
-    var decl = declarations[i]
-    // Could be comments
-    if (decl.type !== 'declaration') continue;
-    if (!this.propertyRegExp.test(decl.property)) continue;
-
-    decl.value.split(',').map(trim).forEach(function (val) {
-      // Should probably just use concat here
-      ;[].push.apply(appendRules, this.inheritMediaRule(val, selectors, query));
-    }, this)
-
-    declarations.splice(i--, 1)
-  }
-
-  return appendRules
-}
-
-Inherit.prototype.inheritMediaRule = function (val, selectors, query) {
-  var matchedRules = this.matches[val] || this.matchRules(val)
-  var alreadyMatched = matchedRules.media[query]
-  var matchedQueryRules = alreadyMatched || this.matchQueryRule(val, query)
-
-  if (!matchedQueryRules.rules.length)
-    throw new Error('Failed to extend as media query from ' + val + '.');
-
-  exports.debug('extend %j in @media %j with %j', selectors, query, val);
-
-  this.appendSelectors(matchedQueryRules, val, selectors)
-
-  return alreadyMatched
-    ? []
-    : matchedQueryRules.rules.map(getRule)
-}
-
-Inherit.prototype.inheritRules = function (rule) {
-  var declarations = rule.declarations
-  var selectors = rule.selectors
-
-  for (var i = 0; i < declarations.length; i++) {
-    var decl = declarations[i]
-    // Could be comments
-    if (decl.type !== 'declaration') continue;
-    if (!this.propertyRegExp.test(decl.property)) continue;
-
-    decl.value.split(',').map(trim).forEach(function (val) {
-      this.inheritRule(val, selectors)
-    }, this)
-
-    declarations.splice(i--, 1)
-  }
-}
-
-Inherit.prototype.inheritRule = function (val, selectors) {
-  var matchedRules = this.matches[val] || this.matchRules(val)
-
-  if (!matchedRules.rules.length)
-    throw new Error('Failed to extend from ' + val + '.');
-
-  exports.debug('extend %j with %j', selectors, val);
-
-  this.appendSelectors(matchedRules, val, selectors)
-}
-
-Inherit.prototype.matchQueryRule = function (val, query) {
-  var matchedRules = this.matches[val] || this.matchRules(val)
-
-  return matchedRules.media[query] = {
-    media: query,
-    rules: matchedRules.rules.map(function (rule) {
-      return {
-        selectors: rule.selectors,
-        declarations: rule.declarations,
-        rule: {
-          type: 'rule',
-          selectors: [],
-          declarations: rule.declarations
-        }
-      }
-    })
-  }
-}
-
-Inherit.prototype.matchRules = function (val) {
-  var matchedRules = this.matches[val] = {
-    rules: [],
-    media: {}
-  }
-
-  this.rules.forEach(function (rule) {
-    if (!rule.selectors) return;
-
-    var matchedSelectors = rule.selectors.filter(function (selector) {
-      return selector.match(replaceRegExp(val))
-    })
-
-    if (!matchedSelectors.length) return;
-
-    matchedRules.rules.push({
-      selectors: matchedSelectors,
-      declarations: rule.declarations,
-      rule: rule
-    })
-  })
-
-  return matchedRules
-}
-
-Inherit.prototype.appendSelectors = function (matchedRules, val, selectors) {
-  matchedRules.rules.forEach(function (matchedRule) {
-    // Selector to actually inherit
-    var selectorReference = matchedRule.rule.selectors
-
-    matchedRule.selectors.forEach(function (matchedSelector) {
-      ;[].push.apply(selectorReference, selectors.map(function (selector) {
-        return replaceSelector(matchedSelector, val, selector)
-      }))
-    })
-  })
-}
-
-// Placeholders are not allowed in media queries
-Inherit.prototype.removePlaceholders = function () {
-  var rules = this.rules
-
-  for (var i = 0; i < rules.length; i++) {
-    var selectors = rules[i].selectors
-    if (!selectors) continue;
-
-    for (var j = 0; j < selectors.length; j++) {
-      var selector = selectors[j]
-      if (~selector.indexOf('%')) selectors.splice(j--, 1);
-    }
-
-    if (!selectors.length) rules.splice(i--, 1);
-  }
-}
-
-function replaceSelector(matchedSelector, val, selector) {
-  return matchedSelector.replace(replaceRegExp(val), function (_, first, last) {
-    return first + selector + last
-  })
-}
-
-function replaceRegExp(val) {
-  return new RegExp(
-    '(^|\\s|\\>|\\+|~)' +
-    escapeRegExp(val) +
-    '($|\\s|\\>|\\+|~|\\:)'
-    , 'g'
-  )
-}
-
-function escapeRegExp(str) {
-  return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
-}
-
-function trim(x) {
-  return x.trim()
-}
-
-function getRule(x) {
-  return x.rule
-}
-
-});
 require.register("jankuca-hsb2rgb/src/hsb2rgb.js", function(exports, require, module){
 
 function hsb2rgb(hue, saturation, value) {
@@ -1818,9 +2035,10 @@ function hsb2rgb(hue, saturation, value) {
 module.exports = hsb2rgb;
 
 });
+require.main("jankuca-hsb2rgb", "src/hsb2rgb.js")
 require.register("rework/index.js", function(exports, require, module){
 
-module.exports = require('./lib/rework');
+module.exports = require("./lib/rework");
 });
 require.register("rework/lib/rework.js", function(exports, require, module){
 
@@ -1828,7 +2046,7 @@ require.register("rework/lib/rework.js", function(exports, require, module){
  * Module dependencies.
  */
 
-var css = require('css');
+var css = require("reworkcss-css");
 
 /**
  * Expose `rework`.
@@ -1840,24 +2058,30 @@ exports = module.exports = rework;
  * Expose `visit` helpers.
  */
 
-exports.visit = require('./visit');
+exports.visit = require("./visit");
 
 /**
  * Expose prefix properties.
  */
 
-exports.properties = require('./properties');
+exports.__defineGetter__('properties', function () {
+  console.warn('rework.properties has been removed.');
+  return [];
+})
 
 /**
  * Initialize a new stylesheet `Rework` with `str`.
  *
  * @param {String} str
+ * @param {Object} options
  * @return {Rework}
  * @api public
  */
 
-function rework(str) {
-  return new Rework(css.parse(str));
+function rework(str, options) {
+  options = options || {};
+  options.position = true; // we need this for sourcemaps
+  return new Rework(css.parse(str, options));
 }
 
 /**
@@ -1889,12 +2113,15 @@ Rework.prototype.use = function(fn){
  * explicit ones may still be passed
  * to most plugins.
  *
+ * Deprecated as of https://github.com/visionmedia/rework/issues/126.
+ *
  * @param {Array} prefixes
  * @return {Rework}
  * @api public
  */
 
 Rework.prototype.vendors = function(prefixes){
+  console.warn('rework.vendors() is deprecated. Please see: https://github.com/visionmedia/rework/issues/126.');
   this.prefixes = prefixes;
   return this;
 };
@@ -1908,35 +2135,68 @@ Rework.prototype.vendors = function(prefixes){
  */
 
 Rework.prototype.toString = function(options){
-  return css.stringify(this.obj, options);
+  options = options || {};
+  var result = css.stringify(this.obj, options);
+  if (options.sourcemap && !options.sourcemapAsObject) {
+    result = result.code + '\n' + sourcemapToComment(result.map);
+  }
+  return result;
 };
+
+/**
+ * Convert sourcemap to base64-encoded comment
+ *
+ * @param {Object} map
+ * @return {String}
+ * @api private
+ */
+
+function sourcemapToComment(map) {
+  var convertSourceMap = require("convert-source-map");
+  var content = convertSourceMap.fromObject(map).toBase64();
+  return '/*# sourceMappingURL=data:application/json;base64,' + content + ' */';
+}
 
 /**
  * Expose plugins.
  */
 
-exports.mixin = exports.mixins = require('./plugins/mixin');
-exports.function = exports.functions = require('./plugins/function');
-exports.prefix = require('./plugins/prefix');
-exports.colors = require('./plugins/colors');
-exports.extend = require('rework-inherit');
-exports.references = require('./plugins/references');
-exports.prefixValue = require('./plugins/prefix-value');
-exports.prefixSelectors = require('./plugins/prefix-selectors');
-exports.keyframes = require('./plugins/keyframes');
-exports.at2x = require('./plugins/at2x');
-exports.url = require('./plugins/url');
-exports.ease = require('./plugins/ease');
-exports.vars = require('./plugins/vars');
+exports.mixin = exports.mixins = require("./plugins/mixin");
+exports.function = exports.functions = require("./plugins/function");
+exports.colors = require("./plugins/colors");
+exports.extend = require("reworkcss-rework-inherit");
+exports.references = require("./plugins/references");
+exports.prefixSelectors = require("./plugins/prefix-selectors");
+exports.at2x = require("./plugins/at2x");
+exports.url = require("./plugins/url");
+exports.ease = require("./plugins/ease");
+
+/**
+ * Warn if users try to use removed components.
+ * This will be removed in v1.
+ */
+
+[
+  'vars',
+  'keyframes',
+  'prefix',
+  'prefixValue',
+].forEach(function (plugin) {
+  exports[plugin] = function () {
+    console.warn('rework.' + plugin + '() has been removed from rework core. Please view https://github.com/visionmedia/rework or https://github.com/visionmedia/rework/wiki/Plugins-and-Utilities.');
+    return noop;
+  };
+});
 
 /**
  * Try/catch plugins unavailable in component.
  */
 
  try {
-  exports.inline = require('./plugins/inline');
-} catch (err) {};
+  exports.inline = require("./plugins/inline");
+} catch (err) {}
 
+function noop(){}
 
 });
 require.register("rework/lib/utils.js", function(exports, require, module){
@@ -1957,86 +2217,7 @@ exports.stripQuotes = function(str) {
 require.register("rework/lib/visit.js", function(exports, require, module){
 
 // TODO: require() directly in plugins...
-exports.declarations = require('rework-visit');
-
-});
-require.register("rework/lib/properties.js", function(exports, require, module){
-
-/**
- * Prefixed properties.
- */
-
-module.exports = [
-  'animation',
-  'animation-delay',
-  'animation-direction',
-  'animation-duration',
-  'animation-fill-mode',
-  'animation-iteration-count',
-  'animation-name',
-  'animation-play-state',
-  'animation-timing-function',
-  'appearance',
-  'background-visibility',
-  'background-composite',
-  'blend-mode',
-  'border-bottom-left-radius',
-  'border-bottom-right-radius',
-  'border-fit',
-  'border-image',
-  'border-vertical-spacing',
-  'box-align',
-  'box-direction',
-  'box-flex',
-  'box-flex-group',
-  'box-lines',
-  'box-ordinal-group',
-  'box-orient',
-  'box-pack',
-  'box-reflect',
-  'box-sizing',
-  'clip-path',
-  'column-count',
-  'column-width',
-  'column-min-width',
-  'column-width-policy',
-  'column-gap',
-  'column-rule',
-  'column-rule-color',
-  'column-rule-style',
-  'column-rule-width',
-  'column-span',
-  'flex',
-  'flex-basis',
-  'flex-direction',
-  'flex-flow',
-  'flex-grow',
-  'flex-shrink',
-  'flex-wrap',
-  'flex-flow-from',
-  'flex-flow-into',
-  'font-smoothing',
-  'transform',
-  'transform-origin',
-  'transform-origin-x',
-  'transform-origin-y',
-  'transform-origin-z',
-  'transform-style',
-  'transition',
-  'transition-delay',
-  'transition-duration',
-  'transition-property',
-  'transition-timing-function',
-  'user-drag',
-  'user-modify',
-  'user-select',
-  'wrap',
-  'wrap-flow',
-  'wrap-margin',
-  'wrap-padding',
-  'wrap-through',
-  'overflow-scrolling'
-];
+exports.declarations = require("reworkcss-rework-visit");
 
 });
 require.register("rework/lib/plugins/function.js", function(exports, require, module){
@@ -2045,8 +2226,8 @@ require.register("rework/lib/plugins/function.js", function(exports, require, mo
  * Module dependencies.
  */
 
-var visit = require('../visit');
-var utils = require('../utils');
+var visit = require("../visit");
+var utils = require("../utils");
 var strip = utils.stripQuotes;
 
 /**
@@ -2055,48 +2236,85 @@ var strip = utils.stripQuotes;
 
 module.exports = function(functions, args) {
   if (!functions) throw new Error('functions object required');
-  return function(style, rework){
+  return function(style){
+    var functionMatcher = functionMatcherBuilder(Object.keys(functions).join('|'));
+
     visit.declarations(style, function(declarations){
-      for (var name in functions) {
-        func(declarations, name, functions[name], args);
-      }
+      func(declarations, functions, functionMatcher, args);
     });
   }
 };
-
-/**
- * Escape regexp codes in string.
- *
- * @param {String} s
- * @api private
- */
-
-function escape(s) {
-  return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-}
 
 /**
  * Visit declarations and apply functions.
  *
  * @param {Array} declarations
  * @param {Object} functions
+ * @param {RegExp} functionMatcher
  * @param {Boolean} [parseArgs]
  * @api private
  */
 
-function func(declarations, name, func, parseArgs) {
+function func(declarations, functions, functionMatcher, parseArgs) {
   if (false !== parseArgs) parseArgs = true;
-  var regexp = new RegExp(escape(name) + '\\(([^\)]+)\\)', 'g');
+
   declarations.forEach(function(decl){
     if ('comment' == decl.type) return;
-    if (!~decl.value.indexOf(name + '(')) return;
-    decl.value = decl.value.replace(regexp, function(_, args){
-      if (!parseArgs) return func.call(decl, strip(args));
-      args = args.split(/,\s*/).map(strip);
-      return func.apply(decl, args);
-    });
+    var generatedFuncs = [], result, generatedFunc;
+
+    while (decl.value.match(functionMatcher)) {
+      decl.value = decl.value.replace(functionMatcher, function(_, name, args){
+        if (parseArgs) {
+          args = args.split(/\s*,\s*/).map(strip);
+        } else {
+          args = [strip(args)];
+        }
+        // Ensure result is string
+        result = '' + functions[name].apply(decl, args);
+
+        // Prevent fall into infinite loop like this:
+        //
+        // {
+        //   url: function(path) {
+        //     return 'url(' + '/some/prefix' + path + ')'
+        //   }
+        // }
+        //
+        generatedFunc = {from: name, to: name + getRandomString()};
+        result = result.replace(functionMatcherBuilder(name), generatedFunc.to + '($2)');
+        generatedFuncs.push(generatedFunc);
+        return result;
+      });
+    }
+
+    generatedFuncs.forEach(function(func) {
+      decl.value = decl.value.replace(func.to, func.from);
+    })
   });
 }
+
+/**
+ * Build function regexp
+ *
+ * @param {String} name
+ * @api private
+ */
+
+function functionMatcherBuilder(name) {
+  // /(?!\W+)(\w+)\(([^()]+)\)/
+  return new RegExp("(?!\\W+)(" + name + ")\\(([^\(\)]+)\\)");
+}
+
+/**
+ * get random string
+ *
+ * @api private
+ */
+
+function getRandomString() {
+  return Math.random().toString(36).slice(2);
+}
+
 
 });
 require.register("rework/lib/plugins/url.js", function(exports, require, module){
@@ -2105,8 +2323,7 @@ require.register("rework/lib/plugins/url.js", function(exports, require, module)
  * Module dependencies.
  */
 
-var utils = require('../utils');
-var func = require('./function');
+var func = require("./function");
 
 /**
  * Map `url()` calls.
@@ -2132,21 +2349,13 @@ module.exports = function(fn) {
 };
 
 });
-require.register("rework/lib/plugins/vars.js", function(exports, require, module){
-
-module.exports = function(){
-  console.warn('Warning: vars() has been removed, please use: https://github.com/visionmedia/rework-vars');
-  return function(){}
-};
-
-});
 require.register("rework/lib/plugins/ease.js", function(exports, require, module){
 
 /**
  * Module dependencies.
  */
 
-var visit = require('../visit');
+var visit = require("../visit");
 
 /**
  * Easing functions.
@@ -2201,7 +2410,7 @@ var keys = Object.keys(ease);
  */
 
 module.exports = function() {
-  return function(style, rework){
+  return function(style){
     visit.declarations(style, substitute);
   }
 };
@@ -2234,8 +2443,8 @@ require.register("rework/lib/plugins/at2x.js", function(exports, require, module
  * Module dependencies.
  */
 
-var utils = require('../utils');
-var path = require('path');
+var utils = require("../utils");
+var path = require("component-path");
 var stripQuotes = utils.stripQuotes;
 
 /**
@@ -2273,21 +2482,21 @@ var query = [
  *
  */
 
-module.exports = function(vendors) {
-  return function(style, rework){
-    vendors = vendors || rework.prefixes;
-
+module.exports = function() {
+  return function(style){
     style.rules.forEach(function(rule){
       if (!rule.declarations) return;
 
       var backgroundSize = rule.declarations.filter(backgroundWithSize).map(value)[0] || 'contain';
 
-      rule.declarations.filter(backgroundWithURL).forEach(function(decl){
+      rule.declarations.filter(backgroundWithHiResURL).forEach(function(decl){
         if ('comment' == decl.type) return;
 
         // parse url
-        var i = decl.value.indexOf('url(');
-        var url = stripQuotes(decl.value.slice(i + 4, decl.value.indexOf(')', i)));
+        var val = decl.value.replace(/\s+(at-2x)\s*(;|$)/, '$2');
+        decl.value = val;
+        var i = val.indexOf('url(');
+        var url = stripQuotes(val.slice(i + 4, val.indexOf(')', i)));
         var ext = path.extname(url);
 
         // ignore .svg
@@ -2322,21 +2531,17 @@ module.exports = function(vendors) {
       });
     });
   };
-
-  return function(style, rework) {
-    vendors = vendors || rework.prefixes;
-    visit(style.rules, style);
-  };
 };
 
 /**
  * Filter background[-image] with url().
  */
 
-function backgroundWithURL(decl) {
+function backgroundWithHiResURL(decl) {
   return ('background' == decl.property
     || 'background-image' == decl.property)
-    && ~decl.value.indexOf('url(');
+    && ~decl.value.indexOf('url(')
+    && ~decl.value.indexOf('at-2x');
 }
 
 /**
@@ -2362,9 +2567,9 @@ require.register("rework/lib/plugins/colors.js", function(exports, require, modu
  * Module dependencies.
  */
 
-var parse = require('color-parser');
-var hsb2rgb = require('hsb2rgb');
-var functions = require('./function');
+var parse = require("component-color-parser");
+var hsb2rgb = require("jankuca-hsb2rgb");
+var functions = require("./function");
 
 /**
  * Provide color manipulation helpers.
@@ -2374,7 +2579,7 @@ module.exports = function() {
   return functions({
 
     /**
-     * Converts RGBA(color, alpha) to the corrosponding RGBA(r, g, b, a) equivalent. 
+     * Converts RGBA(color, alpha) to the corrosponding RGBA(r, g, b, a) equivalent.
      *
      *    background: rgba(#eee, .5)
      *    background: rgba(white, .2)
@@ -2382,11 +2587,12 @@ module.exports = function() {
      */
 
     rgba: function(color, alpha){
+      var args;
       if (2 == arguments.length) {
         var c = parse(color.trim());
-        var args = [c.r, c.g, c.b, alpha];
+        args = [c.r, c.g, c.b, alpha];
       } else {
-        var args = [].slice.call(arguments);
+        args = [].slice.call(arguments);
       }
 
       return 'rgba(' + args.join(', ') + ')';
@@ -2421,7 +2627,7 @@ module.exports = function() {
       alpha = /%/.test(alpha)
         ? parseInt(alpha, 10) / 100
         : parseFloat(alpha, 10);
-      
+
       alpha = String(alpha).replace(/^0+\./, '.');
 
       var rgb = hsb2rgb(hue, saturation, value);
@@ -2437,8 +2643,7 @@ require.register("rework/lib/plugins/mixin.js", function(exports, require, modul
  * Module dependencies.
  */
 
-var utils = require('../utils');
-var visit = require('../visit');
+var visit = require("../visit");
 
 /**
  * Define custom mixins.
@@ -2501,113 +2706,13 @@ function mixin(rework, declarations, mixins) {
 }
 
 });
-require.register("rework/lib/plugins/keyframes.js", function(exports, require, module){
-
-/**
- * Prefix keyframes.
- *
- *   @keyframes animation {
- *     from {
- *       opacity: 0;
- *     }
- *
- *     to {
- *       opacity: 1;
- *     }
- *   }
- *
- * yields:
- *
- *   @keyframes animation {
- *     from {
- *       opacity: 0;
- *     }
- *
- *     to {
- *       opacity: 1;
- *     }
- *   }
- *
- *   @-webkit-keyframes animation {
- *     from {
- *       opacity: 0;
- *     }
- *
- *     to {
- *       opacity: 1;
- *     }
- *   }
- *
- */
-
-module.exports = function(vendors) {
-  return function(style, rework){
-    vendors = vendors || rework.prefixes;
-
-    style.rules.forEach(function(rule){
-      if (!rule.keyframes) return;
-
-      vendors.forEach(function(vendor){
-        if (vendor == rule.vendor) return;
-        var clone = cloneKeyframes(rule);
-        clone.vendor = vendor;
-        style.rules.push(clone);
-      });
-    });
-  }
-};
-
-/**
- * Clone keyframes.
- *
- * @param {Object} rule
- * @api private
- */
-
-function cloneKeyframes(rule) {
-  var clone = { name: rule.name };
-  clone.type = 'keyframes';
-  clone.vendor = rule.vendor;
-  clone.keyframes = [];
-  rule.keyframes.forEach(function(keyframe){
-    clone.keyframes.push(cloneKeyframe(keyframe));
-  });
-  return clone;
-}
-
-/**
- * Clone `keyframe`.
- *
- * @param {Object} keyframe
- * @api private
- */
-
-function cloneKeyframe(keyframe) {
-  var clone = {};
-  clone.type = 'keyframe';
-  clone.values = keyframe.values.slice();
-  clone.declarations = keyframe.declarations.map(function(decl){
-    if ('comment' == decl.type) {
-      return decl;
-    }
-
-    return {
-      type: 'declaration',
-      property: decl.property,
-      value: decl.value
-    }
-  });
-  return clone;
-}
-
-});
 require.register("rework/lib/plugins/references.js", function(exports, require, module){
 
 /**
  * Module dependencies.
  */
 
-var visit = require('../visit');
+var visit = require("../visit");
 
 /**
  * Provide property reference support.
@@ -2629,7 +2734,7 @@ var visit = require('../visit');
  */
 
 module.exports = function() {
-  return function(style, rework){
+  return function(style){
     visit.declarations(style, substitute);
   }
 };
@@ -2684,135 +2789,14 @@ module.exports = function(str) {
     style.rules = style.rules.map(function(rule){
       if (!rule.selectors) return rule;
       rule.selectors = rule.selectors.map(function(selector){
+        if (':root' == selector) return str;
+        selector = selector.replace(/^\:root\s?/, '');
         return str + ' ' + selector;
       });
       return rule;
     });
   }
 };
-});
-require.register("rework/lib/plugins/prefix-value.js", function(exports, require, module){
-
-/**
- * Module dependencies.
- */
-
-var visit = require('../visit');
-
-/**
- * Prefix `value`.
- *
- *    button {
- *      transition: height, transform 2s, width 0.3s linear;
- *    }
- *
- * yields:
- *
- *    button {
- *      -webkit-transition: height, -webkit-transform 2s, width 0.3s linear;
- *      -moz-transition: height, -moz-transform 2s, width 0.3s linear;
- *      transition: height, transform 2s, width 0.3s linear
- *    }
- *
- */
-
-module.exports = function(value, vendors) {
-  return function(style, rework){
-    vendors = vendors || rework.prefixes;
-
-    visit.declarations(style, function(declarations){
-      for (var i = 0; i < declarations.length; ++i) {
-        var decl = declarations[i];
-        if ('comment' == decl.type) continue;
-        if (!~decl.value.indexOf(value)) continue;
-
-        // ignore vendor-prefixed properties
-        if ('-' == decl.property[0]) continue;
-
-        // ignore vendor-prefixed values
-        if (~decl.value.indexOf('-' + value)) continue;
-
-        // vendor prefixed props
-        vendors.forEach(function(vendor){
-          var prop = 'transition' == decl.property
-            ? vendor + decl.property
-            : decl.property;
-
-          declarations.splice(i++, 0, {
-            type: 'declaration',
-            property: prop,
-            value: decl.value.replace(value, vendor + value)
-          });
-        });
-      }
-    });
-  }
-};
-
-});
-require.register("rework/lib/plugins/prefix.js", function(exports, require, module){
-
-/**
- * Module dependencies.
- */
-
-var visit = require('../visit');
-
-/**
- * Prefix `prop`.
- *
- *   .button {
- *     border-radius: 5px;
- *   }
- *
- * yields:
- *
- *   .button {
- *     -webkit-border-radius: 5px;
- *     -moz-border-radius: 5px;
- *     border-radius: 5px;
- *   }
- *
- */
-
-module.exports = function(prop, vendors) {
-  var props = Array.isArray(prop)
-    ? prop
-    : [prop];
-
-  return function(style, rework){
-    vendors = vendors || rework.prefixes;
-    visit.declarations(style, function(declarations, node){
-      var only = node.vendor;
-      var isKeyframes = !! node.keyframes;
-
-      for (var i = 0; i < props.length; ++i) {
-        var prop = props[i];
-
-        for (var j = 0, len = declarations.length; j < len; ++j) {
-          var decl = declarations[j];
-          if ('comment' == decl.type) continue;
-          if (prop != decl.property) continue;
-
-          // vendor prefixed props
-          for (var k = 0; k < vendors.length; ++k) {
-            if (!only && isKeyframes) continue;
-            if (only && only != vendors[k]) continue;
-            declarations.push({
-              type: 'declaration',
-              property: vendors[k] + decl.property,
-              value: decl.value
-            });
-          }
-
-          // original prop
-          declarations.push(decl);
-          declarations.splice(j, 1);
-        }
-      }
-    });
-  }
-};
 
 });
 
@@ -2823,39 +2807,14 @@ module.exports = function(prop, vendors) {
 
 
 
-require.alias("visionmedia-css/index.js", "rework/deps/css/index.js");
-require.alias("visionmedia-css/index.js", "css/index.js");
-require.alias("visionmedia-css-parse/index.js", "visionmedia-css/deps/css-parse/index.js");
 
-require.alias("visionmedia-css-stringify/index.js", "visionmedia-css/deps/css-stringify/index.js");
-require.alias("visionmedia-css-stringify/lib/compress.js", "visionmedia-css/deps/css-stringify/lib/compress.js");
-require.alias("visionmedia-css-stringify/lib/identity.js", "visionmedia-css/deps/css-stringify/lib/identity.js");
 
-require.alias("visionmedia-debug/index.js", "rework/deps/debug/index.js");
-require.alias("visionmedia-debug/debug.js", "rework/deps/debug/debug.js");
-require.alias("visionmedia-debug/index.js", "debug/index.js");
 
-require.alias("visionmedia-rework-visit/index.js", "rework/deps/rework-visit/index.js");
-require.alias("visionmedia-rework-visit/index.js", "rework-visit/index.js");
 
-require.alias("component-color-parser/index.js", "rework/deps/color-parser/index.js");
-require.alias("component-color-parser/colors.js", "rework/deps/color-parser/colors.js");
-require.alias("component-color-parser/index.js", "color-parser/index.js");
 
-require.alias("component-path/index.js", "rework/deps/path/index.js");
-require.alias("component-path/index.js", "path/index.js");
 
-require.alias("jonathanong-rework-inherit/index.js", "rework/deps/rework-inherit/index.js");
-require.alias("jonathanong-rework-inherit/index.js", "rework/deps/rework-inherit/index.js");
-require.alias("jonathanong-rework-inherit/index.js", "rework-inherit/index.js");
-require.alias("visionmedia-debug/index.js", "jonathanong-rework-inherit/deps/debug/index.js");
-require.alias("visionmedia-debug/debug.js", "jonathanong-rework-inherit/deps/debug/debug.js");
 
-require.alias("jonathanong-rework-inherit/index.js", "jonathanong-rework-inherit/index.js");
-require.alias("jankuca-hsb2rgb/src/hsb2rgb.js", "rework/deps/hsb2rgb/src/hsb2rgb.js");
-require.alias("jankuca-hsb2rgb/src/hsb2rgb.js", "rework/deps/hsb2rgb/index.js");
-require.alias("jankuca-hsb2rgb/src/hsb2rgb.js", "hsb2rgb/index.js");
-require.alias("jankuca-hsb2rgb/src/hsb2rgb.js", "jankuca-hsb2rgb/index.js");if (typeof exports == "object") {
+if (typeof exports == "object") {
   module.exports = require("rework");
 } else if (typeof define == "function" && define.amd) {
   define(function(){ return require("rework"); });
