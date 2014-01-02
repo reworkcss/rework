@@ -1,0 +1,11 @@
+#dialog {
+  bar: 'baz';
+}
+
+#dialog foo {
+  color: #f00;
+}
+
+#dialog bar {
+  font-family: "Wingdings";
+}

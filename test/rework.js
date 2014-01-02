@@ -219,6 +219,12 @@ describe('rework', function(){
         .toString()
         .should.equal(fixture('prefix-selectors.out'));
     })
+    it('should use the prefix as the :root pseudo-class', function(){
+      rework(fixture('prefix-selectors-root'))
+        .use(rework.prefixSelectors('#dialog'))
+        .toString()
+        .should.equal(fixture('prefix-selectors-root.out'));
+    })
   })
 
   describe('.url(fn)', function(){

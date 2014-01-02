@@ -1,0 +1,11 @@
+:root {
+  bar: 'baz';
+}
+
+:root foo {
+  color: #f00;
+}
+
+bar {
+  font-family: "Wingdings";
+}
