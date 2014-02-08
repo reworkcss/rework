@@ -313,13 +313,13 @@ describe('rework', function(){
         written += chunk;
         next();
       };
-      ws.on('finish', function() {
-        written.should.equal('body {\n  color: red;\n}');
-        done();
-      });
       rework('body { color: red; }')
         .toStream()
-        .pipe(ws);
+        .pipe(ws)
+        .on('finish', function() {
+          written.should.equal('body {\n  color: red;\n}');
+          done();
+        });
     });
     it('should respect the compress option', function(done) {
       var written = '';
