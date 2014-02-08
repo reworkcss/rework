@@ -47,18 +47,10 @@ function require(path, parent, orig) {
 require.modules = {};
 
 /**
- * Main definitions.
+ * Registered aliases.
  */
 
-require.mains = {};
-
-/**
- * Define a main.
- */
-
-require.main = function(name, path){
-  require.mains[name] = path;
-};
+require.aliases = {};
 
 /**
  * Resolve `path`.
@@ -75,7 +67,7 @@ require.main = function(name, path){
  */
 
 require.resolve = function(path) {
-  if ('/' == path.charAt(0)) path = path.slice(1);
+  if (path.charAt(0) === '/') path = path.slice(1);
 
   var paths = [
     path,
@@ -85,15 +77,10 @@ require.resolve = function(path) {
     path + '/index.json'
   ];
 
-  if (require.mains[path]) {
-    paths = [path + '/' + require.mains[path]];
-  }
-
-  for (var i = 0, len = paths.length; i < len; i++) {
+  for (var i = 0; i < paths.length; i++) {
     var path = paths[i];
-    if (require.modules.hasOwnProperty(path)) {
-      return path;
-    }
+    if (require.modules.hasOwnProperty(path)) return path;
+    if (require.aliases.hasOwnProperty(path)) return require.aliases[path];
   }
 };
 
@@ -114,7 +101,7 @@ require.normalize = function(curr, path) {
   curr = curr.split('/');
   path = path.split('/');
 
-  for (var i = 0, len = path.length; i < len; ++i) {
+  for (var i = 0; i < path.length; ++i) {
     if ('..' == path[i]) {
       curr.pop();
     } else if ('.' != path[i] && '' != path[i]) {
@@ -138,6 +125,21 @@ require.register = function(path, definition) {
 };
 
 /**
+ * Alias a module definition.
+ *
+ * @param {String} from
+ * @param {String} to
+ * @api private
+ */
+
+require.alias = function(from, to) {
+  if (!require.modules.hasOwnProperty(from)) {
+    throw new Error('Failed to alias "' + from + '", it does not exist');
+  }
+  require.aliases[to] = from;
+};
+
+/**
  * Return a require function relative to the `parent` path.
  *
  * @param {String} parent
@@ -146,7 +148,7 @@ require.register = function(path, definition) {
  */
 
 require.relative = function(parent) {
-  var root = require.normalize(parent, '..');
+  var p = require.normalize(parent, '..');
 
   /**
    * lastIndexOf helper.
@@ -176,7 +178,15 @@ require.relative = function(parent) {
   localRequire.resolve = function(path) {
     var c = path.charAt(0);
     if ('/' == c) return path.slice(1);
-    if ('.' == c) return require.normalize(root, path);
+    if ('.' == c) return require.normalize(p, path);
+
+    // resolve deps by returning
+    // the dep in the nearest "deps"
+    // directory
+    var segs = parent.split('/');
+    var i = lastIndexOf(segs, 'deps') + 1;
+    if (!i) i = 0;
+    path = segs.slice(0, i + 1).join('/') + '/deps/' + path;
     return path;
   };
 
@@ -693,8 +703,8 @@ require.register("reworkcss-css-stringify/index.js", function(exports, require, 
  * Module dependencies.
  */
 
-var Compressed = require("./lib/compress");
-var Identity = require("./lib/identity");
+var Compressed = require('./lib/compress');
+var Identity = require('./lib/identity');
 
 /**
  * Stringfy the given AST `node`.
@@ -719,7 +729,7 @@ module.exports = function(node, options){
 
   // source maps
   if (options.sourcemap) {
-    var sourcemaps = require("./lib/source-map-support");
+    var sourcemaps = require('./lib/source-map-support');
     sourcemaps(compiler);
 
     var code = compiler.compile(node);
@@ -738,7 +748,7 @@ require.register("reworkcss-css-stringify/lib/compress.js", function(exports, re
  * Module dependencies.
  */
 
-var Base = require("./compiler");
+var Base = require('./compiler');
 
 /**
  * Expose compiler.
@@ -909,7 +919,7 @@ require.register("reworkcss-css-stringify/lib/identity.js", function(exports, re
  * Module dependencies.
  */
 
-var Base = require("./compiler");
+var Base = require('./compiler');
 
 /**
  * Expose compiler.
@@ -1182,7 +1192,7 @@ require.register("reworkcss-css-stringify/lib/source-map-support.js", function(e
  * Module dependencies.
  */
 
-var SourceMap = require("source-map").SourceMapGenerator;
+var SourceMap = require('source-map').SourceMapGenerator;
 
 /**
  * Expose `mixin()`.
@@ -1265,8 +1275,8 @@ exports.emit = function(str, pos, startOnly) {
 });
 require.register("reworkcss-css/index.js", function(exports, require, module){
 
-exports.parse = require("reworkcss-css-parse");
-exports.stringify = require("reworkcss-css-stringify");
+exports.parse = require('css-parse');
+exports.stringify = require('css-stringify');
 
 });
 require.register("reworkcss-rework-visit/index.js", function(exports, require, module){
@@ -1311,7 +1321,7 @@ function visit(node, fn){
 
 });
 require.register("reworkcss-rework-inherit/index.js", function(exports, require, module){
-var debug = require("visionmedia-debug")('rework-inherit')
+var debug = require('debug')('rework-inherit')
 
 exports = module.exports = function (options) {
   return function inherit(style) {
@@ -1539,9 +1549,9 @@ function getRule(x) {
 });
 require.register("visionmedia-debug/index.js", function(exports, require, module){
 if ('undefined' == typeof window) {
-  module.exports = require("./lib/debug");
+  module.exports = require('./lib/debug');
 } else {
-  module.exports = require("./debug");
+  module.exports = require('./debug');
 }
 
 });
@@ -1691,7 +1701,7 @@ require.register("component-color-parser/index.js", function(exports, require, m
  * Module dependencies.
  */
 
-var colors = require("./colors");
+var colors = require('./colors');
 
 /**
  * Expose `parse`.
@@ -2035,10 +2045,9 @@ function hsb2rgb(hue, saturation, value) {
 module.exports = hsb2rgb;
 
 });
-require.main("jankuca-hsb2rgb", "src/hsb2rgb.js")
 require.register("rework/index.js", function(exports, require, module){
 
-module.exports = require("./lib/rework");
+module.exports = require('./lib/rework');
 });
 require.register("rework/lib/rework.js", function(exports, require, module){
 
@@ -2046,7 +2055,8 @@ require.register("rework/lib/rework.js", function(exports, require, module){
  * Module dependencies.
  */
 
-var css = require("reworkcss-css");
+var css = require('css');
+var Readable = require('stream').Readable;
 
 /**
  * Expose `rework`.
@@ -2058,7 +2068,7 @@ exports = module.exports = rework;
  * Expose `visit` helpers.
  */
 
-exports.visit = require("./visit");
+exports.visit = require('./visit');
 
 /**
  * Expose prefix properties.
@@ -2144,6 +2154,23 @@ Rework.prototype.toString = function(options){
 };
 
 /**
+ * Expose the stylesheet as a stream
+ *
+ * @return {Readable} streams2 readable stream
+ * @api public
+ */
+
+Rework.prototype.toStream = function(options) {
+  var result = this.toString(options);
+  var rs = new Readable();
+  rs._read = function (size) {
+    this.push(result);
+    this.push(null);
+  };
+  return rs;
+};
+
+/**
  * Convert sourcemap to base64-encoded comment
  *
  * @param {Object} map
@@ -2152,7 +2179,7 @@ Rework.prototype.toString = function(options){
  */
 
 function sourcemapToComment(map) {
-  var convertSourceMap = require("convert-source-map");
+  var convertSourceMap = require('convert-source-map');
   var content = convertSourceMap.fromObject(map).toBase64();
   return '/*# sourceMappingURL=data:application/json;base64,' + content + ' */';
 }
@@ -2161,15 +2188,15 @@ function sourcemapToComment(map) {
  * Expose plugins.
  */
 
-exports.mixin = exports.mixins = require("./plugins/mixin");
-exports.function = exports.functions = require("./plugins/function");
-exports.colors = require("./plugins/colors");
-exports.extend = require("reworkcss-rework-inherit");
-exports.references = require("./plugins/references");
-exports.prefixSelectors = require("./plugins/prefix-selectors");
-exports.at2x = require("./plugins/at2x");
-exports.url = require("./plugins/url");
-exports.ease = require("./plugins/ease");
+exports.mixin = exports.mixins = require('./plugins/mixin');
+exports.function = exports.functions = require('./plugins/function');
+exports.colors = require('./plugins/colors');
+exports.extend = require('rework-inherit');
+exports.references = require('./plugins/references');
+exports.prefixSelectors = require('./plugins/prefix-selectors');
+exports.at2x = require('./plugins/at2x');
+exports.url = require('./plugins/url');
+exports.ease = require('./plugins/ease');
 
 /**
  * Warn if users try to use removed components.
@@ -2193,7 +2220,7 @@ exports.ease = require("./plugins/ease");
  */
 
  try {
-  exports.inline = require("./plugins/inline");
+  exports.inline = require('./plugins/inline');
 } catch (err) {}
 
 function noop(){}
@@ -2217,7 +2244,7 @@ exports.stripQuotes = function(str) {
 require.register("rework/lib/visit.js", function(exports, require, module){
 
 // TODO: require() directly in plugins...
-exports.declarations = require("reworkcss-rework-visit");
+exports.declarations = require('rework-visit');
 
 });
 require.register("rework/lib/plugins/function.js", function(exports, require, module){
@@ -2226,8 +2253,8 @@ require.register("rework/lib/plugins/function.js", function(exports, require, mo
  * Module dependencies.
  */
 
-var visit = require("../visit");
-var utils = require("../utils");
+var visit = require('../visit');
+var utils = require('../utils');
 var strip = utils.stripQuotes;
 
 /**
@@ -2323,7 +2350,7 @@ require.register("rework/lib/plugins/url.js", function(exports, require, module)
  * Module dependencies.
  */
 
-var func = require("./function");
+var func = require('./function');
 
 /**
  * Map `url()` calls.
@@ -2355,7 +2382,7 @@ require.register("rework/lib/plugins/ease.js", function(exports, require, module
  * Module dependencies.
  */
 
-var visit = require("../visit");
+var visit = require('../visit');
 
 /**
  * Easing functions.
@@ -2443,8 +2470,8 @@ require.register("rework/lib/plugins/at2x.js", function(exports, require, module
  * Module dependencies.
  */
 
-var utils = require("../utils");
-var path = require("component-path");
+var utils = require('../utils');
+var path = require('path');
 var stripQuotes = utils.stripQuotes;
 
 /**
@@ -2567,9 +2594,9 @@ require.register("rework/lib/plugins/colors.js", function(exports, require, modu
  * Module dependencies.
  */
 
-var parse = require("component-color-parser");
-var hsb2rgb = require("jankuca-hsb2rgb");
-var functions = require("./function");
+var parse = require('color-parser');
+var hsb2rgb = require('hsb2rgb');
+var functions = require('./function');
 
 /**
  * Provide color manipulation helpers.
@@ -2643,7 +2670,7 @@ require.register("rework/lib/plugins/mixin.js", function(exports, require, modul
  * Module dependencies.
  */
 
-var visit = require("../visit");
+var visit = require('../visit');
 
 /**
  * Define custom mixins.
@@ -2712,7 +2739,7 @@ require.register("rework/lib/plugins/references.js", function(exports, require, 
  * Module dependencies.
  */
 
-var visit = require("../visit");
+var visit = require('../visit');
 
 /**
  * Provide property reference support.
@@ -2814,10 +2841,45 @@ module.exports = function(str) {
 
 
 
-if (typeof exports == "object") {
+
+require.alias("reworkcss-css/index.js", "rework/deps/css/index.js");
+require.alias("reworkcss-css/index.js", "css/index.js");
+require.alias("reworkcss-css-parse/index.js", "reworkcss-css/deps/css-parse/index.js");
+
+require.alias("reworkcss-css-stringify/index.js", "reworkcss-css/deps/css-stringify/index.js");
+require.alias("reworkcss-css-stringify/lib/compress.js", "reworkcss-css/deps/css-stringify/lib/compress.js");
+require.alias("reworkcss-css-stringify/lib/identity.js", "reworkcss-css/deps/css-stringify/lib/identity.js");
+require.alias("reworkcss-css-stringify/lib/compiler.js", "reworkcss-css/deps/css-stringify/lib/compiler.js");
+require.alias("reworkcss-css-stringify/lib/source-map-support.js", "reworkcss-css/deps/css-stringify/lib/source-map-support.js");
+
+require.alias("reworkcss-rework-visit/index.js", "rework/deps/rework-visit/index.js");
+require.alias("reworkcss-rework-visit/index.js", "rework-visit/index.js");
+
+require.alias("reworkcss-rework-inherit/index.js", "rework/deps/rework-inherit/index.js");
+require.alias("reworkcss-rework-inherit/index.js", "rework/deps/rework-inherit/index.js");
+require.alias("reworkcss-rework-inherit/index.js", "rework-inherit/index.js");
+require.alias("visionmedia-debug/index.js", "reworkcss-rework-inherit/deps/debug/index.js");
+require.alias("visionmedia-debug/debug.js", "reworkcss-rework-inherit/deps/debug/debug.js");
+
+require.alias("reworkcss-rework-inherit/index.js", "reworkcss-rework-inherit/index.js");
+require.alias("visionmedia-debug/index.js", "rework/deps/debug/index.js");
+require.alias("visionmedia-debug/debug.js", "rework/deps/debug/debug.js");
+require.alias("visionmedia-debug/index.js", "debug/index.js");
+
+require.alias("component-color-parser/index.js", "rework/deps/color-parser/index.js");
+require.alias("component-color-parser/colors.js", "rework/deps/color-parser/colors.js");
+require.alias("component-color-parser/index.js", "color-parser/index.js");
+
+require.alias("component-path/index.js", "rework/deps/path/index.js");
+require.alias("component-path/index.js", "path/index.js");
+
+require.alias("jankuca-hsb2rgb/src/hsb2rgb.js", "rework/deps/hsb2rgb/src/hsb2rgb.js");
+require.alias("jankuca-hsb2rgb/src/hsb2rgb.js", "rework/deps/hsb2rgb/index.js");
+require.alias("jankuca-hsb2rgb/src/hsb2rgb.js", "hsb2rgb/index.js");
+require.alias("jankuca-hsb2rgb/src/hsb2rgb.js", "jankuca-hsb2rgb/index.js");if (typeof exports == "object") {
   module.exports = require("rework");
 } else if (typeof define == "function" && define.amd) {
-  define(function(){ return require("rework"); });
+  define([], function(){ return require("rework"); });
 } else {
   this["rework"] = require("rework");
 }})();

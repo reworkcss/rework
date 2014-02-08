@@ -49,6 +49,11 @@ or in the browser with the stand-alone build ./rework.js referencing the `rework
   Return the string representation of the manipulated css. Optionally
   you may compress the output with `.toString({ compress: true })`
 
+### Rework#toStream(options)
+
+  Return a readable stream of the manipulated css. Optionally you may
+  compress the output with `.toStream({ compress: true })`
+
 ## Plugins
 
   The following plugins are bundled with `rework`:

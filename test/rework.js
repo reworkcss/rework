@@ -2,7 +2,8 @@
 var rework = require('..')
   , fs = require('fs')
   , assert = require('assert')
-  , read = fs.readFileSync;
+  , read = fs.readFileSync
+  , Writable = require('stream').Writable;
 
 function fixture(name) {
   return read('test/fixtures/' + name + '.css', 'utf8').trim();
@@ -303,4 +304,37 @@ describe('rework', function(){
       result.map.mappings.should.equal('AAAA,KAAO,SAAU');
     })
   })
+
+  describe('.toStream()', function() {
+    it('should pipe output', function(done) {
+      var written = '';
+      var ws = new Writable();
+      ws._write = function (chunk, enc, next) {
+        written += chunk;
+        next();
+      };
+      rework('body { color: red; }')
+        .toStream()
+        .pipe(ws)
+        .on('finish', function() {
+          written.should.equal('body {\n  color: red;\n}');
+          done();
+        });
+    });
+    it('should respect the compress option', function(done) {
+      var written = '';
+      var ws = new Writable();
+      ws._write = function (chunk, enc, next) {
+        written += chunk;
+        next();
+      };
+      rework('body { color: red; }')
+        .toStream({ compress: true })
+        .pipe(ws)
+        .on('finish', function() {
+          written.should.equal('body{color:red;}');
+          done();
+        });
+    });
+  });
 })
