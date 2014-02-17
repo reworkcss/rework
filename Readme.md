@@ -47,7 +47,7 @@ or in the browser with the stand-alone build ./rework.js referencing the `rework
 ### Rework#toString(options)
 
   Return the string representation of the manipulated css. Optionally
-  you may compress the output with `.toString({ compress: true })`
+  you may compress the output with `.toString({ compress: true })` and/or generate an inline source map with `.toString({ sourcemap: true })`
 
 ## Plugins
 
