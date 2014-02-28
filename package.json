@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "css": "1.6.0",
-    "commander": "1.0.4",
     "color-parser": "0.1.0",
     "hsb2rgb": "1.0.2",
     "mime": "1.2.11",
