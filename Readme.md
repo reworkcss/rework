@@ -1,4 +1,4 @@
-# rework [![Build Status](https://travis-ci.org/visionmedia/rework.png)](https://travis-ci.org/visionmedia/rework)
+# rework [![Build Status](https://travis-ci.org/reworkcss/rework.png)](https://travis-ci.org/visionmedia/rework)
 
   CSS manipulations built on [css](https://github.com/visionmedia/css),
   allowing you to automate vendor prefixing, create your own properties,
