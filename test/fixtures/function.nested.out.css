@@ -1,8 +1,0 @@
-.rule-with-all-defined-functions {
-  attr: -85;
-}
-
-.rule-with-some-undefined-functions {
-  attr: subtract(30, user-need-handle-this-case-by-self(200));
-}
-
