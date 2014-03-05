@@ -23,6 +23,7 @@
     "debug": "*",
     "rework-inherit": "0.2.1",
     "rework-visit": "1.0.0",
+    "rework-plugin-inline": "^0.1.0",
     "convert-source-map": "~0.3.1"
   },
   "devDependencies": {
