@@ -17,12 +17,11 @@
   },
   "dependencies": {
     "css": "1.6.0",
-    "color-parser": "0.1.0",
-    "hsb2rgb": "1.0.2",
     "mime": "1.2.11",
     "debug": "*",
     "rework-inherit": "0.2.1",
     "rework-visit": "1.0.0",
+    "rework-plugin-colors": "0.1.0",
     "convert-source-map": "~0.3.1"
   },
   "devDependencies": {
