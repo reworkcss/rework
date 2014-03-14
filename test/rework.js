@@ -47,6 +47,7 @@ describe('rework', function(){
     })
   })
 
+<<<<<<< HEAD
   describe('.mixin(obj)', function(){
     it('should apply properties', function(){
       rework(fixture('mixins'))
@@ -133,6 +134,65 @@ describe('rework', function(){
         };
       }
     });
+=======
+  describe('.colors()', function(){
+    it('should support rgba(color, a)', function(){
+      rework(fixture('colors'))
+        .use(rework.colors())
+        .toString()
+        .should.equal(fixture('colors.out'));
+    })
+
+    it('should support hsb(hue, saturation, value)', function(){
+      rework(fixture('colors.hsb'))
+        .use(rework.colors())
+        .toString()
+        .should.equal(fixture('colors.hsb.out'));
+    })
+  })
+
+  describe('.function()', function(){
+    it('should add custom function', function(){
+      rework(fixture('function'))
+        .use(rework.function({ fonts: fonts }))
+        .toString()
+        .should.equal(fixture('function.out'));
+
+      function fonts() {
+        var files = Array.prototype.slice.call(arguments);
+        var types = { woff: 'woff', ttf: 'truetype', otf: 'opentype' };
+        return files.map(function(file){
+          var ext = file.replace(/^.*\./, '');
+          return 'url(' + file + ') format("' + types[ext] + '")';
+        }).join(', ');
+      }
+    })
+
+    it('should support nested function', function() {
+      var functions = {
+        subtract: function(a, b) { return a - b },
+        multiply: function(a, b) { return a * b },
+        divide: function(a, b) { return a / b },
+        floor: Math.floor
+      }
+
+      rework(fixture('function.nested'))
+        .use(rework.function(functions))
+        .toString()
+        .should.equal(fixture('function.nested.out'));
+    })
+
+    it('should prevent infinite loop', function() {
+      rework(fixture('function.infinite-loop'))
+        .use(rework.function({url: prefixurl}))
+        .toString()
+        .should.equal(fixture('function.infinite-loop.out'));
+
+      function prefixurl(path) {
+        return 'url(' + '/some/prefix' + path + ')';
+      }
+    })
+>>>>>>> extract-mixin-plugin
   })
 
   describe('.references()', function(){
