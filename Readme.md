@@ -61,7 +61,7 @@ or in the browser with the stand-alone build ./rework.js referencing the `rework
   - [mixin](https://github.com/reworkcss/rework-plugin-mixin/) — add custom property logic with mixing
   - [function](https://github.com/reworkcss/rework-plugin-function/) — Add user-defined CSS functions
   - [references](#references) — add property references support `height: @width` etc
-  - [url](#urlfn) - rewrite `url()`s with a given function
+  - [url](https://github.com/reworkcss/rework-plugin-url/) - rewrite `url()`s with a given function
   - third-party [plugins](https://github.com/visionmedia/rework/wiki/Plugins-and-Utilities)
 
 ### .extend()
@@ -310,32 +310,6 @@ yields:
 ```css
 .logo {
   background: url("data:image/png;base64,iVBORw0…");
-}
-```
-
-### .url(fn)
-
-  Map `url()` calls. Replace all `url()`s using a given function.
-
-```js
-var css = rework(read(css))
-  .use(rework.url(function(url){
-    return 'http://example.com' + url;
-  }))
-  .toString()
-```
-
-```css
-body {
-  background: url(/images/bg.png);
-}
-```
-
-yields:
-
-```css
-body {
-  background: url(http://example.com/images/bg.png);
 }
 ```
 
