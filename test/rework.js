@@ -47,22 +47,6 @@ describe('rework', function(){
     })
   })
 
-  describe('.colors()', function(){
-    it('should support rgba(color, a)', function(){
-      rework(fixture('colors'))
-        .use(rework.colors())
-        .toString()
-        .should.equal(fixture('colors.out'));
-    })
-
-    it('should support hsb(hue, saturation, value)', function(){
-      rework(fixture('colors.hsb'))
-        .use(rework.colors())
-        .toString()
-        .should.equal(fixture('colors.hsb.out'));
-    })
-  })
-
   describe('.mixin(obj)', function(){
     it('should apply properties', function(){
       rework(fixture('mixins'))
