@@ -23,7 +23,8 @@
     "debug": "*",
     "rework-inherit": "0.2.1",
     "rework-visit": "1.0.0",
-    "convert-source-map": "~0.3.1"
+    "convert-source-map": "~0.3.1",
+    "rework-plugin-function": "^0.1.0"
   },
   "devDependencies": {
     "mocha": "*",

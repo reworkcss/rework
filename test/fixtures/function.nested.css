@@ -1,8 +1,0 @@
-.rule-with-all-defined-functions {
-  attr: divide(subtract(30, floor(multiply(20, 10))), 2);
-}
-
-.rule-with-some-undefined-functions {
-  attr: subtract(30, user-need-handle-this-case-by-self(multiply(20, 10)))
-}
-
