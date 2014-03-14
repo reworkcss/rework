@@ -51,15 +51,15 @@ or in the browser with the stand-alone build ./rework.js referencing the `rework
 
 ## Plugins
 
-  The following plugins are bundled with `rework`:
+  Rework no longer bundles plugins. Formerly bundled plugins are linked below:
 
   - [extend](#extend) — add `extend: selector` support
   - [ease](#ease) — several additional easing functions
   - [at2x](#at2x) — serve high resolution images
   - [prefixSelectors](#prefixselectorsstring) — add prefixes to selectors
-  - [colors](#colors) — add colour helpers like `rgba(#fc0, .5)`
-  - [mixin](#mixinobject) — add custom property logic with mixing
-  - [function](#functionobject) — Add user-defined CSS functions
+  - [colors](https://github.com/reworkcss/rework-plugin-colors/) — add colour helpers like `rgba(#fc0, .5)`
+  - [mixin](https://github.com/reworkcss/rework-plugin-mixin/) — add custom property logic with mixing
+  - [function](https://github.com/reworkcss/rework-plugin-function/) — Add user-defined CSS functions
   - [references](#references) — add property references support `height: @width` etc
   - [url](#urlfn) - rewrite `url()`s with a given function
   - third-party [plugins](https://github.com/visionmedia/rework/wiki/Plugins-and-Utilities)
@@ -253,148 +253,6 @@ yields:
 }
 ```
 
-### .mixin(object)
-
-  Add user-defined mixins, functions that are invoked for a given property, and
-  passed the value. Returning an object that represents one or more properties.
-
-  For example the following `overflow` mixin allows the designer
-  to utilize `overflow: ellipsis;` to automatically assign associated
-  properties preventing wrapping etc.
-
-  The receiver (`this`) is the `Rework` instance, allowing the mixin to reference
-  properties such as the vendor `.prefixes` array.
-
-```js
-var css = rework(css)
-  .use(rework.mixin({ overflow: ellipsis }))
-  .toString()
-
-function ellipsis(type) {
-  if ('ellipsis' == type) {
-    return {
-      'white-space': 'nowrap',
-      'overflow': 'hidden',
-      'text-overflow': 'ellipsis'
-    }
-  }
-
-  return type;
-}
-```
-
-  Mixins in use look just like regular CSS properties:
-
-```css
-
-h1 {
-  overflow: ellipsis;
-}
-```
-
-yields:
-
-```css
-h1 {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis
-}
-```
-
-  You may also return array values to expand to several definitions of the property:
-
-```
-function display(type) {
-  if ('flex' == type) {
-    return {
-      display: [
-        '-webkit-flex',
-        '-moz-flex',
-        '-webkit-flexbox',
-        'flex'
-      ]
-    }
-  }
-
-  return {
-    display: type
-  }
-}
-```
-
-  Would yield:
-
-```css
-.myclass {
-  display: -webkit-flex;
-  display: -moz-flex;
-  display: -webkit-flexbox;
-  display: flex;
-}
-```
-
-### .function(object)
-
-  Add user-defined CSS functions.
-
-  For example create `black(0.5)` shortcut, to replace
-  long `rgba(0, 0, 0, 0.5)`.
-
-```js
-var css = rework(css)
-  .use(rework.function({ black: black }))
-  .toString()
-
-function black(opacity) {
-  return 'rgba(0, 0, 0, ' + opacity + ')';
-}
-```
-
-  User code will receive CSS arguments and replace user-defined function
-  by returned code.
-
-```css
-input {
-  box-shadow: 0 0 5px black(0.7);
-}
-```
-
-yields:
-
-```css
-input {
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
-}
-```
-
-  Nested functions works well too:
-
-```javascript
-var css = rework(css)
-  .use(rework.function(
-    subtract: function(a, b) { return a - b },
-    multiply: function(a, b) { return a * b },
-    divide: function(a, b) { return a / b },
-    floor: Math.floor
-  ))
-  .toString()
-```
-
-```css
-input {
-  top: divide(subtract(30, floor(multiply(20, 10))), 2);
-}
-```
-
-  Would yield:
-
-```css
-input {
-  top: -85;
-}
-```
-
 ### .references()
 
   Add property reference support.
@@ -424,24 +282,6 @@ button.round {
   height: 50px;
   line-height: 50px;
   background-size: 50px 50px
-}
-```
-
-### .colors()
-
-  Add color manipulation helpers such as `rgba(#fc0, .5)`.
-
-```css
-button {
-  background: rgba(#ccc, .5);
-}
-```
-
-yields:
-
-```css
-button {
-  background: rgba(204, 204, 204, .5);
 }
 ```
 
