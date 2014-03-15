@@ -56,21 +56,6 @@ describe('rework', function(){
     })
   })
 
-  describe('.prefixSelectors(str)', function(){
-    it('should prefix selectors', function(){
-      rework(fixture('prefix-selectors'))
-        .use(rework.prefixSelectors('#dialog'))
-        .toString()
-        .should.equal(fixture('prefix-selectors.out'));
-    })
-    it('should use the prefix as the :root pseudo-class', function(){
-      rework(fixture('prefix-selectors-root'))
-        .use(rework.prefixSelectors('#dialog'))
-        .toString()
-        .should.equal(fixture('prefix-selectors-root.out'));
-    })
-  })
-
   describe('.ease()', function(){
     it('should add additional easing functions', function(){
       rework(fixture('easing'))
