@@ -9,44 +9,6 @@ function fixture(name) {
 }
 
 describe('rework', function(){
-  describe('.properties', function(){
-    it('should be vendor-prefixed properties', function(){
-      assert(rework.properties);
-    })
-  })
-
-  describe('visitor', function(){
-    it('should work with charset, import, etc', function(){
-      rework(fixture('charset'))
-        .use(rework.extend())
-        .toString().trim()
-        .should.equal(fixture('charset.out'));
-    })
-  })
-
-  describe('.extend()', function(){
-    it('should allow extending rulesets', function(){
-      rework(fixture('extend'))
-      .use(rework.extend())
-      .toString()
-      .should.equal(fixture('extend.out'));
-    })
-
-    it('should support nested selectors', function(){
-      rework(fixture('extend.nested'))
-      .use(rework.extend())
-      .toString()
-      .should.equal(fixture('extend.nested.out').trim());
-    })
-
-    it('should support placeholder selectors', function(){
-      rework(fixture('extend.nested.placeholder'))
-      .use(rework.extend())
-      .toString()
-      .should.equal(fixture('extend.nested.placeholder.out').trim());
-    })
-  })
-
   describe('.ease()', function(){
     it('should add additional easing functions', function(){
       rework(fixture('easing'))

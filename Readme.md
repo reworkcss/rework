@@ -53,10 +53,10 @@ or in the browser with the stand-alone build ./rework.js referencing the `rework
 
   Rework no longer bundles plugins. Formerly bundled plugins are linked below:
 
-  - [extend](#extend) — add `extend: selector` support
+  - [extend](https://github.com/reworkcss/rework-inherit/) — add `extend: selector` support
   - [ease](#ease) — several additional easing functions
   - [at2x](https://github.com/reworkcss/rework-plugin-at2x/) — serve high resolution images
-  - [prefixSelectors](#prefixselectorsstring) — add prefixes to selectors
+  - [prefixSelectors](https://github.com/reworkcss/rework-plugin-prefix-selectors) — add prefixes to selectors
   - [colors](https://github.com/reworkcss/rework-plugin-colors/) — add colour helpers like `rgba(#fc0, .5)`
   - [mixin](https://github.com/reworkcss/rework-plugin-mixin/) — add custom property logic with mixing
   - [function](https://github.com/reworkcss/rework-plugin-function/) — Add user-defined CSS functions
