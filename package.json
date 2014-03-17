@@ -16,12 +16,13 @@
     "url": "git://github.com/reworkcss/rework.git"
   },
   "dependencies": {
-    "css": "1.6.0",
-    "mime": "1.2.11",
+    "css-parse": "^1.7.0",
+    "css-stringify": "^1.4.1",
+    "mime": "^1.2.11",
     "debug": "*",
-    "rework-inherit": "0.2.1",
-    "rework-visit": "1.0.0",
-    "convert-source-map": "~0.3.1",
+    "rework-inherit": "^0.2.1",
+    "rework-visit": "^1.0.0",
+    "convert-source-map": "^0.3.3",
     "rework-plugin-function": "^0.1.0"
   },
   "devDependencies": {
