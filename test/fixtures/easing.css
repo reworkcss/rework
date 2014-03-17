@@ -1,8 +1,0 @@
-#logo {
-  /* test */
-  transition: all 500ms ease-out-back;
-  transition: all 500ms ease-in-out-back;
-  animation: fade 2s ease-in-out-back;
-  animation-timing-function: ease-in-out-back;
-  transition-timing-function: ease-in-out-back;
-}

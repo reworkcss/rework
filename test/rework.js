@@ -1,22 +1,6 @@
-
 var rework = require('..')
-  , fs = require('fs')
-  , assert = require('assert')
-  , read = fs.readFileSync;
-
-function fixture(name) {
-  return read('test/fixtures/' + name + '.css', 'utf8').trim();
-}
 
 describe('rework', function(){
-  describe('.ease()', function(){
-    it('should add additional easing functions', function(){
-      rework(fixture('easing'))
-        .use(rework.ease())
-        .toString()
-        .should.equal(fixture('easing.out'));
-    })
-  })
 
   describe('.toString() compress option', function(){
     it('should compress the output', function(){
@@ -48,4 +32,5 @@ describe('rework', function(){
       result.map.mappings.should.equal('AAAA,KAAO,SAAU');
     })
   })
+
 })
