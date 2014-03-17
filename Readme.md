@@ -55,7 +55,7 @@ or in the browser with the stand-alone build ./rework.js referencing the `rework
 
   - [extend](#extend) — add `extend: selector` support
   - [ease](#ease) — several additional easing functions
-  - [at2x](#at2x) — serve high resolution images
+  - [at2x](https://github.com/reworkcss/rework-plugin-at2x/) — serve high resolution images
   - [prefixSelectors](#prefixselectorsstring) — add prefixes to selectors
   - [colors](https://github.com/reworkcss/rework-plugin-colors/) — add colour helpers like `rgba(#fc0, .5)`
   - [mixin](https://github.com/reworkcss/rework-plugin-mixin/) — add custom property logic with mixing
@@ -194,36 +194,6 @@ Please delegate any issues with `.extend()` to that repository instead of rework
   - `ease-in-quad` -- `cubic-bezier(0.550, 0.085, 0.680, 0.530)`
 
   To view them online visit [easings.net](http://easings.net/).
-
-### .at2x()
-
-  Adds `at-2x` keyword to `background` and `background-image`
-  declarations to add retina support for images.
-
-```css
-.logo {
-  background-image: url('component.png') at-2x;
-  width: 289px;
-  height: 113px
-}
-```
-
-yields:
-
-```css
-.logo {
-  background-image: url('component.png');
-  width: 289px;
-  height: 113px
-}
-
-@media all and (-webkit-min-device-pixel-ratio: 1.5) {
-  .logo {
-    background-image: url("component@2x.png");
-    background-size: contain
-  }
-}
-```
 
 ## License
 

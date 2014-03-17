@@ -47,15 +47,6 @@ describe('rework', function(){
     })
   })
 
-  describe('.at2x()', function(){
-    it('should add device-pixel-ratio rules', function(){
-      rework(fixture('at2x'))
-        .use(rework.at2x())
-        .toString()
-        .should.equal(fixture('at2x.out'));
-    })
-  })
-
   describe('.ease()', function(){
     it('should add additional easing functions', function(){
       rework(fixture('easing'))
