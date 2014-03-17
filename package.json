@@ -31,7 +31,6 @@
   },
   "main": "index",
   "scripts": {
-    "prepublish": "make rework.js",
     "test": "mocha --require should --reporter spec"
   }
 }
