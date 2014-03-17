@@ -14,16 +14,6 @@
   },
   "scripts": [
     "index.js",
-    "lib/rework.js",
-    "lib/utils.js",
-    "lib/visit.js",
-    "lib/plugins/function.js",
-    "lib/plugins/url.js",
-    "lib/plugins/ease.js",
-    "lib/plugins/at2x.js",
-    "lib/plugins/colors.js",
-    "lib/plugins/mixin.js",
-    "lib/plugins/references.js",
-    "lib/plugins/prefix-selectors.js"
+    "lib/rework.js"
   ]
 }
