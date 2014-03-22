@@ -195,10 +195,16 @@ Please delegate any issues with `.extend()` to that repository instead of rework
 
   To view them online visit [easings.net](http://easings.net/).
 
-### .at2x()
+### .at2x(options)
 
   Adds `at-2x` keyword to `background` and `background-image`
   declarations to add retina support for images.
+
+  If the rule defines a `background-size`, it will be respected,
+  otherwise, the plugin will try to detect real image size and use it.
+
+  Optionally you can define a base directory for the images
+  with `at2x({ baseDir: 'tmp/img' })`.
 
 ```css
 .logo {
@@ -220,7 +226,7 @@ yields:
 @media all and (-webkit-min-device-pixel-ratio: 1.5) {
   .logo {
     background-image: url("component@2x.png");
-    background-size: contain
+    background-size: 100px 50px;
   }
 }
 ```

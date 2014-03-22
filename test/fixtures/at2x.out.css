@@ -1,5 +1,14 @@
 .logo {
-  background-image: url('/public/images/logo.png');
+  background-image: url('test/fixtures/images/image.png');
+}
+
+.big-image {
+  background-image: url('/public/images/big-image.png');
+  background-size: 200px 100px;
+}
+
+.online-image {
+  background-image: url('http://jquery.com/jquery-wp-content/themes/jquery/images/logo-jquery.png');
 }
 
 .banner {
@@ -13,7 +22,21 @@
 
 @media (min--moz-device-pixel-ratio: 1.5), (-o-min-device-pixel-ratio: 3/2), (-webkit-min-device-pixel-ratio: 1.5), (min-device-pixel-ratio: 1.5), (min-resolution: 144dpi), (min-resolution: 1.5dppx) {
   .logo {
-    background-image: url("/public/images/logo@2x.png");
+    background-image: url("test/fixtures/images/image@2x.png");
+    background-size: 400px 300px;
+  }
+}
+
+@media (min--moz-device-pixel-ratio: 1.5), (-o-min-device-pixel-ratio: 3/2), (-webkit-min-device-pixel-ratio: 1.5), (min-device-pixel-ratio: 1.5), (min-resolution: 144dpi), (min-resolution: 1.5dppx) {
+  .big-image {
+    background-image: url("/public/images/big-image@2x.png");
+    background-size: 200px 100px;
+  }
+}
+
+@media (min--moz-device-pixel-ratio: 1.5), (-o-min-device-pixel-ratio: 3/2), (-webkit-min-device-pixel-ratio: 1.5), (min-device-pixel-ratio: 1.5), (min-resolution: 144dpi), (min-resolution: 1.5dppx) {
+  .online-image {
+    background-image: url("http://jquery.com/jquery-wp-content/themes/jquery/images/logo-jquery@2x.png");
     background-size: contain;
   }
 }
