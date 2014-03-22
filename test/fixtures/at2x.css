@@ -1,5 +1,14 @@
 .logo {
-  background-image: url('/public/images/logo.png') at-2x;
+  background-image: url('test/fixtures/images/image.png') at-2x;
+}
+
+.big-image {
+  background-image: url('/public/images/big-image.png') at-2x;
+  background-size: 200px 100px;
+}
+
+.online-image {
+  background-image: url('http://jquery.com/jquery-wp-content/themes/jquery/images/logo-jquery.png') at-2x;
 }
 
 .banner {
