@@ -1,6 +1,6 @@
 {
   "name": "rework",
-  "version": "0.20.2",
+  "version": "0.20.3",
   "description": "CSS manipulations built on CSSOM",
   "keywords": [
     "css",
@@ -21,7 +21,7 @@
     "hsb2rgb": "1.0.2",
     "mime": "1.2.11",
     "debug": "*",
-    "rework-inherit": "0.2.1",
+    "rework-inherit": "~0.2.1",
     "rework-visit": "1.0.0",
     "convert-source-map": "~0.3.1"
   },
