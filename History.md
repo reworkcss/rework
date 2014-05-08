@@ -1,3 +1,18 @@
+
+0.20.3 / 2014-05-08
+==================
+
+ * Using updated rework-inherit
+ * Update repo URL and add keywords
+ * Merge pull request #143 from lennart/master
+ * Fixed Travis CI
+ * Merge pull request #142 from joliss/commander
+ * Remove unused commander dependency
+ * Merge pull request #140 from bclinkinbeard/patch-1
+ * Update Readme.md to document sourcemap option
+ * Merge pull request #138 from ericf/patch-1
+ * Unignore /rework.js so it's in the npm package
+
 0.20.2 / 2014-01-02
 ===================
 
