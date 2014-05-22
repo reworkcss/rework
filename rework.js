@@ -2485,7 +2485,14 @@ var query = [
 
 module.exports = function() {
   return function(style){
-    style.rules.forEach(function(rule){
+    var basequery;
+    style.rules.forEach(function translate(rule){
+      if (rule.media && rule.rules) {
+        basequery = rule.media;
+        rule.rules.forEach(translate);
+        basequery = null;
+      }
+
       if (!rule.declarations) return;
 
       var backgroundSize = rule.declarations.filter(backgroundWithSize).map(value)[0] || 'contain';
@@ -2509,7 +2516,7 @@ module.exports = function() {
         // wrap in @media
         style.rules.push({
           type: 'media',
-          media: query,
+          media: (basequery ? basequery + ', ' : '') + query,
           rules: [
             {
               type: 'rule',

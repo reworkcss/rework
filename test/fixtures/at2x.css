@@ -10,3 +10,9 @@
 .background {
   background-image: url('/public/images/background.png');
 }
+
+@media (min-width: 200px), (max-width: 400px) {
+  .logo {
+    background-image: url('/public/images/logo.png') at-2x;
+  }
+}
