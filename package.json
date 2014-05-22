@@ -27,7 +27,8 @@
   },
   "devDependencies": {
     "mocha": "*",
-    "should": "*"
+    "should": "*",
+    "component": "~0.19.9"
   },
   "main": "index",
   "scripts": {

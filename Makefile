@@ -1,11 +1,13 @@
+NODE_BIN=node_modules/.bin
+MOCHA=$(NODE_BIN)/mocha
+COMPONENT=$(NODE_BIN)/component
 
 rework.js:
-	@component install
-	@component build --standalone rework --out . --name rework
+	@$(COMPONENT) install
+	@$(COMPONENT) build --standalone rework --out . --name rework
 
 test:
-	@./node_modules/.bin/mocha \
-		--require should
+	@$(MOCHA) --require should
 
 clean:
 	rm -f rework.js
