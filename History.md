@@ -1,4 +1,7 @@
 
+ * Move all plugins into separate repositories
+ * Remove browser support via Component(1)
+
 0.20.3 / 2014-05-08
 ==================
 
