@@ -11,6 +11,12 @@
   background-image: url('/public/images/background.png');
 }
 
+@media (min-width: 200px), (max-width: 400px) {
+  .logo {
+    background-image: url('/public/images/logo.png');
+  }
+}
+
 @media (min--moz-device-pixel-ratio: 1.5), (-o-min-device-pixel-ratio: 3/2), (-webkit-min-device-pixel-ratio: 1.5), (min-device-pixel-ratio: 1.5), (min-resolution: 144dpi), (min-resolution: 1.5dppx) {
   .logo {
     background-image: url("/public/images/logo@2x.png");
@@ -22,5 +28,12 @@
   .banner {
     background-image: url("/public/images/banner@2x.png");
     background-size: cover;
+  }
+}
+
+@media (min-width: 200px), (max-width: 400px), (min--moz-device-pixel-ratio: 1.5), (-o-min-device-pixel-ratio: 3/2), (-webkit-min-device-pixel-ratio: 1.5), (min-device-pixel-ratio: 1.5), (min-resolution: 144dpi), (min-resolution: 1.5dppx) {
+  .logo {
+    background-image: url("/public/images/logo@2x.png");
+    background-size: contain;
   }
 }
