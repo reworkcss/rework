@@ -1,6 +1,6 @@
 # rework [![Build Status](https://travis-ci.org/reworkcss/rework.png)](https://travis-ci.org/reworkcss/rework)
 
-  CSS manipulations built on [css](https://github.com/visionmedia/css),
+  CSS manipulations built on [css](https://github.com/reworkcss/css),
   allowing you to automate vendor prefixing, create your own properties,
   inline images, anything you can imagine!
 
