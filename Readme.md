@@ -18,9 +18,10 @@
 
 ## API
 
-### rework(css)
+### rework(css, options)
 
-  Return a new `Rework` instance for the given string of `css`.
+  Return a new `Rework` instance for the given string of `css`. Optionally get
+  better errors and source maps with `rework(css, {source: 'path/to/source.css'})`.
 
 ### Rework#use(fn)
 
