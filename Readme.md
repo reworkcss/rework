@@ -38,7 +38,7 @@
   External modules:
 
   - [extend](https://github.com/reworkcss/rework-inherit/) — add `extend: selector` support
-  - [ease](https://github.com/reworkcss/rework-ease/) — several additional easing functions
+  - [ease](https://github.com/reworkcss/rework-plugin-ease/) — several additional easing functions
   - [at2x](https://github.com/reworkcss/rework-plugin-at2x/) — serve high resolution images
   - [prefixSelectors](https://github.com/reworkcss/rework-plugin-prefix-selectors) — add prefixes to selectors
   - [colors](https://github.com/reworkcss/rework-plugin-colors/) — add colour helpers like `rgba(#fc0, .5)`
