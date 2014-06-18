@@ -3,8 +3,9 @@
  * Module dependencies.
  */
 
-var parse = require('css-parse');
-var stringify = require('css-stringify');
+var css = require('css');
+var parse = css.parse;
+var stringify = css.stringify;
 
 /**
  * Expose `rework`.
