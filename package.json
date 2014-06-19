@@ -1,7 +1,7 @@
 {
   "name": "rework",
-  "version": "0.20.3",
-  "description": "CSS manipulations built on CSSOM",
+  "version": "1.0.0",
+  "description": "Plugin framework for CSS preprocessing",
   "main": "index",
   "files": [
     "index.js"

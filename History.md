@@ -1,3 +1,5 @@
+1.0.0 / 2014-06-19
+==================
 
  * Depend on 'css' 2.0.0
  * Move all plugins into separate repositories
