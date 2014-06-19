@@ -1,4 +1,5 @@
 
+ * Depend on 'css' 2.0.0
  * Move all plugins into separate repositories
  * Remove browser support via Component(1)
 
