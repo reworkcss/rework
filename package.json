@@ -14,8 +14,7 @@
   },
   "devDependencies": {
     "mocha": "*",
-    "should": "*",
-    "component": "~0.19.9"
+    "should": "*"
   },
   "scripts": {
     "test": "mocha --require should --reporter spec"
