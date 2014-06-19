@@ -23,8 +23,6 @@ exports = module.exports = rework;
  */
 
 function rework(str, options) {
-  options = options || {};
-  options.position = true; // we need this for sourcemaps
   return new Rework(parse(str, options));
 }
 
