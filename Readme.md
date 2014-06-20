@@ -54,12 +54,12 @@ Plugins of particular note:
 
 - [at2x](https://github.com/reworkcss/rework-plugin-at2x/) – serve high resolution images
 - [calc](https://github.com/reworkcss/rework-calc) – resolve simple `calc()` expressions
-- [colors](https://github.com/reworkcss/rework-plugin-colors/) – add colour helpers like `rgba(#fc0, .5)`
+- [colors](https://github.com/reworkcss/rework-plugin-colors/) – color helpers like `rgba(#fc0, .5)`
 - [ease](https://github.com/reworkcss/rework-plugin-ease/) – several additional easing functions
 - [extend](https://github.com/reworkcss/rework-inherit/) – `extend: selector` support
 - [function](https://github.com/reworkcss/rework-plugin-function/) – user-defined CSS functions
-- [import](https://github.com/reworkcss/rework-import) – read and inline css via `@import`
-- [inline](https://github.com/reworkcss/rework-plugin-inline) – inline assets as dataURI with base64 encoding
+- [import](https://github.com/reworkcss/rework-import) – read and inline CSS via `@import`
+- [inline](https://github.com/reworkcss/rework-plugin-inline) – inline assets as data URIs
 - [mixin](https://github.com/reworkcss/rework-plugin-mixin/) – custom property logic with mixins
 - [references](https://github.com/reworkcss/rework-plugin-references/) – property references like `height: @width`
 - [url](https://github.com/reworkcss/rework-plugin-url/) – rewrite `url()`s with a given function
@@ -77,7 +77,8 @@ Plugins of particular note:
 
 (The MIT License)
 
-Copyright (c) 2012 - 2013 TJ Holowaychuk <tj@vision-media.ca>
+Copyright (c) 2012–2013 TJ Holowaychuk <tj@vision-media.ca>
+
 Copyright (c) 2014 Contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
