@@ -61,6 +61,7 @@ Plugins of particular note:
 - [import](https://github.com/reworkcss/rework-import) – read and inline CSS via `@import`
 - [inline](https://github.com/reworkcss/rework-plugin-inline) – inline assets as data URIs
 - [mixin](https://github.com/reworkcss/rework-plugin-mixin/) – custom property logic with mixins
+- [npm](https://github.com/reworkcss/rework-npm) - inline CSS via `@import` using node's module resolver
 - [references](https://github.com/reworkcss/rework-plugin-references/) – property references like `height: @width`
 - [url](https://github.com/reworkcss/rework-plugin-url/) – rewrite `url()`s with a given function
 - [variables](https://github.com/reworkcss/rework-vars/) – W3C-style variables
