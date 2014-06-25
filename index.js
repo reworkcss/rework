@@ -4,6 +4,7 @@
  */
 
 var css = require('css');
+var convertSourceMap = require('convert-source-map');
 var parse = css.parse;
 var stringify = css.stringify;
 
@@ -76,7 +77,6 @@ Rework.prototype.toString = function(options){
  */
 
 function sourcemapToComment(map) {
-  var convertSourceMap = require('convert-source-map');
   var content = convertSourceMap.fromObject(map).toBase64();
   return '/*# sourceMappingURL=data:application/json;base64,' + content + ' */';
 }
