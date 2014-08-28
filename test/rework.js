@@ -33,9 +33,9 @@ describe('rework', function() {
       result.should.equal(
         'body{color:red;}' + '\n' +
         '/*# sourceMappingURL=data:application/json;base64,' +
-        'eyJ2ZXJzaW9uIjozLCJmaWxlIjpudWxsLCJzb3VyY2VzIjpbInNvdXJjZS5jc3MiX' +
-        'SwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsS0FBTyIsInNvdXJjZXNDb250ZW' +
-        '50IjpbImJvZHkgeyBjb2xvcjogcmVkOyB9Il19 */'
+        'eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNvdXJjZS5jc3MiXSwibmFtZXMiOltdL' +
+        'CJtYXBwaW5ncyI6IkFBQUEsS0FBTyIsInNvdXJjZXNDb250ZW50IjpbImJvZHkgey' +
+        'Bjb2xvcjogcmVkOyB9Il19 */'
       );
     });
   });
