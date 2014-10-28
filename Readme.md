@@ -73,6 +73,7 @@ Plugins of particular note:
 - [rework-suit](https://github.com/suitcss/rework-suit)
 - [resin](https://github.com/topcoat/resin)
 - [Myth](https://github.com/segmentio/myth)
+- [YACP (Yet Another CSS Preprocessor)](https://github.com/morishitter/YACP)
 
 ## License
 
