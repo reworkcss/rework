@@ -28,5 +28,6 @@
   "repository": {
     "type": "git",
     "url": "git://github.com/reworkcss/rework.git"
-  }
+  },
+  "license": "MIT"
 }
