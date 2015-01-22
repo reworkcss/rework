@@ -7,6 +7,8 @@ var css = require('css');
 var convertSourceMap = require('convert-source-map');
 var parse = css.parse;
 var stringify = css.stringify;
+var Promise = require('bluebird');
+var clone = require('clone');
 
 /**
  * Expose `rework`.
@@ -49,6 +51,25 @@ function Rework(obj) {
 Rework.prototype.use = function(fn){
   fn(this.obj.stylesheet, this);
   return this;
+};
+
+/**
+ * Use the given async plugin `fn(style)`.
+ *
+ * @param {Function} fn
+ * @return {Promise}
+ * @api public
+ */
+
+Rework.prototype.then = function(fn) {
+  var self = this;
+  var style = clone(self.obj.stylesheet, true);
+  return fn(style).then(
+    function(newStyle) {
+      self.obj.stylesheet = newStyle;
+      return newStyle;
+    }, function(error) { throw error; }
+  );
 };
 
 /**

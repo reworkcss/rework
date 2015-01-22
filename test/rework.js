@@ -1,4 +1,5 @@
 var rework = require('..');
+var Promise = require('bluebird');
 
 describe('rework', function() {
 
@@ -12,6 +13,35 @@ describe('rework', function() {
       });
 
       result.should.equal(r);
+    });
+  });
+
+  describe('.then() call function', function() {
+    it('should call the plugin function', function(done) {
+      var r = rework('body { color: red; }');
+      var called = false;
+      var result = r
+      .then(function(sheet) {
+        sheet.rules[0].selectors = ['.cls'];
+
+        // Check whether we're working with copies.
+        sheet.should.not.equal(r.obj.stylesheet);
+
+        return new Promise(function(resolve, reject) {
+          resolve(sheet);
+        });
+      })
+      .then(function(sheet) {
+        sheet.rules[0].selectors.push('.cls2');
+        return new Promise(function(resolve, reject) {
+          resolve(sheet);
+        });
+      })
+      .then(function(sheet) {
+        var result = r.toString({compress: true});
+        result.should.equal('.cls,.cls2{color:red;}');
+        done();
+      });
     });
   });
 

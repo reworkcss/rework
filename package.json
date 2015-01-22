@@ -7,12 +7,14 @@
     "index.js"
   ],
   "dependencies": {
-    "css": "^2.0.0",
-    "convert-source-map": "^0.3.3"
+    "clone": "^0.2.0",
+    "convert-source-map": "^0.3.3",
+    "css": "^2.0.0"
   },
   "devDependencies": {
     "mocha": "^1.20.1",
-    "should": "^4.0.4"
+    "should": "^4.0.4",
+    "bluebird": "^2.8.2"
   },
   "scripts": {
     "test": "mocha --require should --reporter spec"
