@@ -64,12 +64,16 @@ Rework.prototype.use = function(fn){
 Rework.prototype.then = function(fn) {
   var self = this;
   var style = clone(self.obj.stylesheet, true);
-  return fn(style).then(
-    function(newStyle) {
+  var promise = fn(style);
+
+  if (promise && promise.then) {
+    return promise.then(function(newStyle) {
       self.obj.stylesheet = newStyle;
       return newStyle;
-    }, function(error) { throw error; }
-  );
+    }, function(error) { throw error; });
+  } else {
+    return Promise.resolve();
+  }
 };
 
 /**
