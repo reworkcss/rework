@@ -7,6 +7,7 @@ var css = require('css');
 var convertSourceMap = require('convert-source-map');
 var parse = css.parse;
 var stringify = css.stringify;
+var Promise = require('bluebird');
 
 /**
  * Expose `rework`.
@@ -60,15 +61,12 @@ Rework.prototype.use = function(fn){
  *
  */
 
-Rework.prototype.then = function(fn) {
+Rework.prototype.consume = function(fn) {
   var self = this;
-  var promise = fn(this);
-
-  if (!promise) {
-    throw new Error('Rework#then must consume a Function which returns Promise');
-  }
-
-  return promise.then(function() { return self; }, function(err) { throw err; });
+  this._promise = Promise.resolve(this._promise).then(function() {
+    return Promise.resolve(fn(self)).then(function() {return self;})
+  });
+  return this;
 };
 
 /**
