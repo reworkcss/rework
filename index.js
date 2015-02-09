@@ -9,32 +9,23 @@ var parse = css.parse;
 var stringify = css.stringify;
 
 /**
- * Expose `rework`.
+ * Expose `Rework`.
  */
 
-exports = module.exports = rework;
+exports = module.exports = Rework;
 
 /**
- * Initialize a new stylesheet `Rework` with `str`.
+ * Initialize a new stylesheet `Rework` with `obj`.
  *
- * @param {String} str
+ * @param {Object|String} obj
  * @param {Object} options
  * @return {Rework}
  * @api public
  */
 
-function rework(str, options) {
-  return new Rework(parse(str, options));
-}
-
-/**
- * Initialize a new stylesheet `Rework` with `obj`.
- *
- * @param {Object} obj
- * @api private
- */
-
-function Rework(obj) {
+function Rework(obj, options) {
+  if (!(this instanceof Rework)) return new Rework(obj, options);
+  if ('string' == typeof obj) obj = parse(obj, options);
   this.obj = obj;
 }
 
