@@ -65,6 +65,7 @@ Plugins of particular note:
 - [references](https://github.com/reworkcss/rework-plugin-references/) – property references like `height: @width`
 - [url](https://github.com/reworkcss/rework-plugin-url/) – rewrite `url()`s with a given function
 - [variables](https://github.com/reworkcss/rework-vars/) – W3C-style variables
+- [zyndexer](https://github.com/pgilad/rework-zyndexer/) - Scale down z-indexes maintaining order
 
 ## Built with rework
 
