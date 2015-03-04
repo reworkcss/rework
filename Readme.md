@@ -1,4 +1,4 @@
-# rework [![Build Status](https://travis-ci.org/reworkcss/rework.png)](https://travis-ci.org/reworkcss/rework)
+# rework [![NPM version][npm-image]][npm-link] [![Build status][travis-image]][travis-link]
 
 CSS manipulations built on [`css`](https://github.com/reworkcss/css), allowing
 you to automate vendor prefixing, create your own properties, inline images,
@@ -99,3 +99,8 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+[npm-image]: https://img.shields.io/npm/v/rework.svg?style=flat
+[npm-link]: https://npmjs.org/package/rework
+[travis-image]: https://img.shields.io/travis/reworkcss/rework.svg?style=flat
+[travis-link]: https://travis-ci.org/reworkcss/rework
