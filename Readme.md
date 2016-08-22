@@ -73,6 +73,7 @@ Plugins of particular note:
 - [rework-suit](https://github.com/suitcss/rework-suit)
 - [resin](https://github.com/topcoat/resin)
 - [Myth](https://github.com/segmentio/myth)
+- [ClickCSS](https://github.com/ilovecode1/ClickCSS/)
 
 ## License
 
