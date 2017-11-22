@@ -36,6 +36,7 @@ function rework(str, options) {
 
 function Rework(obj) {
   this.obj = obj;
+  this.map = undefined;
 }
 
 /**
@@ -66,6 +67,22 @@ Rework.prototype.toString = function(options){
     result = result.code + '\n' + sourcemapToComment(result.map);
   }
   return result;
+};
+
+/**
+ * For user of rework to set the current sourcemap for the input,
+ * and for plugins to read the sourcemap for example to be able to
+ * map error messages to the correct file and line.
+ *
+ * @param {Object} [map] Optional sourcemap to set
+ * @return {Object} The sourcemap for the input data
+ * @api public
+ */
+Rework.prototype.sourcemap = function(map){
+  if (map) {
+    this.map = map;
+  }
+  return this.map;
 };
 
 /**
