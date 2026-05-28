@@ -1,3 +1,7 @@
+# NOTICE OF DEPRECATION
+
+There has not been material changes to this package in 10 years. New changes and bug fixes are not planned. In the event of concrete security issues, changes may still occur. We recommend moving to something else more modern.
+
 # rework [![Build Status](https://travis-ci.org/reworkcss/rework.png)](https://travis-ci.org/reworkcss/rework)
 
 CSS manipulations built on [`css`](https://github.com/reworkcss/css), allowing
