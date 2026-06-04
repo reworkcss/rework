@@ -1,11 +1,11 @@
 # rework
 
-[![npm package version](https://img.shields.io/github/package-json/v/reworkcss/rework) ![npm downloads](https://img.shields.io/npm/dm/rework)](https://www.npmjs.com/package/rework)
+[![npm package version](https://img.shields.io/npm/v/rework) ![npm downloads](https://img.shields.io/npm/dm/rework)](https://www.npmjs.com/package/rework)
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/reworkcss/rework/test.yml)](https://github.com/reworkcss/rework/actions)
 [![License](https://img.shields.io/github/license/reworkcss/rework)](https://github.com/reworkcss/rework)  
 
 > [!NOTE]  
-> There has not been material changes to this package in 10 years. New changes and bug fixes are not planned. In the event of concrete security issues, changes may still occur. We recommend moving to something else more modern.
+> There have not been material changes to this package in 10 years. New changes and bug fixes are not planned. In the event of concrete security issues, changes may still occur. We recommend moving to something else more modern.
 
 CSS manipulations built on [`css`](https://github.com/reworkcss/css), allowing
 you to automate vendor prefixing, create your own properties, inline images,
