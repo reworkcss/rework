@@ -1,3 +1,5 @@
+var assert = require('node:assert');
+var { describe, it } = require('node:test');
 var rework = require('..');
 
 describe('rework', function() {
@@ -7,19 +9,20 @@ describe('rework', function() {
       var r = rework('body { color: red; }');
       var called = false;
       var result = r.use(function(sheet, instance) {
-        sheet.should.have.property('rules');
-        instance.should.equal(r);
+        assert.ok('rules' in sheet);
+        assert.strictEqual(instance, r);
       });
 
-      result.should.equal(r);
+      assert.strictEqual(result, r);
     });
   });
 
   describe('.toString() compress option', function() {
     it('should compress the output', function() {
-      rework('body { color: red; }')
-        .toString({ compress: true })
-        .should.equal('body{color:red;}');
+      assert.strictEqual(
+        rework('body { color: red; }').toString({ compress: true }),
+        'body{color:red;}'
+      );
     });
   });
 
@@ -30,7 +33,8 @@ describe('rework', function() {
         sourcemap: true
       });
 
-      result.should.equal(
+      assert.strictEqual(
+        result,
         'body{color:red;}' + '\n' +
         '/*# sourceMappingURL=data:application/json;base64,' +
         'eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNvdXJjZS5jc3MiXSwibmFtZXMiOltdL' +
@@ -48,9 +52,9 @@ describe('rework', function() {
         sourcemapAsObject: true
       });
 
-      result.code.should.equal('body{color:red;}');
-      result.map.should.have.property('mappings');
-      result.map.mappings.should.equal('AAAA,KAAO');
+      assert.strictEqual(result.code, 'body{color:red;}');
+      assert.ok('mappings' in result.map);
+      assert.strictEqual(result.map.mappings, 'AAAA,KAAO');
     });
   });
 
