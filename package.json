@@ -16,7 +16,7 @@
     "should": "^4.0.4"
   },
   "scripts": {
-    "test": "mocha --require should --reporter spec"
+    "test": "_mocha --require should --reporter spec"
   },
   "keywords": [
     "css",
