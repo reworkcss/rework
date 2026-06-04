@@ -4,7 +4,8 @@
   "description": "Plugin framework for CSS preprocessing",
   "main": "index",
   "files": [
-    "index.js"
+    "index.js",
+    "LICENSE"
   ],
   "dependencies": {
     "css": "^2.0.0",
